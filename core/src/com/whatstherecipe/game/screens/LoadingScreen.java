@@ -100,14 +100,13 @@ public class LoadingScreen implements Screen {
             this.logo.setHeight(LOGO_HEIGHT / 3);
             this.logo.setPosition(
                     this.stage.getWidth() / 2 - this.logo.getWidth() / 2,
-                    (this.stage.getHeight() / 2 - this.logo.getHeight() / 2) - 100);
+                    (this.stage.getHeight() / 2 - this.logo.getHeight() / 2));
             this.logo.setScaling(Scaling.fit);
 
             this.stage.addActor(this.logo);
 
-            this.logo.addAction(sequence(alpha(0), delay(0.5f), parallel(
-                    fadeIn(1f, Interpolation.pow4),
-                    moveBy(0, 100, 1f, Interpolation.pow4)),
+            this.logo.addAction(sequence(alpha(0), delay(1f), parallel(
+                    fadeIn(2f, Interpolation.pow4)),
                     delay(0.5f),
                     load));
         }
