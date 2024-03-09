@@ -7,11 +7,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
 
@@ -70,7 +73,7 @@ public class MainMenuScreen implements Screen {
 
         this.stage.addAction(sequence(alpha(0f), fadeIn(2f, Interpolation.pow5)));
 
-        renderHeadings();
+        renderHeadingsAndButtons();
         renderKitchenBg();
     }
 
@@ -82,14 +85,48 @@ public class MainMenuScreen implements Screen {
         this.tableRoot.toFront();
     }
 
-    private void renderHeadings() {
+    private void renderHeadingsAndButtons() {
         Label whatsTheLabel = new Label("WHAT'S THE", this.game.skin.get("text-48", LabelStyle.class));
         Label recipeLabel = new Label("RECIPE?", this.game.skin.get("heading-208", LabelStyle.class));
+        TextButton playButton = new TextButton("Play",
+                this.game.skin.get("text-button-default", TextButtonStyle.class));
+        TextButton howToPlay = new TextButton("How to play?",
+                this.game.skin.get("text-button-default", TextButtonStyle.class));
+        TextButton exitButton = new TextButton("Exit",
+                this.game.skin.get("text-button-default", TextButtonStyle.class));
         Table labelGroup = new Table();
 
         labelGroup.add(whatsTheLabel).left();
         labelGroup.row();
         labelGroup.add(recipeLabel);
+        labelGroup.row();
+        labelGroup.add(playButton).padTop(50).left();
+        labelGroup.row();
+        labelGroup.add(howToPlay).padTop(20).left();
+        labelGroup.row();
+        labelGroup.add(exitButton).padTop(20).left();
+
+        playButton.addAction(sequence(
+                alpha(0),
+                delay(1f),
+                fadeIn(1f, Interpolation.pow5)));
+        howToPlay.addAction(sequence(
+                alpha(0),
+                delay(1.25f),
+                fadeIn(1f, Interpolation.pow5)));
+        exitButton.addAction(sequence(
+                alpha(0),
+                delay(1.5f),
+                fadeIn(1f, Interpolation.pow5)));
+
+        exitButton.addListener(
+                (EventListener) event -> {
+                    if (event.toString().equals("touchDown")) {
+                        Gdx.app.exit();
+                    }
+
+                    return false;
+                });
 
         this.tableRoot.add(labelGroup).expandX().left().expandY().top().pad(100, 160, 0, 0);
     }

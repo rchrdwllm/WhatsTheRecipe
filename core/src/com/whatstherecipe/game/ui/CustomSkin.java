@@ -2,11 +2,16 @@ package com.whatstherecipe.game.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 public class CustomSkin extends Skin {
     private FreeTypeFontGenerator lilitaOneGenerator;
@@ -22,6 +27,7 @@ public class CustomSkin extends Skin {
 
         generateDenkOneFonts();
         generateLilitaOneFonts();
+        generateTextButtonStyles();
     }
 
     private void generateDenkOneFonts() {
@@ -82,5 +88,16 @@ public class CustomSkin extends Skin {
         this.heading208 = lilitaOneGenerator.generateFont(parameter208);
         labelStyle208.font = heading208;
         this.add("heading-208", labelStyle208);
+    }
+
+    private void generateTextButtonStyles() {
+        Drawable buttonPatch = new NinePatchDrawable(
+                new NinePatch(new Texture(Gdx.files.internal("patches/text_button.9.png")), 32, 32, 0, 0));
+        TextButtonStyle textButtonStyle = new TextButtonStyle();
+
+        textButtonStyle.up = buttonPatch;
+        textButtonStyle.font = heading48;
+
+        this.add("text-button-default", textButtonStyle);
     }
 }
