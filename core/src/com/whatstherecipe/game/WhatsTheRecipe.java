@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.whatstherecipe.game.screens.LoadingScreen;
 import com.whatstherecipe.game.screens.MainMenuScreen;
+import com.whatstherecipe.game.ui.CustomSkin;
 
 public class WhatsTheRecipe extends Game {
 	public int V_WIDTH = 1920;
@@ -22,12 +23,14 @@ public class WhatsTheRecipe extends Game {
 	public AssetManager assets;
 	public LoadingScreen loadingScreen;
 	public MainMenuScreen mainMenuScreen;
+	public CustomSkin skin;
 
 	@Override
 	public void create() {
 		this.batch = new SpriteBatch();
 		this.camera = new OrthographicCamera();
 		this.assets = new AssetManager();
+		this.skin = new CustomSkin();
 		this.loadingScreen = new LoadingScreen(this);
 		this.mainMenuScreen = new MainMenuScreen(this);
 
@@ -49,6 +52,8 @@ public class WhatsTheRecipe extends Game {
 		this.font.dispose();
 		this.assets.dispose();
 		this.loadingScreen.dispose();
+		this.mainMenuScreen.dispose();
+		this.skin.dispose();
 	}
 
 	private void initFont() {

@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -35,6 +34,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
+        this.stage.dispose();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class MainMenuScreen implements Screen {
 
         this.stage.addAction(sequence(alpha(0f), fadeIn(2f, Interpolation.pow5)));
 
-        renderLabel();
+        renderHeadings();
         renderKitchenBg();
     }
 
@@ -82,11 +82,16 @@ public class MainMenuScreen implements Screen {
         this.tableRoot.toFront();
     }
 
-    private void renderLabel() {
-        Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-        Label mainMenuLabel = new Label("Main menu screen", skin.get("heading", LabelStyle.class));
+    private void renderHeadings() {
+        Label whatsTheLabel = new Label("WHAT'S THE", this.game.skin.get("text-48", LabelStyle.class));
+        Label recipeLabel = new Label("RECIPE?", this.game.skin.get("heading-208", LabelStyle.class));
+        Table labelGroup = new Table();
 
-        this.tableRoot.add(mainMenuLabel);
+        labelGroup.add(whatsTheLabel).left();
+        labelGroup.row();
+        labelGroup.add(recipeLabel);
+
+        this.tableRoot.add(labelGroup).expandX().left().expandY().top().pad(100, 160, 0, 0);
     }
 
     private void renderKitchenBg() {

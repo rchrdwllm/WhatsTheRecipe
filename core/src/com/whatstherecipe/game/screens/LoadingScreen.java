@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Scaling;
@@ -95,10 +94,8 @@ public class LoadingScreen implements Screen {
     }
 
     private void initComponents() {
-        Skin labelSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-
         this.tableRoot = new Table();
-        this.loadingLabel = new Label("Loading...", labelSkin.get("heading", LabelStyle.class));
+        this.loadingLabel = new Label("Loading...", this.game.skin.get("heading-48", LabelStyle.class));
     }
 
     private void renderTable() {
