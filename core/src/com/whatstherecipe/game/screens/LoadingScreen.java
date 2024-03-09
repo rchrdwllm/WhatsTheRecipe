@@ -13,6 +13,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -29,6 +33,8 @@ public class LoadingScreen implements Screen {
     private Stage stage;
     private Image logo;
     private ShapeRenderer shapeRenderer;
+    private Table tableRoot;
+    private Label loadingLabel;
 
     float loadProgress = 0f;
     boolean shouldLoad = false;
@@ -38,6 +44,8 @@ public class LoadingScreen implements Screen {
         this.camera = game.camera;
         this.stage = new Stage(new FitViewport(game.V_WIDTH, game.V_HEIGHT));
         this.shapeRenderer = new ShapeRenderer();
+
+        initComponents();
     }
 
     @Override
@@ -79,17 +87,46 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void show() {
+        renderTable();
+        renderLoadingText();
         renderLogo();
     }
 
+    private void initComponents() {
+        Skin labelSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+
+        this.tableRoot = new Table();
+        this.loadingLabel = new Label("Loading...", labelSkin.get("heading", LabelStyle.class));
+    }
+
+    private void renderTable() {
+        this.tableRoot.setFillParent(true);
+        this.stage.addActor(tableRoot);
+    }
+
     private void renderLogo() {
-        if (this.game.assets.update()) {
+        if (this.game.assets.isLoaded("logo.png")) {
             RunnableAction load = new RunnableAction();
 
             load.setRunnable(new Runnable() {
                 @Override
                 public void run() {
                     shouldLoad = true;
+
+                    RunnableAction goToMainMenuScreen = new RunnableAction();
+
+                    goToMainMenuScreen.setRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.setScreen(game.mainMenuScreen);
+                        }
+                    });
+
+                    if (game.assets.update()) {
+                        stage.addAction(
+                                sequence(delay(2f),
+                                        fadeOut(2f, Interpolation.pow5), goToMainMenuScreen));
+                    }
                 }
             });
 
@@ -116,6 +153,10 @@ public class LoadingScreen implements Screen {
         if (this.shouldLoad) {
             this.loadProgress = MathUtils.lerp(this.loadProgress, this.game.assets.getProgress(), 0.06f);
         }
+
+        if (this.game.assets.update() && this.loadProgress >= this.game.assets.getProgress() - 0.001f) {
+            this.loadingLabel.setText("All set!");
+        }
     }
 
     private void renderLoader() {
@@ -128,5 +169,15 @@ public class LoadingScreen implements Screen {
         shapeRenderer.setColor(Color.valueOf("#C18F4B"));
         shapeRenderer.rect(0, 0, (this.camera.viewportWidth * loadProgress), 15);
         shapeRenderer.end();
+    }
+
+    private void renderLoadingText() {
+        this.tableRoot.add(loadingLabel).expandY().bottom()
+                .padBottom(150);
+
+        loadingLabel.addAction(sequence(
+                alpha(0f),
+                delay(2f),
+                fadeIn(2f, Interpolation.pow4)));
     }
 }

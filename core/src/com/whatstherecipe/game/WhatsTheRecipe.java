@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.whatstherecipe.game.screens.LoadingScreen;
+import com.whatstherecipe.game.screens.MainMenuScreen;
 
 public class WhatsTheRecipe extends Game {
 	public int V_WIDTH = 1920;
@@ -20,6 +21,7 @@ public class WhatsTheRecipe extends Game {
 	public OrthographicCamera camera;
 	public AssetManager assets;
 	public LoadingScreen loadingScreen;
+	public MainMenuScreen mainMenuScreen;
 
 	@Override
 	public void create() {
@@ -27,6 +29,7 @@ public class WhatsTheRecipe extends Game {
 		this.camera = new OrthographicCamera();
 		this.assets = new AssetManager();
 		this.loadingScreen = new LoadingScreen(this);
+		this.mainMenuScreen = new MainMenuScreen(this);
 
 		initFont();
 		queueLoadingAssets();
