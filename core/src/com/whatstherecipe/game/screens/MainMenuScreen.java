@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -24,6 +25,7 @@ public class MainMenuScreen implements Screen {
     private final WhatsTheRecipe game;
     private Stage stage;
     private Table tableRoot;
+    private Table labelGroup;
     private OrthographicCamera camera;
     private Image kitchenBg;
 
@@ -94,17 +96,18 @@ public class MainMenuScreen implements Screen {
                 this.game.skin.get("text-button-default", TextButtonStyle.class));
         TextButton exitButton = new TextButton("Exit",
                 this.game.skin.get("text-button-default", TextButtonStyle.class));
-        Table labelGroup = new Table();
 
-        labelGroup.add(whatsTheLabel).left();
-        labelGroup.row();
-        labelGroup.add(recipeLabel);
-        labelGroup.row();
-        labelGroup.add(playButton).padTop(50).left();
-        labelGroup.row();
-        labelGroup.add(howToPlay).padTop(20).left();
-        labelGroup.row();
-        labelGroup.add(exitButton).padTop(20).left();
+        this.labelGroup = new Table();
+
+        this.labelGroup.add(whatsTheLabel).padTop(50).left();
+        this.labelGroup.row();
+        this.labelGroup.add(recipeLabel);
+        this.labelGroup.row();
+        this.labelGroup.add(playButton).padTop(150).left();
+        this.labelGroup.row();
+        this.labelGroup.add(howToPlay).padTop(30).left();
+        this.labelGroup.row();
+        this.labelGroup.add(exitButton).padTop(30).left();
 
         playButton.addAction(sequence(
                 alpha(0),
@@ -118,6 +121,15 @@ public class MainMenuScreen implements Screen {
                 alpha(0),
                 delay(1.5f),
                 fadeIn(1f, Interpolation.pow5)));
+
+        playButton.addListener(
+                (EventListener) event -> {
+                    if (event.toString().equals("touchDown")) {
+                        transitionToKitchen();
+                    }
+
+                    return false;
+                });
 
         exitButton.addListener(
                 (EventListener) event -> {
@@ -137,10 +149,27 @@ public class MainMenuScreen implements Screen {
 
             this.kitchenBg = new Image(kitchenTexture);
 
-            this.kitchenBg.setWidth(this.game.V_WIDTH);
+            this.kitchenBg.setWidth(this.game.V_WIDTH * 2);
             this.kitchenBg.setHeight(this.game.V_HEIGHT);
             this.stage.addActor(this.kitchenBg);
             this.kitchenBg.toBack();
         }
+    }
+
+    private void transitionToKitchen() {
+        RunnableAction panKitchenBg = new RunnableAction();
+
+        panKitchenBg.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                kitchenBg.addAction(moveBy(-game.V_WIDTH, 0, 3f, Interpolation.pow5));
+            }
+        });
+
+        this.labelGroup.addAction(sequence(delay(0.5f),
+                parallel(
+                        fadeOut(1.5f, Interpolation.pow5),
+                        moveBy(-750, 0, 1.5f, Interpolation.pow5)),
+                panKitchenBg));
     }
 }
