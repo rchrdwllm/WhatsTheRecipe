@@ -166,7 +166,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        this.labelGroup.addAction(sequence(delay(0.5f),
+        this.labelGroup.addAction(sequence(
                 parallel(
                         fadeOut(1.5f, Interpolation.pow5),
                         moveBy(-750, 0, 1.5f, Interpolation.pow5)),
