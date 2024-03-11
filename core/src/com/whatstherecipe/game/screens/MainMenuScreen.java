@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
 
@@ -28,6 +29,7 @@ public class MainMenuScreen implements Screen {
     private Table labelGroup;
     private OrthographicCamera camera;
     private Image kitchenBg;
+    private int screenShows = 0;
 
     public MainMenuScreen(final WhatsTheRecipe game) {
         this.game = game;
@@ -73,10 +75,16 @@ public class MainMenuScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        this.stage.addAction(sequence(alpha(0f), fadeIn(2f, Interpolation.pow5)));
+        if (this.screenShows > 0) {
+            resetState();
+        } else {
+            this.stage.addAction(sequence(alpha(0f), fadeIn(2f, Interpolation.pow5)));
 
-        renderHeadingsAndButtons();
-        renderKitchenBg();
+            renderHeadingsAndButtons();
+            renderKitchenBg();
+        }
+
+        this.screenShows += 1;
     }
 
     private void initComponents() {
@@ -149,6 +157,7 @@ public class MainMenuScreen implements Screen {
 
             this.kitchenBg = new Image(kitchenTexture);
 
+            this.kitchenBg.setOrigin(Align.center);
             this.kitchenBg.setScale(1.25f, 1.25f);
             this.kitchenBg.setWidth(this.game.V_WIDTH * 2);
             this.kitchenBg.setHeight(this.game.V_HEIGHT);
@@ -168,7 +177,7 @@ public class MainMenuScreen implements Screen {
                 switchToKitchenScreen.setRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        game.setScreen(new KitchenScreen(game));
+                        game.setScreen(game.kitchenScreen);
                     }
                 });
 
@@ -185,5 +194,13 @@ public class MainMenuScreen implements Screen {
                         fadeOut(1.5f, Interpolation.pow5),
                         moveBy(-750, 0, 1.5f, Interpolation.pow5)),
                 panKitchenBg));
+    }
+
+    private void resetState() {
+        this.kitchenBg.clear();
+        this.kitchenBg.setPosition(0, 0);
+        this.kitchenBg.setScale(1.25f, 1.25f);
+        this.labelGroup.addAction(parallel(fadeIn(1.5f, Interpolation.pow5),
+                moveBy(750, 0, 1.5f, Interpolation.pow5)));
     }
 }
