@@ -144,11 +144,12 @@ public class MainMenuScreen implements Screen {
     }
 
     private void renderKitchenBg() {
-        if (this.game.assets.isLoaded("kitchen.png")) {
-            Texture kitchenTexture = this.game.assets.get("kitchen.png", Texture.class);
+        if (this.game.assets.isLoaded("kitchen.jpg")) {
+            Texture kitchenTexture = this.game.assets.get("kitchen.jpg", Texture.class);
 
             this.kitchenBg = new Image(kitchenTexture);
 
+            this.kitchenBg.setScale(1.25f, 1.25f);
             this.kitchenBg.setWidth(this.game.V_WIDTH * 2);
             this.kitchenBg.setHeight(this.game.V_HEIGHT);
             this.stage.addActor(this.kitchenBg);
@@ -162,7 +163,22 @@ public class MainMenuScreen implements Screen {
         panKitchenBg.setRunnable(new Runnable() {
             @Override
             public void run() {
-                kitchenBg.addAction(moveBy(-game.V_WIDTH, 0, 3f, Interpolation.pow5));
+                RunnableAction switchToKitchenScreen = new RunnableAction();
+
+                switchToKitchenScreen.setRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new KitchenScreen(game));
+
+                        System.out.println("Switched to kitchen screen");
+                    }
+                });
+
+                kitchenBg.addAction(sequence(
+                        parallel(
+                                scaleBy(-0.25f, -0.25f, 3f, Interpolation.pow5),
+                                moveBy(-game.V_WIDTH, 0, 3f, Interpolation.pow5)),
+                        switchToKitchenScreen));
             }
         });
 
