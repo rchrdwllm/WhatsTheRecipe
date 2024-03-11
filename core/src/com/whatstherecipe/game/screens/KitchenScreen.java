@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
 
@@ -16,6 +18,7 @@ public class KitchenScreen implements Screen {
     private final WhatsTheRecipe game;
     private Stage stage;
     private Table tableRoot;
+    private Label label;
     private OrthographicCamera camera;
     private Image kitchenBg;
 
@@ -63,6 +66,8 @@ public class KitchenScreen implements Screen {
         Gdx.input.setInputProcessor(this.stage);
 
         renderKitchenBg();
+        renderLabel();
+
     }
 
     private void initComponents() {
@@ -83,5 +88,10 @@ public class KitchenScreen implements Screen {
             this.stage.addActor(kitchenBg);
             this.kitchenBg.toBack();
         }
+    }
+
+    private void renderLabel() {
+        this.label = new Label("Kitchen", this.game.skin.get("heading-48", LabelStyle.class));
+        this.tableRoot.add(this.label);
     }
 }
