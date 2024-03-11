@@ -169,8 +169,6 @@ public class MainMenuScreen implements Screen {
                     @Override
                     public void run() {
                         game.setScreen(new KitchenScreen(game));
-
-                        System.out.println("Switched to kitchen screen");
                     }
                 });
 
