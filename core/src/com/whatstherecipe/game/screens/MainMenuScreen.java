@@ -152,8 +152,8 @@ public class MainMenuScreen implements Screen {
     }
 
     private void renderKitchenBg() {
-        if (this.game.assets.isLoaded("kitchen.jpeg")) {
-            Texture kitchenTexture = this.game.assets.get("kitchen.jpeg", Texture.class);
+        if (this.game.assets.isLoaded("kitchen.png")) {
+            Texture kitchenTexture = this.game.assets.get("kitchen.png", Texture.class);
 
             this.kitchenBg = new Image(kitchenTexture);
 

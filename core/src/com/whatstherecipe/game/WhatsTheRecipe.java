@@ -59,7 +59,7 @@ public class WhatsTheRecipe extends Game {
 
 	private void queueLoadingAssets() {
 		this.assets.load("logo.png", Texture.class);
-		this.assets.load("kitchen.jpeg", Texture.class);
+		this.assets.load("kitchen.png", Texture.class);
 		this.assets.finishLoading();
 	}
 }
