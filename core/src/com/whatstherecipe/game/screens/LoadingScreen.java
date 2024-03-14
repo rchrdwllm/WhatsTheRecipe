@@ -15,11 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.ui.Colors;
+import com.whatstherecipe.game.ui.CustomSkin;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -63,7 +64,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(Color.valueOf("#F9ECE9"));
+        ScreenUtils.clear(Color.valueOf("#FDEEEC"));
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         this.camera.update();
@@ -95,7 +96,7 @@ public class LoadingScreen implements Screen {
 
     private void initComponents() {
         this.tableRoot = new Table();
-        this.loadingLabel = new Label("Loading...", this.game.skin.get("heading-48", LabelStyle.class));
+        this.loadingLabel = new Label("Loading...", CustomSkin.generateCustomLilitaOneFont(Colors.coral, 48));
     }
 
     private void renderTable() {
@@ -160,12 +161,12 @@ public class LoadingScreen implements Screen {
 
     private void renderLoader() {
         shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(Color.valueOf("#E0C7A4"));
+        shapeRenderer.setColor(Colors.lightCoral);
         shapeRenderer.rect(0, 0, this.camera.viewportWidth, 15);
         shapeRenderer.end();
 
         shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(Color.valueOf("#C18F4B"));
+        shapeRenderer.setColor(Colors.coral);
         shapeRenderer.rect(0, 0, (this.camera.viewportWidth * loadProgress), 15);
         shapeRenderer.end();
     }
