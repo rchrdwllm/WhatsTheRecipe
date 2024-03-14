@@ -137,8 +137,8 @@ public class KitchenScreen implements Screen {
 
                 kitchenBg.addAction(sequence(
                         parallel(
-                                scaleBy(0.25f, 0.25f, 3f, Interpolation.pow5),
-                                moveBy(game.V_WIDTH, 0, 3f, Interpolation.pow5)),
+                                scaleBy(0.25f, 0.25f, 2f, Interpolation.pow5),
+                                moveBy(game.V_WIDTH, 0, 2f, Interpolation.pow5)),
                         switchToMainMenuScreen));
             }
         });
