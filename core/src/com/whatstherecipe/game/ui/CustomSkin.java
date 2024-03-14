@@ -89,12 +89,26 @@ public class CustomSkin extends Skin {
     }
 
     private void generateTextButtonStyles() {
+        FreeTypeFontParameter params = new FreeTypeFontParameter();
         Drawable buttonPatch = new NinePatchDrawable(
                 new NinePatch(new Texture(Gdx.files.internal("patches/text_button.9.png")), 32, 32, 0, 0));
+        Drawable buttonDown = new NinePatchDrawable(
+                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_down.9.png")), 32, 32, 0, 0));
+        Drawable buttonOver = new NinePatchDrawable(
+                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_over.9.png")), 32, 32, 0, 0));
         TextButtonStyle textButtonStyle = new TextButtonStyle();
 
+        params.size = 48;
+
+        BitmapFont font = lilitaOneGenerator.generateFont(params);
+
         textButtonStyle.up = buttonPatch;
-        textButtonStyle.font = heading48;
+        textButtonStyle.font = font;
+        textButtonStyle.fontColor = Colors.brown;
+        textButtonStyle.down = buttonDown;
+        textButtonStyle.downFontColor = Colors.lightBrown;
+        textButtonStyle.over = buttonOver;
+        textButtonStyle.overFontColor = Colors.lightBrown;
 
         this.add("text-button-default", textButtonStyle);
     }
