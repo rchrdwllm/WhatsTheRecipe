@@ -19,7 +19,6 @@ public class WhatsTheRecipe extends Game {
 	public int V_HEIGHT = 1080;
 
 	public SpriteBatch batch;
-	public BitmapFont font;
 	public OrthographicCamera camera;
 	public AssetManager assets;
 	public LoadingScreen loadingScreen;
@@ -37,7 +36,6 @@ public class WhatsTheRecipe extends Game {
 		this.mainMenuScreen = new MainMenuScreen(this);
 		this.kitchenScreen = new KitchenScreen(this);
 
-		initFont();
 		queueLoadingAssets();
 
 		this.camera.setToOrtho(false, V_WIDTH, V_HEIGHT);
@@ -52,22 +50,11 @@ public class WhatsTheRecipe extends Game {
 	@Override
 	public void dispose() {
 		this.batch.dispose();
-		this.font.dispose();
 		this.assets.dispose();
 		this.loadingScreen.dispose();
 		this.mainMenuScreen.dispose();
 		this.kitchenScreen.dispose();
 		this.skin.dispose();
-	}
-
-	private void initFont() {
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/LilitaOne-Regular.ttf"));
-		FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-		params.color = Color.BLACK;
-		params.size = 24;
-
-		this.font = generator.generateFont(params);
 	}
 
 	private void queueLoadingAssets() {
