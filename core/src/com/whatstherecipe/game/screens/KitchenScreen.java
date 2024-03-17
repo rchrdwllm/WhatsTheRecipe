@@ -91,8 +91,8 @@ public class KitchenScreen implements Screen {
     }
 
     private void renderKitchenBg() {
-        if (this.game.assets.isLoaded("kitchen.png")) {
-            Texture kitchenTexture = this.game.assets.get("kitchen.png", Texture.class);
+        if (this.game.assets.isLoaded("kitchen.jpg")) {
+            Texture kitchenTexture = this.game.assets.get("kitchen.jpg", Texture.class);
 
             this.kitchenBg = new Image(kitchenTexture);
 

@@ -96,8 +96,15 @@ public class MainMenuScreen implements Screen {
     }
 
     private void renderHeadingsAndButtons() {
-        Label whatsTheLabel = new Label("WHAT'S THE", this.game.skin.get("text-48", LabelStyle.class));
-        Label recipeLabel = new Label("RECIPE?", this.game.skin.get("heading-208", LabelStyle.class));
+        this.labelGroup = new Table();
+
+        if (this.game.assets.isLoaded("main-menu-screen-text.png")) {
+            Texture mainMenuScreenText = this.game.assets.get("main-menu-screen-text.png", Texture.class);
+            Image whatsTheLabel = new Image(mainMenuScreenText);
+
+            this.labelGroup.add(whatsTheLabel).padTop(50).left();
+        }
+
         TextButton playButton = new TextButton("Play",
                 this.game.skin.get("text-button-default", TextButtonStyle.class));
         TextButton howToPlay = new TextButton("How to play?",
@@ -105,11 +112,6 @@ public class MainMenuScreen implements Screen {
         TextButton exitButton = new TextButton("Exit",
                 this.game.skin.get("text-button-default", TextButtonStyle.class));
 
-        this.labelGroup = new Table();
-
-        this.labelGroup.add(whatsTheLabel).padTop(50).left();
-        this.labelGroup.row();
-        this.labelGroup.add(recipeLabel);
         this.labelGroup.row();
         this.labelGroup.add(playButton).padTop(150).left();
         this.labelGroup.row();
@@ -152,8 +154,8 @@ public class MainMenuScreen implements Screen {
     }
 
     private void renderKitchenBg() {
-        if (this.game.assets.isLoaded("kitchen.png")) {
-            Texture kitchenTexture = this.game.assets.get("kitchen.png", Texture.class);
+        if (this.game.assets.isLoaded("kitchen.jpg")) {
+            Texture kitchenTexture = this.game.assets.get("kitchen.jpg", Texture.class);
 
             this.kitchenBg = new Image(kitchenTexture);
 
