@@ -15,7 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
@@ -24,9 +25,9 @@ public class KitchenScreen implements Screen {
     private final WhatsTheRecipe game;
     private Stage stage;
     private Table tableRoot;
-    private Label label;
     private OrthographicCamera camera;
     private Image kitchenBg;
+    private TextButton backBtn;
     private int screenShows = 0;
 
     public KitchenScreen(final WhatsTheRecipe game) {
@@ -77,7 +78,7 @@ public class KitchenScreen implements Screen {
             resetState();
         } else {
             renderKitchenBg();
-            renderLabel();
+            renderButtons();
         }
 
         this.screenShows += 1;
@@ -104,13 +105,12 @@ public class KitchenScreen implements Screen {
         }
     }
 
-    private void renderLabel() {
-        this.label = new Label("Kitchen", this.game.skin.get("heading-48", LabelStyle.class));
-        this.tableRoot.add(this.label);
+    private void renderButtons() {
+        this.backBtn = new TextButton("Back", this.game.skin.get("text-button-default", TextButtonStyle.class));
+        this.tableRoot.add(this.backBtn).expandY().top().expandX().left().pad(100, 100, 0, 0);
 
-        this.label.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
-
-        label.addListener(
+        this.backBtn.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
+        this.backBtn.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
                         transitionToMainMenu();
@@ -143,7 +143,7 @@ public class KitchenScreen implements Screen {
             }
         });
 
-        this.label.addAction(sequence(
+        this.backBtn.addAction(sequence(
                 fadeOut(1.5f, Interpolation.pow5),
                 panKitchenBg));
     }
@@ -152,6 +152,6 @@ public class KitchenScreen implements Screen {
         this.kitchenBg.clear();
         this.kitchenBg.setPosition(-this.game.V_WIDTH, 0);
         this.kitchenBg.setScale(1f, 1f);
-        this.label.addAction(fadeIn(1.5f, Interpolation.pow5));
+        this.backBtn.addAction(fadeIn(1.5f, Interpolation.pow5));
     }
 }
