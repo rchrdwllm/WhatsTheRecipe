@@ -1,14 +1,10 @@
 package com.whatstherecipe.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.screens.LoadingScreen;
 import com.whatstherecipe.game.screens.MainMenuScreen;
@@ -59,7 +55,7 @@ public class WhatsTheRecipe extends Game {
 
 	private void queueLoadingAssets() {
 		this.assets.load("logo.png", Texture.class);
-		this.assets.load("kitchen.png", Texture.class);
+		this.assets.load("kitchen.jpg", Texture.class);
 		this.assets.finishLoading();
 	}
 }
