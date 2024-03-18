@@ -136,6 +136,9 @@ public class KitchenScreen implements Screen {
                     }
                 });
 
+                recipeRef.addAction(parallel(
+                        scaleBy(0.25f, 0.25f, 2f, Interpolation.pow5),
+                        moveBy(game.V_WIDTH, 0, 2f, Interpolation.pow5)));
                 kitchenBg.addAction(sequence(
                         parallel(
                                 scaleBy(0.25f, 0.25f, 2f, Interpolation.pow5),
@@ -144,7 +147,6 @@ public class KitchenScreen implements Screen {
             }
         });
 
-        this.recipeRef.addAction(fadeOut(1.5f, Interpolation.pow5));
         this.backBtn.addAction(sequence(
                 fadeOut(1.5f, Interpolation.pow5),
                 panKitchenBg));
@@ -169,6 +171,9 @@ public class KitchenScreen implements Screen {
         this.kitchenBg.setPosition(-this.game.V_WIDTH, 0);
         this.kitchenBg.setScale(1f, 1f);
         this.recipeRef.addAction(fadeIn(1.5f, Interpolation.pow5));
+        this.recipeRef.setScale(1f, 1f);
+        this.recipeRef.setPosition((this.game.V_WIDTH - recipeRef.getWidth()) - 240,
+                (this.game.V_HEIGHT - recipeRef.getHeight()) - 160);
         this.backBtn.addAction(fadeIn(1.5f, Interpolation.pow5));
     }
 }
