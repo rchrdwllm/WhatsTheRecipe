@@ -57,6 +57,7 @@ public class WhatsTheRecipe extends Game {
 		this.assets.load("logo.png", Texture.class);
 		this.assets.load("kitchen.jpg", Texture.class);
 		this.assets.load("main-menu-screen-text.png", Texture.class);
+		this.assets.load("recipe-ref.png", Texture.class);
 		this.assets.finishLoading();
 	}
 }

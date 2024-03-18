@@ -26,6 +26,7 @@ public class KitchenScreen implements Screen {
     private Table tableRoot;
     private OrthographicCamera camera;
     private Image kitchenBg;
+    private Image recipeRef;
     private TextButton backBtn;
     private int screenShows = 0;
 
@@ -78,6 +79,7 @@ public class KitchenScreen implements Screen {
         } else {
             renderKitchenBg();
             renderButtons();
+            renderRecipeRef();
         }
 
         this.screenShows += 1;
@@ -142,15 +144,31 @@ public class KitchenScreen implements Screen {
             }
         });
 
+        this.recipeRef.addAction(fadeOut(1.5f, Interpolation.pow5));
         this.backBtn.addAction(sequence(
                 fadeOut(1.5f, Interpolation.pow5),
                 panKitchenBg));
+    }
+
+    private void renderRecipeRef() {
+        if (this.game.assets.isLoaded("recipe-ref.png")) {
+            Texture recipeRefTexture = this.game.assets.get("recipe-ref.png", Texture.class);
+
+            this.recipeRef = new Image(recipeRefTexture);
+            this.recipeRef.setWidth(recipeRef.getWidth() / 4);
+            this.recipeRef.setHeight(recipeRef.getHeight() / 4);
+            this.recipeRef.setPosition((this.game.V_WIDTH - recipeRef.getWidth()) - 240,
+                    (this.game.V_HEIGHT - recipeRef.getHeight()) - 160);
+            this.recipeRef.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
+            this.stage.addActor(recipeRef);
+        }
     }
 
     private void resetState() {
         this.kitchenBg.clear();
         this.kitchenBg.setPosition(-this.game.V_WIDTH, 0);
         this.kitchenBg.setScale(1f, 1f);
+        this.recipeRef.addAction(fadeIn(1.5f, Interpolation.pow5));
         this.backBtn.addAction(fadeIn(1.5f, Interpolation.pow5));
     }
 }
