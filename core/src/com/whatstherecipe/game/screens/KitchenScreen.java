@@ -29,6 +29,7 @@ public class KitchenScreen implements Screen {
     private Image recipeRef;
     private TextButton backBtn;
     private int screenShows = 0;
+    private boolean isRecipePaperShown = false;
 
     public KitchenScreen(final WhatsTheRecipe game) {
         this.game = game;
@@ -164,6 +165,41 @@ public class KitchenScreen implements Screen {
                     (this.game.V_HEIGHT - recipeRef.getHeight()) - 160);
             this.recipeRef.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
             this.stage.addActor(recipeRef);
+
+            this.recipeRef.addListener((EventListener) event -> {
+                if (event.toString().equals("touchDown")) {
+                    toggleRecipePaper();
+                }
+
+                return false;
+            });
+        }
+    }
+
+    private void toggleRecipePaper() {
+        if (isRecipePaperShown) {
+            isRecipePaperShown = false;
+
+            this.recipeRef.addAction(
+                    parallel(
+                            moveTo(
+                                    (this.game.V_WIDTH - recipeRef.getWidth()) - 240,
+                                    (this.game.V_HEIGHT - recipeRef.getHeight()) - 160,
+                                    2f,
+                                    Interpolation.pow5),
+                            scaleBy(-3f, -3f, 2f, Interpolation.pow5)));
+        } else {
+            isRecipePaperShown = true;
+
+            this.recipeRef.setOrigin(Align.center);
+            this.recipeRef.addAction(
+                    parallel(
+                            moveTo(
+                                    (this.game.V_WIDTH / 2) - (recipeRef.getWidth() / 2),
+                                    (this.game.V_HEIGHT / 2) - (recipeRef.getHeight() / 2),
+                                    2f,
+                                    Interpolation.pow5),
+                            scaleBy(3f, 3f, 2f, Interpolation.pow5)));
         }
     }
 
