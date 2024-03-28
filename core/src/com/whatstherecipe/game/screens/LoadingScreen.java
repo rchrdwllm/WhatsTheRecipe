@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -123,8 +124,10 @@ public class LoadingScreen implements Screen {
                     });
 
                     if (game.assets.update()) {
+                        logo.setOrigin(Align.center);
+                        logo.addAction(sequence(delay(2.5f), scaleTo(0, 0, 0.5f, Interpolation.swingIn)));
                         stage.addAction(
-                                sequence(delay(2f),
+                                sequence(delay(1.75f),
                                         fadeOut(2f, Interpolation.pow5), goToMainMenuScreen));
                     }
                 }
