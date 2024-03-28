@@ -102,7 +102,7 @@ public class MainMenuScreen implements Screen {
             Texture mainMenuScreenText = this.game.assets.get("main-menu-screen-text.png", Texture.class);
             Image whatsTheLabel = new Image(mainMenuScreenText);
 
-            this.labelGroup.add(whatsTheLabel).padTop(50).left();
+            this.labelGroup.add(whatsTheLabel).left();
         }
 
         TextButton playButton = new TextButton("Play",
@@ -159,7 +159,8 @@ public class MainMenuScreen implements Screen {
                     return false;
                 });
 
-        this.tableRoot.add(labelGroup).expandX().left().expandY().top().pad(100, 160, 0, 0);
+        this.labelGroup.setPosition(160, (float) 132.5);
+        this.tableRoot.add(labelGroup).expandX().left().top().pad(0, 160, 0, 0);
     }
 
     private void renderKitchenBg() {
@@ -242,6 +243,6 @@ public class MainMenuScreen implements Screen {
         this.kitchenBg.setPosition(0, 0);
         this.kitchenBg.setScale(1.25f, 1.25f);
         this.labelGroup.addAction(parallel(fadeIn(1.5f, Interpolation.pow5),
-                moveBy(750, 0, 1.5f, Interpolation.pow5)));
+                moveTo(160, (float) 132.5, 1.5f, Interpolation.pow5)));
     }
 }
