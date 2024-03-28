@@ -27,6 +27,7 @@ public class MainMenuScreen implements Screen {
     private Table labelGroup;
     private OrthographicCamera camera;
     private Image kitchenBg;
+    private Image paper;
     private int screenShows = 0;
 
     public MainMenuScreen(final WhatsTheRecipe game) {
@@ -80,6 +81,7 @@ public class MainMenuScreen implements Screen {
 
             renderHeadingsAndButtons();
             renderKitchenBg();
+            renderHowTo();
         }
 
         this.screenShows += 1;
@@ -134,6 +136,15 @@ public class MainMenuScreen implements Screen {
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
                         transitionToKitchen();
+                    }
+
+                    return false;
+                });
+
+        howToPlay.addListener(
+                (EventListener) event -> {
+                    if (event.toString().equals("touchDown")) {
+                        toggleInstructions();
                     }
 
                     return false;
@@ -194,6 +205,32 @@ public class MainMenuScreen implements Screen {
                         fadeOut(1.5f, Interpolation.pow5),
                         moveBy(-750, 0, 1.5f, Interpolation.pow5)),
                 panKitchenBg));
+    }
+
+    private void renderHowTo() {
+        if (this.game.assets.isLoaded("paper.png")) {
+            Texture paperTexture = this.game.assets.get("paper.png", Texture.class);
+
+            this.paper = new Image(paperTexture);
+            this.paper.setOrigin(Align.center);
+            this.paper.setWidth((float) (paper.getWidth() / 1.25));
+            this.paper.setHeight((float) (paper.getHeight() / 1.25));
+            this.paper.setPosition((this.game.V_WIDTH / 2) - (paper.getWidth() / 2), -paper.getHeight());
+            this.stage.addActor(this.paper);
+            this.paper.toFront();
+        }
+    }
+
+    private void toggleInstructions() {
+        if (this.paper.getY() < 0) {
+            this.paper.addAction(sequence(
+                    moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2),
+                            (this.game.V_HEIGHT / 2) - (paper.getHeight() / 2), 1.5f, Interpolation.pow5)));
+        } else {
+            this.paper.addAction(sequence(
+                    moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2), -paper.getHeight(), 1.5f,
+                            Interpolation.pow5)));
+        }
     }
 
     private void resetState() {
