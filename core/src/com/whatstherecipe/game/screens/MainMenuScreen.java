@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.ui.Colors;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -28,7 +30,9 @@ public class MainMenuScreen implements Screen {
     private OrthographicCamera camera;
     private Image kitchenBg;
     private Image paper;
+    private Image brownOverlay;
     private int screenShows = 0;
+    private boolean instructionsVisible = false;
 
     public MainMenuScreen(final WhatsTheRecipe game) {
         this.game = game;
@@ -81,6 +85,7 @@ public class MainMenuScreen implements Screen {
 
             renderHeadingsAndButtons();
             renderKitchenBg();
+            renderOverlay();
             renderHowTo();
         }
 
@@ -144,7 +149,7 @@ public class MainMenuScreen implements Screen {
         howToPlay.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
-                        transitionToInstructions();
+                        toggleInstructions();
                     }
 
                     return false;
@@ -208,6 +213,25 @@ public class MainMenuScreen implements Screen {
                 panKitchenBg));
     }
 
+    private void renderOverlay() {
+        Pixmap brownPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+
+        brownPixmap.setColor(Colors.brown);
+        brownPixmap.fillRectangle(0, 0, 1, 1);
+
+        this.brownOverlay = new Image(new Texture(brownPixmap));
+        this.brownOverlay.setFillParent(true);
+        this.brownOverlay.addAction(alpha(0));
+
+        this.brownOverlay.addListener((EventListener) event -> {
+            if (event.toString().contains("touchDown")) {
+                toggleInstructions();
+            }
+
+            return false;
+        });
+    }
+
     private void renderHowTo() {
         if (this.game.assets.isLoaded("paper.png")) {
             Texture paperTexture = this.game.assets.get("paper.png", Texture.class);
@@ -218,24 +242,37 @@ public class MainMenuScreen implements Screen {
             this.paper.setHeight((float) (paper.getHeight() / 1.25));
             this.paper.setPosition((this.game.V_WIDTH / 2) - (paper.getWidth() / 2), -paper.getHeight());
             this.stage.addActor(this.paper);
-            this.paper.toFront();
         }
     }
 
-    private void transitionToInstructions() {
-        RunnableAction switchToInstructions = new RunnableAction();
+    private void toggleInstructions() {
+        RunnableAction removeOverlay = new RunnableAction();
 
-        switchToInstructions.setRunnable(new Runnable() {
+        removeOverlay.setRunnable(new Runnable() {
             @Override
             public void run() {
-                game.setScreen(game.howToPlayScreen);
+                brownOverlay.remove();
             }
         });
 
-        this.paper.addAction(sequence(
-                moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2),
-                        (this.game.V_HEIGHT / 2) - (paper.getHeight() / 2), 1.5f, Interpolation.pow5),
-                switchToInstructions));
+        if (instructionsVisible) {
+            this.paper.addAction(
+                    moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2),
+                            -paper.getHeight(), 1.5f, Interpolation.pow5));
+            this.brownOverlay.addAction(sequence(delay(1.5f), fadeOut(0.5f, Interpolation.pow5), removeOverlay));
+
+            instructionsVisible = false;
+        } else {
+            this.stage.addActor(this.brownOverlay);
+            this.paper.toFront();
+            this.brownOverlay.addAction(fadeIn(0.5f, Interpolation.pow5));
+            this.paper.addAction(sequence(
+                    delay(0.5f),
+                    moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2),
+                            (this.game.V_HEIGHT / 2) - (paper.getHeight() / 2), 1.5f, Interpolation.pow5)));
+
+            instructionsVisible = true;
+        }
     }
 
     private void resetState() {
@@ -244,5 +281,8 @@ public class MainMenuScreen implements Screen {
         this.kitchenBg.setScale(1.25f, 1.25f);
         this.labelGroup.addAction(parallel(fadeIn(1.5f, Interpolation.pow5),
                 moveTo(160, (float) 132.5, 1.5f, Interpolation.pow5)));
+        this.brownOverlay.addAction(alpha(0f));
+        this.paper.setPosition((this.game.V_WIDTH / 2) - (paper.getWidth() / 2), -paper.getHeight());
+        this.brownOverlay.remove();
     }
 }
