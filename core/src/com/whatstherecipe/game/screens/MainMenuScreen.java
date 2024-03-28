@@ -144,7 +144,7 @@ public class MainMenuScreen implements Screen {
         howToPlay.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
-                        toggleInstructions();
+                        transitionToInstructions();
                     }
 
                     return false;
@@ -221,16 +221,20 @@ public class MainMenuScreen implements Screen {
         }
     }
 
-    private void toggleInstructions() {
-        if (this.paper.getY() < 0) {
-            this.paper.addAction(sequence(
-                    moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2),
-                            (this.game.V_HEIGHT / 2) - (paper.getHeight() / 2), 1.5f, Interpolation.pow5)));
-        } else {
-            this.paper.addAction(sequence(
-                    moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2), -paper.getHeight(), 1.5f,
-                            Interpolation.pow5)));
-        }
+    private void transitionToInstructions() {
+        RunnableAction switchToInstructions = new RunnableAction();
+
+        switchToInstructions.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                game.setScreen(game.howToPlayScreen);
+            }
+        });
+
+        this.paper.addAction(sequence(
+                moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2),
+                        (this.game.V_HEIGHT / 2) - (paper.getHeight() / 2), 1.5f, Interpolation.pow5),
+                switchToInstructions));
     }
 
     private void resetState() {

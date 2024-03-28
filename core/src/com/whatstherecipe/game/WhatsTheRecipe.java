@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.whatstherecipe.game.screens.HowToPlayScreen;
 import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.screens.LoadingScreen;
 import com.whatstherecipe.game.screens.MainMenuScreen;
@@ -20,6 +21,7 @@ public class WhatsTheRecipe extends Game {
 	public LoadingScreen loadingScreen;
 	public MainMenuScreen mainMenuScreen;
 	public KitchenScreen kitchenScreen;
+	public HowToPlayScreen howToPlayScreen;
 	public CustomSkin skin;
 
 	@Override
@@ -31,6 +33,7 @@ public class WhatsTheRecipe extends Game {
 		this.loadingScreen = new LoadingScreen(this);
 		this.mainMenuScreen = new MainMenuScreen(this);
 		this.kitchenScreen = new KitchenScreen(this);
+		this.howToPlayScreen = new HowToPlayScreen(this);
 
 		queueLoadingAssets();
 
@@ -50,6 +53,7 @@ public class WhatsTheRecipe extends Game {
 		this.loadingScreen.dispose();
 		this.mainMenuScreen.dispose();
 		this.kitchenScreen.dispose();
+		this.howToPlayScreen.dispose();
 		this.skin.dispose();
 	}
 
