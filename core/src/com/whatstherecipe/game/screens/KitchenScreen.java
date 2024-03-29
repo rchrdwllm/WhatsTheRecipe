@@ -2,14 +2,19 @@ package com.whatstherecipe.game.screens;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.ui.Colors;
 
 public class KitchenScreen implements Screen {
     private final WhatsTheRecipe game;
@@ -30,6 +36,8 @@ public class KitchenScreen implements Screen {
     private TextButton backBtn;
     private int screenShows = 0;
     private boolean isRecipePaperShown = false;
+    private ArrayList<Image> cabinetTriggers;
+    private ArrayList<Image> cabinetImgs;
 
     public KitchenScreen(final WhatsTheRecipe game) {
         this.game = game;
@@ -81,6 +89,8 @@ public class KitchenScreen implements Screen {
             renderKitchenBg();
             renderButtons();
             renderRecipeRef();
+            prepareCabinetImgs();
+            renderCabinetTriggers();
         }
 
         this.screenShows += 1;
@@ -104,6 +114,14 @@ public class KitchenScreen implements Screen {
             this.kitchenBg.moveBy(-this.game.V_WIDTH, 0);
             this.stage.addActor(kitchenBg);
             this.kitchenBg.toBack();
+            this.kitchenBg.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    System.out.println("x: " + x + ", y: " + y);
+
+                    return true;
+                }
+            });
         }
     }
 
@@ -200,6 +218,98 @@ public class KitchenScreen implements Screen {
                                     2f,
                                     Interpolation.pow5),
                             scaleBy(3f, 3f, 2f, Interpolation.pow5)));
+        }
+    }
+
+    private void renderCabinetTriggers() {
+        this.cabinetTriggers = new ArrayList<Image>();
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        TextButton closeCabinetBtn = new TextButton("Close",
+                this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+        closeCabinetBtn.setPosition(100, this.game.V_HEIGHT - closeCabinetBtn.getHeight() - 100);
+
+        pixmap.setColor(Colors.transparent);
+        pixmap.fillRectangle(0, 0, 1, 1);
+
+        Image cabinetTrigger1 = new Image(new Texture(pixmap));
+        cabinetTrigger1.setSize(330, 398);
+        cabinetTrigger1.setPosition(0, 114);
+        cabinetTriggers.add(cabinetTrigger1);
+
+        Image cabinetTrigger2 = new Image(new Texture(pixmap));
+        cabinetTrigger2.setSize(316, 406);
+        cabinetTrigger2.setPosition(1097, 105);
+        cabinetTriggers.add(cabinetTrigger2);
+
+        Image cabinetTrigger3 = new Image(new Texture(pixmap));
+        cabinetTrigger3.setSize(325, 223);
+        cabinetTrigger3.setPosition(1087, 856);
+        cabinetTriggers.add(cabinetTrigger3);
+
+        for (int i = 0; i < this.cabinetTriggers.size(); i++) {
+            Image cabinetTrigger = this.cabinetTriggers.get(i);
+            int index = i;
+
+            this.stage.addActor(cabinetTrigger);
+
+            cabinetTrigger.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    Image cabinetImg = cabinetImgs.get(index);
+
+                    closeCabinetBtn.clear();
+                    stage.addActor(cabinetImg);
+                    cabinetImg.toFront();
+                    cabinetImg.addAction(fadeIn(0.5f));
+                    recipeRef.toFront();
+                    cabinetTrigger.addAction(fadeIn(0.5f));
+                    closeCabinetBtn.addListener(new InputListener() {
+                        @Override
+                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            RunnableAction removeItems = new RunnableAction();
+
+                            removeItems.setRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    cabinetImg.remove();
+                                    closeCabinetBtn.clear();
+                                    closeCabinetBtn.remove();
+                                }
+                            });
+
+                            cabinetImg.addAction(fadeOut(0.5f));
+                            closeCabinetBtn.addAction(sequence(fadeOut(0.5f), removeItems));
+
+                            return true;
+                        }
+                    });
+                    closeCabinetBtn.addAction(sequence(fadeIn(0.5f)));
+                    stage.addActor(closeCabinetBtn);
+
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void prepareCabinetImgs() {
+        String[] fileNames = { "open-cabinet-1.jpg", "open-cabinet-2.jpg", "open-cabinet-3.jpg" };
+
+        this.cabinetImgs = new ArrayList<Image>();
+
+        for (String fileName : fileNames) {
+            if (this.game.assets.isLoaded(fileName)) {
+                Texture cabinetImgTexture = this.game.assets.get(fileName, Texture.class);
+
+                Image cabinetImg = new Image(cabinetImgTexture);
+                cabinetImg.setOrigin(Align.center);
+                cabinetImg.setSize(this.game.V_WIDTH * 2, this.game.V_HEIGHT);
+                cabinetImg.setPosition(-this.game.V_WIDTH, 0);
+                cabinetImg.addAction(alpha(0f));
+                this.cabinetImgs.add(cabinetImg);
+            }
         }
     }
 
