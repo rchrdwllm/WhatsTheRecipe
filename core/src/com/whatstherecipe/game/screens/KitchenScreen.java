@@ -239,6 +239,7 @@ public class KitchenScreen implements Screen {
                     });
                     closeCabinetBtn.addAction(sequence(fadeIn(0.5f)));
                     stage.addActor(closeCabinetBtn);
+                    recipePaperView.recipeRef.toFront();
 
                     return true;
                 }
