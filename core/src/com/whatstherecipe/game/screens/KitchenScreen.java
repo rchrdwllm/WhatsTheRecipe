@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.classes.Ingredients;
+import com.whatstherecipe.game.components.Ingredient;
 import com.whatstherecipe.game.components.RecipePaperView;
 import com.whatstherecipe.game.ui.Colors;
 
@@ -38,11 +40,14 @@ public class KitchenScreen implements Screen {
     private ArrayList<Image> cabinetTriggers;
     private ArrayList<Image> cabinetImgs;
     private RecipePaperView recipePaperView;
+    private ArrayList<ArrayList<Ingredient>> ingredients;
 
     public KitchenScreen(final WhatsTheRecipe game) {
         this.game = game;
         this.stage = new Stage();
         this.camera = game.camera;
+
+        this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
         initComponents();
     }
@@ -90,6 +95,7 @@ public class KitchenScreen implements Screen {
         } else {
             renderKitchenBg();
             renderButtons();
+            prepareIngredients();
             prepareCabinetImgs();
             renderCabinetTriggers();
         }
@@ -178,7 +184,7 @@ public class KitchenScreen implements Screen {
         this.cabinetTriggers = new ArrayList<Image>();
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        TextButton closeCabinetBtn = new TextButton("Close",
+        TextButton closeCabinetBtn = new TextButton("Close the cabinet",
                 this.game.skin.get("text-button-default", TextButtonStyle.class));
 
         closeCabinetBtn.setPosition(100, this.game.V_HEIGHT - closeCabinetBtn.getHeight() - 100);
@@ -238,8 +244,13 @@ public class KitchenScreen implements Screen {
                         }
                     });
                     closeCabinetBtn.addAction(sequence(fadeIn(0.5f)));
+                    closeCabinetBtn.toFront();
                     stage.addActor(closeCabinetBtn);
                     recipePaperView.recipeRef.toFront();
+
+                    ingredients.get(index).forEach(ingredient -> {
+                        ingredient.showIngredient();
+                    });
 
                     return true;
                 }
@@ -262,6 +273,21 @@ public class KitchenScreen implements Screen {
                 cabinetImg.setPosition(-this.game.V_WIDTH, 0);
                 cabinetImg.addAction(alpha(0f));
                 this.cabinetImgs.add(cabinetImg);
+            }
+        }
+    }
+
+    private void prepareIngredients() {
+        for (int i = 0; i < Ingredients.ingredientsList.length; i++) {
+            this.ingredients.add(new ArrayList<Ingredient>());
+
+            for (int j = 0; j < Ingredients.ingredientsList[i].length; j++) {
+                Ingredient ingredient = new Ingredient(this.game, this.stage, Ingredients.ingredientsList[i][j]);
+                int cabinetIndex = i;
+
+                ingredient.cabinetIndex = cabinetIndex;
+
+                this.ingredients.get(i).add(ingredient);
             }
         }
     }
