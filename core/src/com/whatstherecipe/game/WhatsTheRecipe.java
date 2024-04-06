@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.screens.LoadingScreen;
 import com.whatstherecipe.game.screens.MainMenuScreen;
@@ -62,6 +63,13 @@ public class WhatsTheRecipe extends Game {
 		this.assets.load("open-cabinet-1.jpg", Texture.class);
 		this.assets.load("open-cabinet-2.jpg", Texture.class);
 		this.assets.load("open-cabinet-3.jpg", Texture.class);
+
+		for (int i = 0; i < Ingredients.ingredientsList.length; i++) {
+			for (int j = 0; j < Ingredients.ingredientsList[i].length; j++) {
+				this.assets.load("ingredients/" + Ingredients.ingredientsList[i][j] + ".png", Texture.class);
+			}
+		}
+
 		this.assets.finishLoading();
 	}
 }
