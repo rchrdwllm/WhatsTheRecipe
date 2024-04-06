@@ -85,9 +85,9 @@ public class RecipePaperView {
                             moveTo(
                                     (this.game.V_WIDTH - recipeRef.getWidth()) - 240,
                                     (this.game.V_HEIGHT - recipeRef.getHeight()) - 160,
-                                    0.5f,
-                                    Interpolation.swingIn),
-                            scaleBy(-3f, -3f, 0.75f, Interpolation.swingIn)));
+                                    1f,
+                                    Interpolation.pow5),
+                            scaleBy(-3f, -3f, 0.75f, Interpolation.pow5)));
             this.brownOverlay.addAction(sequence(delay(0.75f), fadeOut(0.5f, Interpolation.pow5), removeOverlay));
 
             recipePaperVisible = false;
@@ -101,8 +101,8 @@ public class RecipePaperView {
                             moveTo(
                                     (this.game.V_WIDTH / 2) - (recipeRef.getWidth() / 2),
                                     (this.game.V_HEIGHT / 2) - (recipeRef.getHeight() / 2),
-                                    0.5f,
-                                    Interpolation.swingOut),
+                                    1f,
+                                    Interpolation.pow5),
                             scaleBy(3f, 3f, 0.75f, Interpolation.swingOut)));
 
             recipePaperVisible = true;

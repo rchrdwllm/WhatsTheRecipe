@@ -208,7 +208,7 @@ public class MainMenuScreen implements Screen {
 
         this.labelGroup.addAction(sequence(
                 parallel(
-                        fadeOut(0.5f, Interpolation.pow5),
+                        fadeOut(0.75f, Interpolation.pow5),
                         moveBy(-350, 0, 0.5f, Interpolation.swingIn)),
                 panKitchenBg));
     }
@@ -217,7 +217,7 @@ public class MainMenuScreen implements Screen {
         this.kitchenBg.clear();
         this.kitchenBg.setPosition(0, 0);
         this.kitchenBg.setScale(1.25f, 1.25f);
-        this.labelGroup.addAction(parallel(fadeIn(0.5f, Interpolation.pow5),
+        this.labelGroup.addAction(parallel(fadeIn(0.35f, Interpolation.pow5),
                 moveTo(160, (float) 132.5, 0.5f, Interpolation.swingOut)));
     }
 }
