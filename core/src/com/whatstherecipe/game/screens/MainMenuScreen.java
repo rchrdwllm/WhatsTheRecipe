@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
-import com.whatstherecipe.game.ui.Colors;
+import com.whatstherecipe.game.components.InstructionsView;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -29,10 +28,8 @@ public class MainMenuScreen implements Screen {
     private Table labelGroup;
     private OrthographicCamera camera;
     private Image kitchenBg;
-    private Image paper;
-    private Image brownOverlay;
     private int screenShows = 0;
-    private boolean instructionsVisible = false;
+    private InstructionsView instructionsView;
 
     public MainMenuScreen(final WhatsTheRecipe game) {
         this.game = game;
@@ -78,6 +75,8 @@ public class MainMenuScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
+        this.instructionsView = new InstructionsView(game, stage, screenShows);
+
         if (this.screenShows > 0) {
             resetState();
         } else {
@@ -85,8 +84,6 @@ public class MainMenuScreen implements Screen {
 
             renderHeadingsAndButtons();
             renderKitchenBg();
-            renderOverlay();
-            renderHowTo();
         }
 
         this.screenShows += 1;
@@ -126,16 +123,19 @@ public class MainMenuScreen implements Screen {
 
         playButton.addAction(sequence(
                 alpha(0),
+                moveBy(-350, 0),
                 delay(1f),
-                fadeIn(1f, Interpolation.pow5)));
+                parallel(fadeIn(0.5f, Interpolation.pow5), moveBy(350, 0, 0.5f, Interpolation.swingOut))));
         howToPlay.addAction(sequence(
                 alpha(0),
-                delay(1.25f),
-                fadeIn(1f, Interpolation.pow5)));
+                moveBy(-350, 0),
+                delay(1.15f),
+                parallel(fadeIn(0.5f, Interpolation.pow5), moveBy(350, 0, 0.5f, Interpolation.swingOut))));
         exitButton.addAction(sequence(
                 alpha(0),
-                delay(1.5f),
-                fadeIn(1f, Interpolation.pow5)));
+                moveBy(-350, 0),
+                delay(1.3f),
+                parallel(fadeIn(0.5f, Interpolation.pow5), moveBy(350, 0, 0.5f, Interpolation.swingOut))));
 
         playButton.addListener(
                 (EventListener) event -> {
@@ -149,7 +149,7 @@ public class MainMenuScreen implements Screen {
         howToPlay.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
-                        toggleInstructions();
+                        instructionsView.toggleInstructions();
                     }
 
                     return false;
@@ -208,81 +208,16 @@ public class MainMenuScreen implements Screen {
 
         this.labelGroup.addAction(sequence(
                 parallel(
-                        fadeOut(1.5f, Interpolation.pow5),
-                        moveBy(-750, 0, 1.5f, Interpolation.pow5)),
+                        fadeOut(0.5f, Interpolation.pow5),
+                        moveBy(-350, 0, 0.5f, Interpolation.swingIn)),
                 panKitchenBg));
-    }
-
-    private void renderOverlay() {
-        Pixmap brownPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-
-        brownPixmap.setColor(Colors.brown);
-        brownPixmap.fillRectangle(0, 0, 1, 1);
-
-        this.brownOverlay = new Image(new Texture(brownPixmap));
-        this.brownOverlay.setFillParent(true);
-        this.brownOverlay.addAction(alpha(0));
-
-        this.brownOverlay.addListener((EventListener) event -> {
-            if (event.toString().contains("touchDown")) {
-                toggleInstructions();
-            }
-
-            return false;
-        });
-    }
-
-    private void renderHowTo() {
-        if (this.game.assets.isLoaded("paper.png")) {
-            Texture paperTexture = this.game.assets.get("paper.png", Texture.class);
-
-            this.paper = new Image(paperTexture);
-            this.paper.setOrigin(Align.center);
-            this.paper.setWidth((float) (paper.getWidth() / 1.25));
-            this.paper.setHeight((float) (paper.getHeight() / 1.25));
-            this.paper.setPosition((this.game.V_WIDTH / 2) - (paper.getWidth() / 2), -paper.getHeight());
-            this.stage.addActor(this.paper);
-        }
-    }
-
-    private void toggleInstructions() {
-        RunnableAction removeOverlay = new RunnableAction();
-
-        removeOverlay.setRunnable(new Runnable() {
-            @Override
-            public void run() {
-                brownOverlay.remove();
-            }
-        });
-
-        if (instructionsVisible) {
-            this.paper.addAction(
-                    moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2),
-                            -paper.getHeight(), 1.5f, Interpolation.pow5));
-            this.brownOverlay.addAction(sequence(delay(1.5f), fadeOut(0.5f, Interpolation.pow5), removeOverlay));
-
-            instructionsVisible = false;
-        } else {
-            this.stage.addActor(this.brownOverlay);
-            this.paper.toFront();
-            this.brownOverlay.addAction(fadeIn(0.5f, Interpolation.pow5));
-            this.paper.addAction(sequence(
-                    delay(0.5f),
-                    moveTo((this.game.V_WIDTH / 2) - (paper.getWidth() / 2),
-                            (this.game.V_HEIGHT / 2) - (paper.getHeight() / 2), 1.5f, Interpolation.pow5)));
-
-            instructionsVisible = true;
-        }
     }
 
     private void resetState() {
         this.kitchenBg.clear();
         this.kitchenBg.setPosition(0, 0);
         this.kitchenBg.setScale(1.25f, 1.25f);
-        this.labelGroup.addAction(parallel(fadeIn(1.5f, Interpolation.pow5),
-                moveTo(160, (float) 132.5, 1.5f, Interpolation.pow5)));
-        this.brownOverlay.addAction(alpha(0f));
-        this.paper.setPosition((this.game.V_WIDTH / 2) - (paper.getWidth() / 2), -paper.getHeight());
-        this.brownOverlay.remove();
+        this.labelGroup.addAction(parallel(fadeIn(0.5f, Interpolation.pow5),
+                moveTo(160, (float) 132.5, 0.5f, Interpolation.swingOut)));
     }
 }
