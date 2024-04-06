@@ -19,12 +19,10 @@ public class InstructionsView {
     private Image paper;
     private Image brownOverlay;
     private boolean instructionsVisible = false;
-    private int screenShows;
 
-    public InstructionsView(final WhatsTheRecipe game, Stage stage, int screenShows) {
+    public InstructionsView(final WhatsTheRecipe game, Stage stage) {
         this.game = game;
         this.stage = stage;
-        this.screenShows = screenShows;
 
         renderOverlay();
         initPaper();
