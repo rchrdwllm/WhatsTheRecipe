@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Ingredients;
+import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.components.Ingredient;
 import com.whatstherecipe.game.components.RecipePaperView;
 import com.whatstherecipe.game.ui.Colors;
@@ -40,15 +41,22 @@ public class KitchenScreen implements Screen {
     private ArrayList<Image> cabinetTriggers;
     private ArrayList<Image> cabinetImgs;
     private RecipePaperView recipePaperView;
+    private ArrayList<ArrayList<Ingredient>> allIngredients;
+    private ArrayList<String> ingredientsWithRandom;
     private ArrayList<ArrayList<Ingredient>> ingredients;
+    private Meal meal;
 
-    public KitchenScreen(final WhatsTheRecipe game) {
+    public KitchenScreen(final WhatsTheRecipe game, Meal meal) {
         this.game = game;
         this.stage = new Stage();
         this.camera = game.camera;
+        this.meal = meal;
 
+        this.allIngredients = new ArrayList<ArrayList<Ingredient>>();
+        this.ingredientsWithRandom = new ArrayList<String>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
+        randomizeIngredients();
         initComponents();
     }
 
@@ -101,6 +109,18 @@ public class KitchenScreen implements Screen {
         }
 
         this.screenShows += 1;
+    }
+
+    private void randomizeIngredients() {
+        this.ingredientsWithRandom.ensureCapacity(8);
+
+        for (int i = 0; i < 8; i++) {
+            if (i > this.meal.ingredients.size() - 1) {
+                this.ingredientsWithRandom.add(Ingredients.getRandomIngredient(ingredientsWithRandom));
+            } else {
+                this.ingredientsWithRandom.add(this.meal.ingredients.get(i));
+            }
+        }
     }
 
     private void initComponents() {
@@ -282,14 +302,19 @@ public class KitchenScreen implements Screen {
     private void prepareIngredients() {
         for (int i = 0; i < Ingredients.ingredientsList.length; i++) {
             this.ingredients.add(new ArrayList<Ingredient>());
+            int cabinetIndex = i;
 
             for (int j = 0; j < Ingredients.ingredientsList[i].length; j++) {
                 Ingredient ingredient = new Ingredient(this.game, this.stage, Ingredients.ingredientsList[i][j]);
-                int cabinetIndex = i;
 
                 ingredient.cabinetIndex = cabinetIndex;
 
-                this.ingredients.get(i).add(ingredient);
+                this.ingredientsWithRandom.forEach(ingredientName -> {
+                    if (ingredientName.equals(ingredient.name)) {
+                        this.ingredients.get(cabinetIndex)
+                                .add(ingredient);
+                    }
+                });
             }
         }
     }

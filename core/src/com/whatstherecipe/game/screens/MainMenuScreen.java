@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.components.InstructionsView;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -140,7 +141,7 @@ public class MainMenuScreen implements Screen {
         playButton.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
-                        transitionToKitchen();
+                        playGame();
                     }
 
                     return false;
@@ -183,7 +184,9 @@ public class MainMenuScreen implements Screen {
         }
     }
 
-    private void transitionToKitchen() {
+    private void playGame() {
+        Meal randomMeal = this.game.meals.getRandomMeal();
+
         RunnableAction panKitchenBg = new RunnableAction();
 
         panKitchenBg.setRunnable(new Runnable() {
@@ -194,7 +197,7 @@ public class MainMenuScreen implements Screen {
                 switchToKitchenScreen.setRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        game.setScreen(game.kitchenScreen);
+                        game.setScreen(new KitchenScreen(game, randomMeal));
                     }
                 });
 
