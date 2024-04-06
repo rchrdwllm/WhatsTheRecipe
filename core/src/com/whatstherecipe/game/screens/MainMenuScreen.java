@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.components.InstructionsView;
+import com.whatstherecipe.game.components.RecipePaperView;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -75,7 +76,7 @@ public class MainMenuScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        this.instructionsView = new InstructionsView(game, stage, screenShows);
+        this.instructionsView = new InstructionsView(game, stage);
 
         if (this.screenShows > 0) {
             resetState();

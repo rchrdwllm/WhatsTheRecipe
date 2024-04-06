@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.components.RecipePaperView;
 import com.whatstherecipe.game.ui.Colors;
 
 public class KitchenScreen implements Screen {
@@ -32,12 +33,11 @@ public class KitchenScreen implements Screen {
     private Table tableRoot;
     private OrthographicCamera camera;
     private Image kitchenBg;
-    private Image recipeRef;
     private TextButton backBtn;
     private int screenShows = 0;
-    private boolean isRecipePaperShown = false;
     private ArrayList<Image> cabinetTriggers;
     private ArrayList<Image> cabinetImgs;
+    private RecipePaperView recipePaperView;
 
     public KitchenScreen(final WhatsTheRecipe game) {
         this.game = game;
@@ -83,12 +83,13 @@ public class KitchenScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(this.stage);
 
+        this.recipePaperView = new RecipePaperView(game, stage);
+
         if (this.screenShows > 0) {
             resetState();
         } else {
             renderKitchenBg();
             renderButtons();
-            renderRecipeRef();
             prepareCabinetImgs();
             renderCabinetTriggers();
         }
@@ -141,6 +142,8 @@ public class KitchenScreen implements Screen {
     }
 
     private void transitionToMainMenu() {
+        System.out.println("Going back");
+
         RunnableAction panKitchenBg = new RunnableAction();
 
         panKitchenBg.setRunnable(new Runnable() {
@@ -154,8 +157,7 @@ public class KitchenScreen implements Screen {
                         game.setScreen(game.mainMenuScreen);
                     }
                 });
-
-                recipeRef.addAction(sequence(parallel(
+                recipePaperView.recipeRef.addAction(sequence(parallel(
                         scaleBy(0.25f, 0.25f, 2f, Interpolation.pow5),
                         moveBy(game.V_WIDTH, 0, 2f, Interpolation.pow5)),
                         alpha(0f)));
@@ -170,55 +172,6 @@ public class KitchenScreen implements Screen {
         this.backBtn.addAction(sequence(
                 fadeOut(1.5f, Interpolation.pow5),
                 panKitchenBg));
-    }
-
-    private void renderRecipeRef() {
-        if (this.game.assets.isLoaded("recipe-ref.png")) {
-            Texture recipeRefTexture = this.game.assets.get("recipe-ref.png", Texture.class);
-
-            this.recipeRef = new Image(recipeRefTexture);
-            this.recipeRef.setWidth(recipeRef.getWidth() / 4);
-            this.recipeRef.setHeight(recipeRef.getHeight() / 4);
-            this.recipeRef.setPosition((this.game.V_WIDTH - recipeRef.getWidth()) - 240,
-                    (this.game.V_HEIGHT - recipeRef.getHeight()) - 160);
-            this.recipeRef.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
-            this.stage.addActor(recipeRef);
-
-            this.recipeRef.addListener((EventListener) event -> {
-                if (event.toString().equals("touchDown")) {
-                    toggleRecipePaper();
-                }
-
-                return false;
-            });
-        }
-    }
-
-    private void toggleRecipePaper() {
-        if (isRecipePaperShown) {
-            isRecipePaperShown = false;
-
-            this.recipeRef.addAction(
-                    parallel(
-                            moveTo(
-                                    (this.game.V_WIDTH - recipeRef.getWidth()) - 240,
-                                    (this.game.V_HEIGHT - recipeRef.getHeight()) - 160,
-                                    2f,
-                                    Interpolation.pow5),
-                            scaleBy(-3f, -3f, 2f, Interpolation.pow5)));
-        } else {
-            isRecipePaperShown = true;
-
-            this.recipeRef.setOrigin(Align.center);
-            this.recipeRef.addAction(
-                    parallel(
-                            moveTo(
-                                    (this.game.V_WIDTH / 2) - (recipeRef.getWidth() / 2),
-                                    (this.game.V_HEIGHT / 2) - (recipeRef.getHeight() / 2),
-                                    2f,
-                                    Interpolation.pow5),
-                            scaleBy(3f, 3f, 2f, Interpolation.pow5)));
-        }
     }
 
     private void renderCabinetTriggers() {
@@ -263,7 +216,6 @@ public class KitchenScreen implements Screen {
                     stage.addActor(cabinetImg);
                     cabinetImg.toFront();
                     cabinetImg.addAction(fadeIn(0.5f));
-                    recipeRef.toFront();
                     cabinetTrigger.addAction(fadeIn(0.5f));
                     closeCabinetBtn.addListener(new InputListener() {
                         @Override
@@ -317,10 +269,6 @@ public class KitchenScreen implements Screen {
         this.kitchenBg.clear();
         this.kitchenBg.setPosition(-this.game.V_WIDTH, 0);
         this.kitchenBg.setScale(1f, 1f);
-        this.recipeRef.setScale(1f, 1f);
-        this.recipeRef.setPosition((this.game.V_WIDTH - recipeRef.getWidth()) - 240,
-                (this.game.V_HEIGHT - recipeRef.getHeight()) - 160);
-        this.recipeRef.addAction(fadeIn(1.5f, Interpolation.pow5));
         this.backBtn.addAction(fadeIn(1.5f, Interpolation.pow5));
     }
 }
