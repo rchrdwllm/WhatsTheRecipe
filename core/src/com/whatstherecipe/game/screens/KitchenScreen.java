@@ -41,7 +41,6 @@ public class KitchenScreen implements Screen {
     private ArrayList<Image> cabinetTriggers;
     private ArrayList<Image> cabinetImgs;
     private RecipePaperView recipePaperView;
-    private ArrayList<ArrayList<Ingredient>> allIngredients;
     private ArrayList<String> ingredientsWithRandom;
     private ArrayList<ArrayList<Ingredient>> ingredients;
     private Meal meal;
@@ -52,7 +51,6 @@ public class KitchenScreen implements Screen {
         this.camera = game.camera;
         this.meal = meal;
 
-        this.allIngredients = new ArrayList<ArrayList<Ingredient>>();
         this.ingredientsWithRandom = new ArrayList<String>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
@@ -104,6 +102,7 @@ public class KitchenScreen implements Screen {
             renderKitchenBg();
             renderButtons();
             prepareIngredients();
+            positionIngredients();
             prepareCabinetImgs();
             renderCabinetTriggers();
         }
@@ -128,6 +127,14 @@ public class KitchenScreen implements Screen {
 
         this.tableRoot.setFillParent(true);
         this.stage.addActor(tableRoot);
+        this.stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("x: " + x + ", y: " + y);
+
+                return true;
+            }
+        });
     }
 
     private void renderKitchenBg() {
@@ -141,14 +148,7 @@ public class KitchenScreen implements Screen {
             this.kitchenBg.moveBy(-this.game.V_WIDTH, 0);
             this.stage.addActor(kitchenBg);
             this.kitchenBg.toBack();
-            this.kitchenBg.addListener(new InputListener() {
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    System.out.println("x: " + x + ", y: " + y);
 
-                    return true;
-                }
-            });
         }
     }
 
@@ -316,6 +316,18 @@ public class KitchenScreen implements Screen {
                     }
                 });
             }
+        }
+    }
+
+    private void positionIngredients() {
+        try {
+            this.ingredients.get(0).get(0).ingredient.setPosition(49, 370);
+            this.ingredients.get(0).get(1).ingredient.setPosition(202, 407);
+            this.ingredients.get(0).get(2).ingredient.setPosition(251, 370);
+            this.ingredients.get(0).get(3).ingredient.setPosition(90, 189);
+            this.ingredients.get(0).get(4).ingredient.setPosition(239, 189);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Index out of bounds");
         }
     }
 
