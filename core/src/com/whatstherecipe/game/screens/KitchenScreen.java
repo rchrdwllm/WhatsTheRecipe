@@ -239,6 +239,9 @@ public class KitchenScreen implements Screen {
 
                             cabinetImg.addAction(fadeOut(0.5f));
                             closeCabinetBtn.addAction(sequence(fadeOut(0.5f), removeItems));
+                            ingredients.get(index).forEach(ingredient -> {
+                                ingredient.toggleIngredient();
+                            });
 
                             return true;
                         }
@@ -247,9 +250,8 @@ public class KitchenScreen implements Screen {
                     closeCabinetBtn.toFront();
                     stage.addActor(closeCabinetBtn);
                     recipePaperView.recipeRef.toFront();
-
                     ingredients.get(index).forEach(ingredient -> {
-                        ingredient.showIngredient();
+                        ingredient.toggleIngredient();
                     });
 
                     return true;
