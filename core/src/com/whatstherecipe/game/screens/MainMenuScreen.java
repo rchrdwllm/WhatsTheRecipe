@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.components.InstructionsView;
-import com.whatstherecipe.game.components.RecipePaperView;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
