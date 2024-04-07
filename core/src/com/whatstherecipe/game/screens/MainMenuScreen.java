@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.components.InstructionsView;
@@ -35,7 +36,7 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final WhatsTheRecipe game) {
         this.game = game;
         this.camera = game.camera;
-        this.stage = new Stage();
+        this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
 
         initComponents();
     }

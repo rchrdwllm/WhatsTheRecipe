@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.ui.Colors;
 import com.whatstherecipe.game.ui.CustomSkin;
@@ -43,7 +43,7 @@ public class LoadingScreen implements Screen {
     public LoadingScreen(final WhatsTheRecipe game) {
         this.game = game;
         this.camera = game.camera;
-        this.stage = new Stage(new FillViewport(game.V_WIDTH, game.V_HEIGHT));
+        this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
         this.shapeRenderer = new ShapeRenderer();
 
         initComponents();
