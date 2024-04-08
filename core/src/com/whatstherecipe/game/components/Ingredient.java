@@ -18,7 +18,6 @@ public class Ingredient {
     public Image ingredient;
     public int cabinetIndex;
     private boolean isToggled = false;
-    private float divideRatio = 4;
 
     public Ingredient(final WhatsTheRecipe game, Stage stage, String name) {
         this.game = game;
@@ -31,17 +30,14 @@ public class Ingredient {
     }
 
     private void initIngredient() {
-        if (this.name.equals("bile") || this.name.equals("calamansi")) {
-            this.divideRatio = (float) 4.5;
-        }
 
         if (this.game.assets.isLoaded(path)) {
             Texture ingredientTexture = this.game.assets.get(path);
 
             this.ingredient = new Image(ingredientTexture);
             this.ingredient.setOrigin(Align.center);
-            this.ingredient.setSize((float) (ingredient.getWidth() / divideRatio),
-                    (float) (ingredient.getHeight() / divideRatio));
+            this.ingredient.setSize(ingredient.getWidth(),
+                    ingredient.getHeight());
             this.ingredient.setPosition(0, 0);
             this.ingredient.addAction(alpha(0));
         }

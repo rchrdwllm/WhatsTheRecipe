@@ -322,11 +322,27 @@ public class KitchenScreen implements Screen {
 
     private void positionIngredients() {
         try {
-            this.ingredients.get(0).get(0).ingredient.setPosition(49, 370);
-            this.ingredients.get(0).get(1).ingredient.setPosition(202, 407);
-            this.ingredients.get(0).get(2).ingredient.setPosition(251, 370);
-            this.ingredients.get(0).get(3).ingredient.setPosition(90, 189);
-            this.ingredients.get(0).get(4).ingredient.setPosition(239, 189);
+            this.ingredients.get(0).get(0).ingredient.setPosition(100, 362);
+            this.ingredients.get(0).get(1).ingredient.setPosition(222, 362);
+            this.ingredients.get(0).get(2).ingredient.setPosition(100, 174);
+            this.ingredients.get(0).get(3).ingredient.setPosition(222, 174);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Index out of bounds");
+        }
+
+        try {
+            this.ingredients.get(1).get(0).ingredient.setPosition(1196, 352);
+            this.ingredients.get(1).get(1).ingredient.setPosition(1300, 352);
+            this.ingredients.get(1).get(2).ingredient.setPosition(1196, 156);
+            this.ingredients.get(1).get(3).ingredient.setPosition(1300, 156);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Index out of bounds");
+        }
+
+        try {
+            this.ingredients.get(2).get(0).ingredient.setPosition(1148, 888);
+            this.ingredients.get(2).get(1).ingredient.setPosition(1240, 888);
+            this.ingredients.get(2).get(2).ingredient.setPosition(1203, 888);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Index out of bounds");
         }
