@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meals;
-import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.screens.LoadingScreen;
 import com.whatstherecipe.game.screens.MainMenuScreen;
 import com.whatstherecipe.game.ui.CustomSkin;
