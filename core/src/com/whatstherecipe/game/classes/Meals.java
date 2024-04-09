@@ -7,10 +7,20 @@ public class Meals {
 
     public Meals() {
         String[] adoboIngredients = { "pork-ribs", "toyo", "suka" };
-        mealsList.add(new Meal("adobo", adoboIngredients));
+        String[] adoboSteps = {
+                "first adobo step",
+                "second adobo step",
+                "third adobo step"
+        };
+        mealsList.add(new Meal("adobo", "easy", adoboIngredients, adoboSteps));
 
         String[] sinigangIngredients = { "pork-ribs", "tamarind", "tomatoes", "onion" };
-        mealsList.add(new Meal("sinigang", sinigangIngredients));
+        String[] sinigangSteps = {
+                "first sinigang step",
+                "second sinigang step",
+                "third sinigang step"
+        };
+        mealsList.add(new Meal("sinigang", "easy", sinigangIngredients, sinigangSteps));
     }
 
     public Meal getRandomMeal() {
