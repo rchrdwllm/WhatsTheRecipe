@@ -30,7 +30,6 @@ public class Ingredient {
     }
 
     private void initIngredient() {
-
         if (this.game.assets.isLoaded(path)) {
             Texture ingredientTexture = this.game.assets.get(path);
 
