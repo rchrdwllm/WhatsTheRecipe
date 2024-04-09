@@ -30,6 +30,10 @@ public class Meal {
     }
 
     public void shuffleMealSteps() {
-        Collections.shuffle(this.steps);
+        ArrayList<Step> originalSteps = new ArrayList<Step>(this.steps);
+
+        do {
+            Collections.shuffle(this.steps);
+        } while (originalSteps.equals(this.steps));
     }
 }
