@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meal;
+import com.whatstherecipe.game.classes.Meals;
 import com.whatstherecipe.game.classes.Step;
 import com.whatstherecipe.game.components.Ingredient;
 import com.whatstherecipe.game.components.RecipePaperView;
@@ -46,12 +47,32 @@ public class KitchenScreen implements Screen {
     private ArrayList<String> ingredientsWithRandom;
     private ArrayList<ArrayList<Ingredient>> ingredients;
     private Meal meal;
+    private int roundCount = 1;
+    private int currentStars = 3;
+    private boolean isRoundWin = false;
 
     public KitchenScreen(final WhatsTheRecipe game, Meal meal) {
         this.game = game;
         this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
         this.camera = game.camera;
         this.meal = meal;
+
+        this.ingredientsWithRandom = new ArrayList<String>();
+        this.ingredients = new ArrayList<ArrayList<Ingredient>>();
+
+        randomizeIngredients();
+        randomizeSteps();
+        sortSteps();
+        initComponents();
+    }
+
+    public KitchenScreen(final WhatsTheRecipe game, Meal meal, int roundCount, int currentStars) {
+        this.game = game;
+        this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
+        this.camera = game.camera;
+        this.meal = meal;
+        this.roundCount = roundCount;
+        this.currentStars = currentStars;
 
         this.ingredientsWithRandom = new ArrayList<String>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
@@ -155,7 +176,8 @@ public class KitchenScreen implements Screen {
         // @Override
         // public boolean touchDown(InputEvent event, float x, float y, int pointer, int
         // button) {
-        // System.out.println("x: " + x + ", y: " + y);
+        // game.setScreen(new KitchenScreen(game, Meals.getRandomMeal(), roundCount + 1,
+        // currentStars));
 
         // return true;
         // }
