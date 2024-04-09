@@ -56,6 +56,7 @@ public class KitchenScreen implements Screen {
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
         randomizeIngredients();
+        randomizeSteps();
         initComponents();
     }
 
@@ -121,6 +122,13 @@ public class KitchenScreen implements Screen {
                 this.ingredientsWithRandom.add(this.meal.ingredients.get(i));
             }
         }
+    }
+
+    private void randomizeSteps() {
+        this.meal.shuffleMealSteps();
+        this.meal.steps.forEach(step -> {
+            System.out.println(step.stepNumber + 1 + ". " + step.label);
+        });
     }
 
     private void initComponents() {
