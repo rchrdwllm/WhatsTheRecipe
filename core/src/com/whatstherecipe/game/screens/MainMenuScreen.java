@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
+import com.whatstherecipe.game.classes.Meals;
 import com.whatstherecipe.game.components.InstructionsView;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -186,7 +187,7 @@ public class MainMenuScreen implements Screen {
     }
 
     private void playGame() {
-        Meal randomMeal = this.game.meals.getRandomMeal();
+        Meal randomMeal = Meals.getRandomMeal();
 
         RunnableAction panKitchenBg = new RunnableAction();
 

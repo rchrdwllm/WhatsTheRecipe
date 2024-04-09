@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meal;
+import com.whatstherecipe.game.classes.Step;
 import com.whatstherecipe.game.components.Ingredient;
 import com.whatstherecipe.game.components.RecipePaperView;
 import com.whatstherecipe.game.ui.Colors;
@@ -57,6 +58,7 @@ public class KitchenScreen implements Screen {
 
         randomizeIngredients();
         randomizeSteps();
+        sortSteps();
         initComponents();
     }
 
@@ -125,7 +127,20 @@ public class KitchenScreen implements Screen {
     }
 
     private void randomizeSteps() {
-        this.meal.shuffleMealSteps();
+        Step.shuffle(this.meal.steps);
+
+        System.out.println("\nRandomized steps:");
+
+        this.meal.steps.forEach(step -> {
+            System.out.println(step.stepNumber + 1 + ". " + step.label);
+        });
+    }
+
+    private void sortSteps() {
+        Step.sort(this.meal.steps);
+
+        System.out.println("Sorted steps:");
+
         this.meal.steps.forEach(step -> {
             System.out.println(step.stepNumber + 1 + ". " + step.label);
         });
@@ -136,14 +151,15 @@ public class KitchenScreen implements Screen {
 
         this.tableRoot.setFillParent(true);
         this.stage.addActor(tableRoot);
-        this.stage.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("x: " + x + ", y: " + y);
+        // this.stage.addListener(new InputListener() {
+        // @Override
+        // public boolean touchDown(InputEvent event, float x, float y, int pointer, int
+        // button) {
+        // System.out.println("x: " + x + ", y: " + y);
 
-                return true;
-            }
-        });
+        // return true;
+        // }
+        // });
     }
 
     private void renderKitchenBg() {
@@ -335,7 +351,6 @@ public class KitchenScreen implements Screen {
             this.ingredients.get(0).get(2).ingredient.setPosition(100, 174);
             this.ingredients.get(0).get(3).ingredient.setPosition(222, 174);
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Index out of bounds");
         }
 
         try {
@@ -344,7 +359,6 @@ public class KitchenScreen implements Screen {
             this.ingredients.get(1).get(2).ingredient.setPosition(1196, 156);
             this.ingredients.get(1).get(3).ingredient.setPosition(1300, 156);
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Index out of bounds");
         }
 
         try {
@@ -352,7 +366,6 @@ public class KitchenScreen implements Screen {
             this.ingredients.get(2).get(1).ingredient.setPosition(1240, 888);
             this.ingredients.get(2).get(2).ingredient.setPosition(1203, 888);
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Index out of bounds");
         }
     }
 

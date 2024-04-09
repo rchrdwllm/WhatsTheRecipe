@@ -23,7 +23,7 @@ public class Meals {
         mealsList.add(new Meal("sinigang", "easy", sinigangIngredients, sinigangSteps));
     }
 
-    public Meal getRandomMeal() {
+    public static Meal getRandomMeal() {
         int randomIndex = (int) (Math.random() * mealsList.size());
 
         return mealsList.get(randomIndex);

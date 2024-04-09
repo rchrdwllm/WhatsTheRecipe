@@ -1,7 +1,6 @@
 package com.whatstherecipe.game.classes;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Meal {
     public String name;
@@ -27,13 +26,5 @@ public class Meal {
 
             this.steps.add(step);
         }
-    }
-
-    public void shuffleMealSteps() {
-        ArrayList<Step> originalSteps = new ArrayList<Step>(this.steps);
-
-        do {
-            Collections.shuffle(this.steps);
-        } while (originalSteps.equals(this.steps));
     }
 }
