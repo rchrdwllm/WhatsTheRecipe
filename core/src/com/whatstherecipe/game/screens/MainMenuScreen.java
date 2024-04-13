@@ -187,7 +187,7 @@ public class MainMenuScreen implements Screen {
     }
 
     private void playGame() {
-        Meal randomMeal = Meals.getRandomMeal();
+        Meal randomMeal = Meals.getRandomEasyMeal();
 
         RunnableAction panKitchenBg = new RunnableAction();
 
