@@ -3,7 +3,9 @@ package com.whatstherecipe.game.classes;
 import java.util.ArrayList;
 
 public class Meals {
-    public static ArrayList<Meal> mealsList = new ArrayList<Meal>();
+    public static ArrayList<Meal> easyMeals = new ArrayList<Meal>();
+    public static ArrayList<Meal> mediumMeals = new ArrayList<Meal>();
+    public static ArrayList<Meal> hardMeals = new ArrayList<Meal>();
 
     public Meals() {
         String[] adoboIngredients = { "chicken", "toyo", "suka", "garlic", }; // Pepper yung kulang
@@ -15,7 +17,7 @@ public class Meals {
                 "Enjoy your delicious adobo with steamed rice."
 
         };
-        mealsList.add(new Meal("Adobo", "easy", adoboIngredients, adoboSteps));
+        easyMeals.add(new Meal("Adobo", "easy", adoboIngredients, adoboSteps));
 
         String[] sinigangIngredients = { "pork-ribs", "tamarind", "tomatoes", "onion" };
         String[] sinigangSteps = {
@@ -25,7 +27,7 @@ public class Meals {
                 "Add salt to taste.",
                 "Enjoy your hot and sour sinigang with rice!"
         };
-        mealsList.add(new Meal("Sinigang", "easy", sinigangIngredients, sinigangSteps));
+        easyMeals.add(new Meal("Sinigang", "easy", sinigangIngredients, sinigangSteps));
 
         String[] pancitpalabokIngredients = { "rice-noodles", "shrimp", "chicharon", "patis" };
         String[] pancitpalabokSteps = {
@@ -36,7 +38,7 @@ public class Meals {
                 "Top with chicharon, green onions, and boiled eggs.",
                 "Enjoy your delicious pancit palabok!"
         };
-        mealsList.add(new Meal("Pancit Palabok", "easy", pancitpalabokIngredients, pancitpalabokSteps));
+        easyMeals.add(new Meal("Pancit Palabok", "easy", pancitpalabokIngredients, pancitpalabokSteps));
 
         String[] sisigIngredients = { "sisig-meat", "calamansi", "onion", "mayonnaise", "chili" };
         String[] sisigSteps = {
@@ -47,7 +49,7 @@ public class Meals {
                 "Top with chili and onions.",
                 "Enjoy your sizzling sisig!"
         };
-        mealsList.add(new Meal("Sisig", "medium", sisigIngredients, sisigSteps));
+        mediumMeals.add(new Meal("Sisig", "medium", sisigIngredients, sisigSteps));
 
         String[] papaitanIngredients = { "bile", "ginger", "onion", "garlic" }; // Kulang Goat Meat
         String[] papaitanSteps = {
@@ -57,16 +59,54 @@ public class Meals {
                 "Season with salt and pepper to taste.",
                 "Enjoy your hearty papaitan!"
         };
-        mealsList.add(new Meal("Papaitan", "hard", papaitanIngredients, papaitanSteps));
+        hardMeals.add(new Meal("Papaitan", "hard", papaitanIngredients, papaitanSteps));
     }
 
     public static Meal getRandomEasyMeal() {
-        int randomIndex = (int) (Math.random() * mealsList.size());
+        int randomIndex = (int) (Math.random() * easyMeals.size());
 
-        while (!mealsList.get(randomIndex).difficulty.equals("easy")) {
-            randomIndex = (int) (Math.random() * mealsList.size());
+        return easyMeals.get(randomIndex);
+    }
+
+    public static Meal getRandomEasyMeal(ArrayList<Meal> previousMeals) {
+        int randomIndex = (int) (Math.random() * easyMeals.size());
+
+        if (previousMeals.containsAll(easyMeals)) {
+            return easyMeals.get(randomIndex);
+        } else {
+            while (previousMeals.contains(easyMeals.get(randomIndex))) {
+                randomIndex = (int) (Math.random() * easyMeals.size());
+            }
         }
 
-        return mealsList.get(randomIndex);
+        return easyMeals.get(randomIndex);
+    }
+
+    public static Meal getRandomMediumMeal(ArrayList<Meal> previousMeals) {
+        int randomIndex = (int) (Math.random() * mediumMeals.size());
+
+        if (previousMeals.containsAll(mediumMeals)) {
+            return mediumMeals.get(randomIndex);
+        } else {
+            while (previousMeals.contains(mediumMeals.get(randomIndex))) {
+                randomIndex = (int) (Math.random() * mediumMeals.size());
+            }
+        }
+
+        return mediumMeals.get(randomIndex);
+    }
+
+    public static Meal getRandomHardMeal(ArrayList<Meal> previousMeals) {
+        int randomIndex = (int) (Math.random() * hardMeals.size());
+
+        if (previousMeals.containsAll(hardMeals)) {
+            return hardMeals.get(randomIndex);
+        } else {
+            while (previousMeals.contains(hardMeals.get(randomIndex))) {
+                randomIndex = (int) (Math.random() * hardMeals.size());
+            }
+        }
+
+        return hardMeals.get(randomIndex);
     }
 }
