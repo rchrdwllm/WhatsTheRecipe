@@ -27,9 +27,9 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meal;
-import com.whatstherecipe.game.classes.Meals;
 import com.whatstherecipe.game.classes.Step;
 import com.whatstherecipe.game.components.Ingredient;
+import com.whatstherecipe.game.components.MealBanner;
 import com.whatstherecipe.game.components.RecipePaperView;
 import com.whatstherecipe.game.ui.Colors;
 
@@ -121,6 +121,8 @@ public class KitchenScreen implements Screen {
 
         this.recipePaperView = new RecipePaperView(game, stage);
 
+        new MealBanner(stage, meal, roundCount);
+
         if (this.screenShows > 0) {
             resetState();
         } else {
@@ -195,12 +197,11 @@ public class KitchenScreen implements Screen {
             this.kitchenBg.moveBy(-this.game.V_WIDTH, 0);
             this.stage.addActor(kitchenBg);
             this.kitchenBg.toBack();
-
         }
     }
 
     private void renderButtons() {
-        this.backBtn = new TextButton("Back", this.game.skin.get("text-button-default", TextButtonStyle.class));
+        this.backBtn = new TextButton("Quit", this.game.skin.get("text-button-default", TextButtonStyle.class));
         this.tableRoot.add(this.backBtn).expandY().top().expandX().left().pad(100, 100, 0, 0);
 
         this.backBtn.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
