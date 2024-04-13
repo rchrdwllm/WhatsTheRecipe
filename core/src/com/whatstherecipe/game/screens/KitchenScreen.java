@@ -204,47 +204,7 @@ public class KitchenScreen implements Screen {
         this.backBtn.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
-                        // transitionToMainMenu();
-                        previousMeals.add(meal);
-
-                        if (isRoundWin) {
-                            switch (meal.difficulty) {
-                                case "easy":
-                                    game.setScreen(new KitchenScreen(game, Meals.getRandomMediumMeal(previousMeals),
-                                            roundCount + 1,
-                                            currentStars + 1, previousMeals));
-                                    break;
-                                case "medium":
-                                    game.setScreen(new KitchenScreen(game, Meals.getRandomHardMeal(previousMeals),
-                                            roundCount + 1,
-                                            currentStars + 1, previousMeals));
-                                    break;
-                                case "hard":
-                                    game.setScreen(new KitchenScreen(game, Meals.getRandomHardMeal(previousMeals),
-                                            roundCount + 1,
-                                            currentStars + 1, previousMeals));
-                                    break;
-                            }
-                        } else {
-                            switch (meal.difficulty) {
-                                case "easy":
-                                    game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
-                                            roundCount + 1,
-                                            currentStars - 1, previousMeals));
-                                    break;
-                                case "medium":
-                                    game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
-                                            roundCount + 1,
-                                            currentStars - 1, previousMeals));
-                                    break;
-                                case "hard":
-                                    game.setScreen(new KitchenScreen(game, Meals.getRandomMediumMeal(previousMeals),
-                                            roundCount + 1,
-                                            currentStars - 1, previousMeals));
-                                    break;
-
-                            }
-                        }
+                        transitionToMainMenu();
                     }
 
                     return false;
@@ -425,6 +385,49 @@ public class KitchenScreen implements Screen {
             this.ingredients.get(2).get(1).ingredient.setPosition(1240, 888);
             this.ingredients.get(2).get(2).ingredient.setPosition(1203, 888);
         } catch (IndexOutOfBoundsException e) {
+        }
+    }
+
+    private void nextRound() {
+        previousMeals.add(meal);
+
+        if (isRoundWin) {
+            switch (meal.difficulty) {
+                case "easy":
+                    game.setScreen(new KitchenScreen(game, Meals.getRandomMediumMeal(previousMeals),
+                            roundCount + 1,
+                            currentStars + 1, previousMeals));
+                    break;
+                case "medium":
+                    game.setScreen(new KitchenScreen(game, Meals.getRandomHardMeal(previousMeals),
+                            roundCount + 1,
+                            currentStars + 1, previousMeals));
+                    break;
+                case "hard":
+                    game.setScreen(new KitchenScreen(game, Meals.getRandomHardMeal(previousMeals),
+                            roundCount + 1,
+                            currentStars + 1, previousMeals));
+                    break;
+            }
+        } else {
+            switch (meal.difficulty) {
+                case "easy":
+                    game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
+                            roundCount + 1,
+                            currentStars - 1, previousMeals));
+                    break;
+                case "medium":
+                    game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
+                            roundCount + 1,
+                            currentStars - 1, previousMeals));
+                    break;
+                case "hard":
+                    game.setScreen(new KitchenScreen(game, Meals.getRandomMediumMeal(previousMeals),
+                            roundCount + 1,
+                            currentStars - 1, previousMeals));
+                    break;
+
+            }
         }
     }
 
