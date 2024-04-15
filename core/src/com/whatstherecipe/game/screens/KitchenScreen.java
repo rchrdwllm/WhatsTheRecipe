@@ -400,6 +400,16 @@ public class KitchenScreen implements Screen {
             this.ingredients.get(2).get(0).ingredient.setPosition(1148, 888);
             this.ingredients.get(2).get(1).ingredient.setPosition(1240, 888);
             this.ingredients.get(2).get(2).ingredient.setPosition(1203, 888);
+            this.ingredients.get(2).get(2).ingredient.setPosition(1203, 888);
+        } catch (IndexOutOfBoundsException e) {
+        }
+
+        try {
+            this.ingredients.get(3).get(0).ingredient.setPosition(1510, 320);
+            this.ingredients.get(3).get(1).ingredient.setPosition(1634, 320);
+            this.ingredients.get(3).get(2).ingredient.setPosition(1732, 320);
+            this.ingredients.get(3).get(2).ingredient.setPosition(1576, 190);
+            this.ingredients.get(3).get(2).ingredient.setPosition(1692, 190);
         } catch (IndexOutOfBoundsException e) {
         }
     }
