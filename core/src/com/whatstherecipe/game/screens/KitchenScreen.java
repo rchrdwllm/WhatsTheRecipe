@@ -63,8 +63,6 @@ public class KitchenScreen implements Screen {
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
         randomizeIngredients();
-        randomizeSteps();
-        sortSteps();
         initComponents();
     }
 
@@ -86,8 +84,6 @@ public class KitchenScreen implements Screen {
         // System.out.println("Difficulty: " + meal.difficulty);
 
         randomizeIngredients();
-        randomizeSteps();
-        sortSteps();
         initComponents();
     }
 
@@ -127,7 +123,7 @@ public class KitchenScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(this.stage);
 
-        this.recipePaperView = new RecipePaperView(game, stage);
+        this.recipePaperView = new RecipePaperView(game, stage, meal);
 
         new MealBanner(stage, meal, roundCount);
 
@@ -154,26 +150,6 @@ public class KitchenScreen implements Screen {
             } else {
                 this.ingredientsWithRandom.add(this.meal.ingredients.get(i));
             }
-        }
-    }
-
-    private void randomizeSteps() {
-        Step.shuffle(this.meal.steps);
-
-        System.out.println("Shuffled steps");
-
-        for (Step step : this.meal.steps) {
-            System.out.println(step.stepNumber + 1 + ". " + step.label);
-        }
-    }
-
-    private void sortSteps() {
-        Step.sort(this.meal.steps);
-
-        System.out.println("Sorted steps");
-
-        for (Step step : this.meal.steps) {
-            System.out.println(step.stepNumber + 1 + ". " + step.label);
         }
     }
 
