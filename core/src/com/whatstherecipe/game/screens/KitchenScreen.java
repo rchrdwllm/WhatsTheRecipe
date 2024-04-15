@@ -159,10 +159,22 @@ public class KitchenScreen implements Screen {
 
     private void randomizeSteps() {
         Step.shuffle(this.meal.steps);
+
+        System.out.println("Shuffled steps");
+
+        for (Step step : this.meal.steps) {
+            System.out.println(step.stepNumber + 1 + ". " + step.label);
+        }
     }
 
     private void sortSteps() {
         Step.sort(this.meal.steps);
+
+        System.out.println("Sorted steps");
+
+        for (Step step : this.meal.steps) {
+            System.out.println(step.stepNumber + 1 + ". " + step.label);
+        }
     }
 
     private void initComponents() {
@@ -170,16 +182,14 @@ public class KitchenScreen implements Screen {
 
         this.tableRoot.setFillParent(true);
         this.stage.addActor(tableRoot);
-        // this.stage.addListener(new InputListener() {
-        // @Override
-        // public boolean touchDown(InputEvent event, float x, float y, int pointer, int
-        // button) {
-        // game.setScreen(new KitchenScreen(game, Meals.getRandomMeal(), roundCount + 1,
-        // currentStars));
+        this.stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.print("x: " + x + ", y: " + y + "\n");
 
-        // return true;
-        // }
-        // });
+                return true;
+            }
+        });
     }
 
     private void renderKitchenBg() {
@@ -271,6 +281,11 @@ public class KitchenScreen implements Screen {
         cabinetTrigger3.setPosition(1087, 856);
         cabinetTriggers.add(cabinetTrigger3);
 
+        Image cabinetTrigger4 = new Image(new Texture(pixmap));
+        cabinetTrigger4.setSize(394, 332);
+        cabinetTrigger4.setPosition(1436, 108);
+        cabinetTriggers.add(cabinetTrigger4);
+
         for (int i = 0; i < this.cabinetTriggers.size(); i++) {
             Image cabinetTrigger = this.cabinetTriggers.get(i);
             int index = i;
@@ -286,6 +301,7 @@ public class KitchenScreen implements Screen {
                     stage.addActor(cabinetImg);
                     cabinetImg.toFront();
                     cabinetImg.addAction(fadeIn(0.5f));
+                    System.out.println(cabinetImg);
                     cabinetTrigger.addAction(fadeIn(0.5f));
                     closeCabinetBtn.addListener(new InputListener() {
                         @Override
@@ -325,7 +341,7 @@ public class KitchenScreen implements Screen {
     }
 
     private void prepareCabinetImgs() {
-        String[] fileNames = { "open-cabinet-1.jpg", "open-cabinet-2.jpg", "open-cabinet-3.jpg" };
+        String[] fileNames = { "open-cabinet-1.jpg", "open-cabinet-2.jpg", "open-cabinet-3.jpg", "open-cabinet-4.jpg" };
 
         this.cabinetImgs = new ArrayList<Image>();
 

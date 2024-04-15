@@ -62,6 +62,7 @@ public class WhatsTheRecipe extends Game {
 		this.assets.load("open-cabinet-1.jpg", Texture.class);
 		this.assets.load("open-cabinet-2.jpg", Texture.class);
 		this.assets.load("open-cabinet-3.jpg", Texture.class);
+		this.assets.load("open-cabinet-4.jpg", Texture.class);
 
 		for (int i = 0; i < Ingredients.ingredientsList.length; i++) {
 			for (int j = 0; j < Ingredients.ingredientsList[i].length; j++) {

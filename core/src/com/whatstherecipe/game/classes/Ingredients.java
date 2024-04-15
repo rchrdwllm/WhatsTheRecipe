@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class Ingredients {
     public static String[][] ingredientsList = {
-            { "bile", "chicken", "ginger", "onion", "rice-noodles", "tamarind" }, // 0
-            { "calamansi", "chili", "ketchup", "patis", "shrimps", "tomatoes", "suka" }, // 1
-            { "chicharon", "garlic", "mayonnaise", "pork-ribs", "sisig-meat", "toyo" } // 2
+            { "bile", "chicken", "ginger", "onion", "sisig-meat" }, // 0
+            { "calamansi", "chili", "ketchup", "patis", "shrimps" }, // 1
+            { "chicharon", "garlic", "mayonnaise", "pork-ribs" }, // 2
+            { "rice-noodles", "tamarind", "tomatoes", "pork-ribs", "suka", "toyo" } // 2
     };
 
     public static String getRandomIngredient(ArrayList<String> existingIngredients) {
