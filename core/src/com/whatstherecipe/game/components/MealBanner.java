@@ -69,6 +69,10 @@ public class MealBanner {
         Label mealLabel = new Label(meal.name,
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 120));
         mealNameTable.add(mealLabel).center();
+        mealNameTable.row();
+        Label mealDifficulty = new Label("Difficulty: " + meal.difficulty,
+                CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32));
+        mealNameTable.add(mealDifficulty).center();
 
         this.table.add(roundLabel).center().padTop(50);
         this.table.row();

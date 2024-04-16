@@ -212,12 +212,9 @@ public class RecipePaperView {
                     arrangedStepLabel.addListener(new InputListener() {
                         @Override
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                            Cell<Label> cell = centerTable.getCell(arrangedStepLabel);
-
-                            arrangedStepLabel.remove();
-                            centerTable.getCells().removeValue(cell, true);
                             centerTable.invalidate();
                             arrangedSteps.remove(step);
+                            arrangedStepLabel.remove();
                             stepLabel.addAction(alpha(1f));
 
                             isStepSelected[0] = false;
@@ -227,12 +224,9 @@ public class RecipePaperView {
                     });
 
                     if (isStepSelected[0]) {
-                        Cell<Label> cell = centerTable.getCell(arrangedStepLabel);
-
-                        arrangedStepLabel.remove();
-                        centerTable.getCells().removeValue(cell, true);
                         centerTable.invalidate();
                         arrangedSteps.remove(step);
+                        arrangedStepLabel.remove();
                         stepLabel.addAction(alpha(1f));
 
                         isStepSelected[0] = false;
