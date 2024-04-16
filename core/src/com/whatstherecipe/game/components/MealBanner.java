@@ -33,7 +33,7 @@ public class MealBanner {
     private void renderOverlay() {
         Pixmap brownPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 
-        brownPixmap.setColor(Colors.brown);
+        brownPixmap.setColor(Colors.darkBrown);
         brownPixmap.fillRectangle(0, 0, 1, 1);
 
         this.brownOverlay = new Image(new Texture(brownPixmap));
