@@ -28,7 +28,6 @@ import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.classes.Meals;
-import com.whatstherecipe.game.classes.Step;
 import com.whatstherecipe.game.components.Ingredient;
 import com.whatstherecipe.game.components.MealBanner;
 import com.whatstherecipe.game.components.RecipePaperView;
@@ -158,14 +157,15 @@ public class KitchenScreen implements Screen {
 
         this.tableRoot.setFillParent(true);
         this.stage.addActor(tableRoot);
-        this.stage.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.print("x: " + x + ", y: " + y + "\n");
+        // this.stage.addListener(new InputListener() {
+        // @Override
+        // public boolean touchDown(InputEvent event, float x, float y, int pointer, int
+        // button) {
+        // System.out.print("x: " + x + ", y: " + y + "\n");
 
-                return true;
-            }
-        });
+        // return true;
+        // }
+        // });
     }
 
     private void renderKitchenBg() {
