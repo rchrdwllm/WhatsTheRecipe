@@ -4,11 +4,16 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.classes.Step;
@@ -17,13 +22,20 @@ import com.whatstherecipe.game.ui.CustomSkin;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
+import java.util.ArrayList;
+
 public class RecipePaperView {
     private final WhatsTheRecipe game;
     private Stage stage;
     private Meal meal;
+    private ArrayList<Step> shuffledSteps;
+    private ArrayList<Step> arrangedSteps;
+    private ArrayList<Step> sortedSteps;
     private Image brownOverlay;
-    private Table recipeTable;
-    private Table stepsTable;
+    private Table table;
+    private Table leftTable;
+    private Table centerTable;
+    private Table rightTable;
     public Image recipeRef;
     public Image recipe;
     private boolean recipePaperVisible = false;
@@ -32,39 +44,50 @@ public class RecipePaperView {
         this.game = game;
         this.stage = stage;
         this.meal = meal;
+        this.shuffledSteps = new ArrayList<Step>(meal.steps);
+        this.arrangedSteps = new ArrayList<Step>();
+        this.sortedSteps = new ArrayList<Step>();
 
         randomizeSteps();
         renderOverlay();
         initTable();
-        renderTextSteps();
-        renderInstructions();
+        renderLeft();
+        renderRight();
         initRecipePaper();
     }
 
     private void randomizeSteps() {
-        Step.shuffle(this.meal.steps);
+        Step.shuffle(shuffledSteps);
 
         System.out.println("Shuffled steps");
 
-        for (Step step : this.meal.steps) {
+        for (Step step : this.shuffledSteps) {
             System.out.println(step.stepNumber + 1 + ". " + step.label);
         }
     }
 
-    private void sortSteps() {
-        Step.sort(this.meal.steps);
+    private void checkSteps() {
+        this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
+
+        Step.sort(sortedSteps);
 
         System.out.println("Sorted steps");
 
-        for (Step step : this.meal.steps) {
+        for (Step step : this.sortedSteps) {
             System.out.println(step.stepNumber + 1 + ". " + step.label);
+        }
+
+        if (arrangedSteps.equals(sortedSteps)) {
+            System.out.println("Correct steps! Cooking the meal...");
+        } else {
+            System.out.println("Incorrect steps! Please arrange the steps correctly.");
         }
     }
 
     private void renderOverlay() {
         Pixmap brownPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 
-        brownPixmap.setColor(Colors.brown);
+        brownPixmap.setColor(Colors.darkBrown);
         brownPixmap.fillRectangle(0, 0, 1, 1);
 
         this.brownOverlay = new Image(new Texture(brownPixmap));
@@ -81,15 +104,15 @@ public class RecipePaperView {
     }
 
     private void initTable() {
-        this.recipeTable = new Table();
-        this.stepsTable = new Table();
-        this.recipeTable.setFillParent(true);
-        this.stepsTable.setFillParent(true);
+        this.table = new Table();
+        this.leftTable = new Table();
+        this.centerTable = new Table();
+        this.rightTable = new Table();
 
-        this.stage.addActor(this.recipeTable);
-        this.recipeTable.addActor(stepsTable);
-
-        this.recipeTable.addAction(alpha(0f));
+        this.table.setFillParent(true);
+        this.table.add(leftTable).expand().left().padLeft(100);
+        this.table.add(centerTable).expand().center();
+        this.table.add(rightTable).expand().right().padRight(100);
     }
 
     private void initRecipePaper() {
@@ -128,11 +151,12 @@ public class RecipePaperView {
             @Override
             public void run() {
                 brownOverlay.remove();
+                table.remove();
             }
         });
 
         if (recipePaperVisible) {
-            this.recipeTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+            this.table.addAction(fadeOut(0.5f, Interpolation.pow5));
             this.recipe.addAction(
                     sequence(delay(0.5f), moveTo((this.game.V_WIDTH / 2) - (recipe.getWidth() / 2),
                             -recipe.getHeight(), 0.75f, Interpolation.swingIn)));
@@ -141,38 +165,129 @@ public class RecipePaperView {
             recipePaperVisible = false;
         } else {
             this.stage.addActor(this.brownOverlay);
+            this.stage.addActor(table);
+            this.table.addAction(alpha(0f));
             this.recipe.toFront();
             this.brownOverlay.addAction(fadeIn(0.5f, Interpolation.pow5));
             this.recipe.addAction(sequence(
                     delay(0.5f),
                     moveTo((this.game.V_WIDTH / 2) - (recipe.getWidth() / 2),
                             (this.game.V_HEIGHT / 2) - (recipe.getHeight() / 2), 0.75f, Interpolation.swingOut)));
-            this.recipeTable.addAction(sequence(delay(1.25f), fadeIn(0.5f, Interpolation.pow5)));
+            this.table.addAction(sequence(delay(1.25f), fadeIn(0.5f, Interpolation.pow5)));
 
             recipePaperVisible = true;
         }
 
-        this.recipeTable.toFront();
+        this.table.toFront();
     }
 
-    private void renderTextSteps() {
-        this.meal.steps.forEach(step -> {
+    private void renderLeft() {
+        Table leftContainer = new Table();
+        Table stepsContainer = new Table();
+
+        Label mealName = new Label(meal.name, CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 64));
+
+        mealName.setWrap(true);
+        leftContainer.add(mealName).width(400).row();
+
+        this.shuffledSteps.forEach(step -> {
+            final boolean[] isStepSelected = { false };
             Label stepLabel = new Label(step.stepNumber + 1 + ". " + step.label,
-                    CustomSkin.generateCustomLilitaOneFont(Colors.brown, 32));
+                    CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32));
 
             stepLabel.setWrap(true);
 
-            this.stepsTable.add(stepLabel).width(400).padBottom(10).row();
+            stepsContainer.add(stepLabel).width(400).padBottom(15).row();
+
+            stepLabel.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    System.out.println(
+                            "Step " + (step.stepNumber + 1) + " clicked!");
+
+                    Label arrangedStepLabel = new Label(step.stepNumber + 1 + ". " + step.label,
+                            CustomSkin.generateCustomLilitaOneFont(Colors.brown, 32));
+
+                    arrangedStepLabel.setWrap(true);
+                    arrangedStepLabel.addListener(new InputListener() {
+                        @Override
+                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            Cell<Label> cell = centerTable.getCell(arrangedStepLabel);
+
+                            arrangedStepLabel.remove();
+                            centerTable.getCells().removeValue(cell, true);
+                            centerTable.invalidate();
+                            arrangedSteps.remove(step);
+                            stepLabel.addAction(alpha(1f));
+
+                            isStepSelected[0] = false;
+
+                            return true;
+                        }
+                    });
+
+                    if (isStepSelected[0]) {
+                        Cell<Label> cell = centerTable.getCell(arrangedStepLabel);
+
+                        arrangedStepLabel.remove();
+                        centerTable.getCells().removeValue(cell, true);
+                        centerTable.invalidate();
+                        arrangedSteps.remove(step);
+                        stepLabel.addAction(alpha(1f));
+
+                        isStepSelected[0] = false;
+                    } else {
+                        stepLabel.addAction(alpha(0.5f));
+                        arrangedSteps.add(step);
+                        centerTable.add(arrangedStepLabel).width(400).padBottom(15).row();
+
+                        isStepSelected[0] = true;
+                    }
+
+                    return true;
+                }
+            });
         });
+
+        leftContainer.add(stepsContainer).padTop(50);
+
+        this.leftTable.add(leftContainer);
     }
 
-    private void renderInstructions() {
-        Label instructions = new Label(
+    private void renderRight() {
+        Table rightContainer = new Table();
+        Table instructionsContainer = new Table();
+        ArrayList<Label> instructions = new ArrayList<Label>();
+
+        instructions.add(new Label(
                 "Click on the meal steps on the left side of the screen to sort them on the recipe paper! You can remove and switch up the steps as you want by clicking again on the steps on the paper",
-                CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32));
+                CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
+        instructions.add(new Label(
+                "Click anywhere on the brown area to dismiss the recipe paper.",
+                CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
+        instructions.add(new Label(
+                "Finally, click on the 'cook' button if you're sure with the order of steps for this meal!",
+                CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
 
-        instructions.setWrap(true);
+        instructions.forEach(instruction -> {
+            instruction.setWrap(true);
+            instructionsContainer.add(instruction).width(400).padBottom(15).row();
+        });
 
-        this.recipeTable.add(instructions).width(400).right().expand().padRight(160);
+        TextButton cookBtn = new TextButton("Cook", this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+        cookBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                checkSteps();
+
+                return true;
+            }
+        });
+
+        rightContainer.add(instructionsContainer).row();
+        rightContainer.add(cookBtn).padTop(50);
+
+        this.rightTable.add(rightContainer);
     }
 }
