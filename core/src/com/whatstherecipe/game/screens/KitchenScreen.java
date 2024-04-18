@@ -51,6 +51,7 @@ public class KitchenScreen implements Screen {
     private int roundCount = 1;
     private int currentStars = 3;
     private boolean isRoundWin = false;
+    private String phase = "ingredient-selection";
 
     public KitchenScreen(final WhatsTheRecipe game, Meal meal) {
         this.game = game;
@@ -122,7 +123,7 @@ public class KitchenScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(this.stage);
 
-        this.recipePaperView = new RecipePaperView(game, stage, meal);
+        this.recipePaperView = new RecipePaperView(game, stage, meal, phase);
 
         new MealBanner(stage, meal, roundCount);
 
