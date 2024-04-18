@@ -39,7 +39,7 @@ public class KitchenScreen implements Screen {
     private Table tableRoot;
     private OrthographicCamera camera;
     private Image kitchenBg;
-    private TextButton backBtn;
+    private TextButton quitBtn;
     private int screenShows = 0;
     private ArrayList<Image> cabinetTriggers;
     private ArrayList<Image> cabinetImgs;
@@ -183,11 +183,11 @@ public class KitchenScreen implements Screen {
     }
 
     private void renderButtons() {
-        this.backBtn = new TextButton("Quit", this.game.skin.get("text-button-default", TextButtonStyle.class));
-        this.tableRoot.add(this.backBtn).expandY().top().expandX().left().pad(100, 100, 0, 0);
+        this.quitBtn = new TextButton("Quit", this.game.skin.get("text-button-default", TextButtonStyle.class));
+        this.tableRoot.add(this.quitBtn).expandY().top().expandX().left().pad(100, 100, 0, 0);
 
-        this.backBtn.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
-        this.backBtn.addListener(
+        this.quitBtn.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
+        this.quitBtn.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
                         transitionToMainMenu();
@@ -225,7 +225,7 @@ public class KitchenScreen implements Screen {
             }
         });
 
-        this.backBtn.addAction(sequence(
+        this.quitBtn.addAction(sequence(
                 fadeOut(1.5f, Interpolation.pow5),
                 panKitchenBg));
     }
@@ -437,6 +437,6 @@ public class KitchenScreen implements Screen {
         this.kitchenBg.clear();
         this.kitchenBg.setPosition(-this.game.V_WIDTH, 0);
         this.kitchenBg.setScale(1f, 1f);
-        this.backBtn.addAction(fadeIn(1.5f, Interpolation.pow5));
+        this.quitBtn.addAction(fadeIn(1.5f, Interpolation.pow5));
     }
 }
