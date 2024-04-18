@@ -208,26 +208,18 @@ public class RecipePaperView {
                     Label arrangedStepLabel = new Label(step.stepNumber + 1 + ". " + step.label,
                             CustomSkin.generateCustomLilitaOneFont(Colors.brown, 32));
 
-                    arrangedStepLabel.setWrap(true);
-                    arrangedStepLabel.addListener(new InputListener() {
-                        @Override
-                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                            centerTable.invalidate();
-                            arrangedSteps.remove(step);
-                            arrangedStepLabel.remove();
-                            stepLabel.addAction(alpha(1f));
-
-                            isStepSelected[0] = false;
-
-                            return true;
-                        }
-                    });
-
                     if (isStepSelected[0]) {
-                        centerTable.invalidate();
                         arrangedSteps.remove(step);
-                        arrangedStepLabel.remove();
+
+                        Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
+
+                        if (arrangedStepLabelCell != null) {
+                            arrangedStepLabelCell.padBottom(0);
+                            arrangedStepLabel.remove();
+                        }
+
                         stepLabel.addAction(alpha(1f));
+                        centerTable.invalidate();
 
                         isStepSelected[0] = false;
                     } else {
@@ -237,6 +229,28 @@ public class RecipePaperView {
 
                         isStepSelected[0] = true;
                     }
+
+                    arrangedStepLabel.setWrap(true);
+                    arrangedStepLabel.addListener(new InputListener() {
+                        @Override
+                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            arrangedSteps.remove(step);
+
+                            Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
+
+                            if (arrangedStepLabelCell != null) {
+                                arrangedStepLabelCell.padBottom(0);
+                                arrangedStepLabel.remove();
+                            }
+
+                            stepLabel.addAction(alpha(1f));
+                            centerTable.invalidate();
+
+                            isStepSelected[0] = false;
+
+                            return true;
+                        }
+                    });
 
                     return true;
                 }
