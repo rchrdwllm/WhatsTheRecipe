@@ -29,7 +29,7 @@ public class Meals {
         };
         easyMeals.add(new Meal("Sinigang", "easy", sinigangIngredients, sinigangSteps));
 
-        String[] pancitpalabokIngredients = { "rice-noodles", "shrimp", "chicharon", "patis" };
+        String[] pancitpalabokIngredients = { "rice-noodles", "shrimps", "chicharon", "patis" };
         String[] pancitpalabokSteps = {
                 "Cook the noodles according to package instructions. Drain and set aside.",
                 "In a pot, heat the oil over medium heat. Add the shrimp and cook until pink.",
