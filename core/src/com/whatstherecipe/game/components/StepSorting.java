@@ -30,7 +30,6 @@ public class StepSorting {
     private Table leftTable;
     private Table centerTable;
     private Table rightTable;
-    private String phase;
 
     public StepSorting(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
