@@ -31,11 +31,12 @@ public class StepSorting {
     private Table leftTable;
     private Table centerTable;
     private Table rightTable;
+    private String phase;
 
-    public StepSorting(final WhatsTheRecipe game, Stage stage, Meal meal) {
-        this.game = game;
-        this.stage = stage;
-        this.meal = meal;
+    public StepSorting(RecipePaperView recipePaperView) {
+        this.game = recipePaperView.game;
+        this.stage = recipePaperView.stage;
+        this.meal = recipePaperView.meal;
         this.shuffledSteps = new ArrayList<Step>(meal.steps);
         this.arrangedSteps = new ArrayList<Step>();
         this.sortedSteps = new ArrayList<Step>();
@@ -73,20 +74,20 @@ public class StepSorting {
 
     private void randomizeSteps() {
         Step.shuffle(shuffledSteps);
-
-        System.out.println("Shuffled steps");
-
-        for (Step step : this.shuffledSteps) {
-            System.out.println(step.stepNumber + 1 + ". " + step.label);
-        }
     }
 
     private void checkSteps() {
         this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
 
+        System.out.println("Arranged steps by player:");
+
+        for (Step step : this.sortedSteps) {
+            System.out.println(step.stepNumber + 1 + ". " + step.label);
+        }
+
         Step.sort(sortedSteps);
 
-        System.out.println("Sorted steps");
+        System.out.println("Sorted steps:");
 
         for (Step step : this.sortedSteps) {
             System.out.println(step.stepNumber + 1 + ". " + step.label);
@@ -120,9 +121,6 @@ public class StepSorting {
             stepLabel.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    System.out.println(
-                            "Step " + (step.stepNumber + 1) + " clicked!");
-
                     Label arrangedStepLabel = new Label(step.stepNumber + 1 + ". " + step.label,
                             CustomSkin.generateCustomLilitaOneFont(Colors.brown, 32));
 
