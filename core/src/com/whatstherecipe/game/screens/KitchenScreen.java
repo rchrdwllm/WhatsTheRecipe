@@ -199,8 +199,6 @@ public class KitchenScreen implements Screen {
     }
 
     private void transitionToMainMenu() {
-        System.out.println("Going back");
-
         RunnableAction panKitchenBg = new RunnableAction();
 
         panKitchenBg.setRunnable(new Runnable() {
@@ -278,7 +276,6 @@ public class KitchenScreen implements Screen {
                     stage.addActor(cabinetImg);
                     cabinetImg.toFront();
                     cabinetImg.addAction(fadeIn(0.5f));
-                    System.out.println(cabinetImg);
                     cabinetTrigger.addAction(fadeIn(0.5f));
                     closeCabinetBtn.addListener(new InputListener() {
                         @Override
