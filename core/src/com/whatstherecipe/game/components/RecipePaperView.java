@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.ui.Colors;
@@ -15,10 +14,10 @@ import com.whatstherecipe.game.ui.Colors;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class RecipePaperView {
-    private final WhatsTheRecipe game;
-    private Stage stage;
-    private Meal meal;
-    private String phase;
+    public final WhatsTheRecipe game;
+    public Stage stage;
+    public Meal meal;
+    public String phase;
     public Image recipeRef;
     public Image recipe;
     private Image brownOverlay;
@@ -32,8 +31,8 @@ public class RecipePaperView {
         this.meal = meal;
         this.phase = phase;
 
-        this.ingredientSelection = new IngredientSelection(game, stage, meal);
-        this.stepSorting = new StepSorting(game, stage, meal);
+        this.stepSorting = new StepSorting(this);
+        this.ingredientSelection = new IngredientSelection(this);
 
         renderOverlay();
         initRecipePaper();
