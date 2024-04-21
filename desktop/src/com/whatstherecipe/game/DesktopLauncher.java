@@ -10,8 +10,8 @@ public class DesktopLauncher {
 
 		config.setForegroundFPS(60);
 		config.setTitle("What's The Recipe");
-		config.setWindowedMode((int) (960 * 1.5), (int) (540 * 1.5));
-		// config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+		// config.setWindowedMode((int) (960 * 1.5), (int) (540 * 1.5));
+		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 
 		new Lwjgl3Application(new WhatsTheRecipe(), config);
 	}
