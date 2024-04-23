@@ -33,7 +33,7 @@ public class StepSorting {
     private RecipePaperView recipePaperView;
     private ArrayList<Label> stepLabels;
     private ArrayList<Label> arrangedStepLabels;
-    private int maxTries = 2;
+    private int maxTries = 0;
     private int tries = 0;
 
     public StepSorting(RecipePaperView recipePaperView) {
@@ -47,10 +47,28 @@ public class StepSorting {
         this.stepLabels = new ArrayList<Label>();
         this.arrangedStepLabels = new ArrayList<Label>();
 
+        determineMaxTries();
         initTables();
         randomizeSteps();
         renderLeft();
         renderRight();
+    }
+
+    private void determineMaxTries() {
+        switch (this.meal.difficulty) {
+            case "easy":
+                this.maxTries = 3;
+                break;
+            case "medium":
+                this.maxTries = 3;
+                break;
+            case "hard":
+                this.maxTries = 1;
+                break;
+            default:
+                this.maxTries = 3;
+                break;
+        }
     }
 
     public void show() {
@@ -107,31 +125,28 @@ public class StepSorting {
                 if (this.tries == 1) {
                     System.out.println("Cooked the meal on first try. Best cook!");
 
-                    this.recipePaperView.kitchenScreen.isRoundWin = true;
                     this.recipePaperView.kitchenScreen.nextRound();
 
                     return;
                 } else if (this.tries == this.maxTries) {
                     System.out.println("Cooked the meal on second try. Delicious!");
 
-                    this.recipePaperView.kitchenScreen.isRoundWin = true;
                     this.recipePaperView.kitchenScreen.nextRound();
 
                     return;
                 }
             } else {
                 if (this.tries == this.maxTries) {
-                    System.out.println("\nFailed to cook the meal. Max tries reached! Game over!");
+                    System.out.println("\nFailed to cook the meal. Max tries reached! Proceeding to next meal...");
 
-                    this.recipePaperView.kitchenScreen.isEndGame = true;
+                    this.recipePaperView.kitchenScreen.nextRound();
                 } else {
-                    System.out.println("\nIncorrect steps! Please arrange the steps correctly. You lost a star!");
-                    this.recipePaperView.kitchenScreen.currentStars -= 1;
+                    System.out.println("\nIncorrect steps! Please arrange the steps correctly.");
 
                     arrangedSteps.clear();
 
                     this.stepLabels.forEach(step -> {
-                        step.addAction(alpha(1f, 0.5f, Interpolation.pow5));
+                        step.addAction(alpha(1f, 0.25f));
                     });
 
                     this.shuffledSteps.forEach(step -> {
@@ -152,8 +167,6 @@ public class StepSorting {
                     });
                 }
             }
-
-            System.out.println("\nCurrent stars: " + this.recipePaperView.kitchenScreen.currentStars);
         }
     }
 
@@ -193,12 +206,12 @@ public class StepSorting {
                             arrangedStepLabel.remove();
                         }
 
-                        stepLabel.addAction(alpha(1f, 0.5f, Interpolation.pow5));
+                        stepLabel.addAction(alpha(1f, 0.25f));
                         centerTable.invalidate();
 
                         step.isSelected = false;
                     } else {
-                        stepLabel.addAction(alpha(0.5f, 0.5f, Interpolation.pow5));
+                        stepLabel.addAction(alpha(0.5f, 0.25f));
                         arrangedSteps.add(step);
                         centerTable.add(arrangedStepLabel).width(400).padBottom(15).row();
 
@@ -218,7 +231,7 @@ public class StepSorting {
                                 arrangedStepLabel.remove();
                             }
 
-                            stepLabel.addAction(alpha(1f, 0.5f, Interpolation.pow5));
+                            stepLabel.addAction(alpha(1f, 0.25f));
                             centerTable.invalidate();
 
                             step.isSelected = false;
