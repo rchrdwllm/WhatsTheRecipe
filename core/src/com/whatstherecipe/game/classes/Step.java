@@ -6,6 +6,7 @@ import java.util.Collections;
 public class Step {
     public String label;
     public int stepNumber;
+    public boolean isSelected = false;
 
     public Step(String label, int stepNumber) {
         this.label = label;
