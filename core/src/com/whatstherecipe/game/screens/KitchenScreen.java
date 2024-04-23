@@ -27,7 +27,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meal;
-import com.whatstherecipe.game.classes.Meals;
 import com.whatstherecipe.game.components.Ingredient;
 import com.whatstherecipe.game.components.MealBanner;
 import com.whatstherecipe.game.components.RecipePaperView;
@@ -46,27 +45,29 @@ public class KitchenScreen implements Screen {
     private RecipePaperView recipePaperView;
     private ArrayList<String> ingredientsWithRandom;
     private ArrayList<ArrayList<Ingredient>> ingredients;
-    public ArrayList<Meal> previousMeals;
+    public ArrayList<Meal> mealPlan;
     public Meal meal;
-    private int maxRoundCount = 6;
+    private int maxRoundCount = 5;
     public int roundCount = 1;
-    public int maxStars = 3;
-    public int currentStars = 3;
-    public boolean isRoundWin = false;
     public boolean isEndGame = false;
     public String phase = "ingredient-selection";
 
-    public KitchenScreen(final WhatsTheRecipe game, Meal meal) {
+    public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan) {
         this.game = game;
         this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
         this.camera = game.camera;
-        this.meal = meal;
-        this.previousMeals = new ArrayList<Meal>();
+        this.mealPlan = mealPlan;
+        this.meal = mealPlan.get(0);
         this.ingredientsWithRandom = new ArrayList<String>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
+        System.out.println("Meal plan for this game:");
+
+        mealPlan.forEach(meal -> {
+            System.out.println(meal.name + " - " + meal.difficulty);
+        });
+
         System.out.println("\nRound: " + roundCount);
-        System.out.println("Stars: " + currentStars);
         System.out.println("Meal: " + meal.name);
         System.out.println("Difficulty: " + meal.difficulty + "\n");
 
@@ -74,20 +75,17 @@ public class KitchenScreen implements Screen {
         initComponents();
     }
 
-    public KitchenScreen(final WhatsTheRecipe game, Meal meal, int roundCount, int currentStars,
-            ArrayList<Meal> previousMeals) {
+    public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan, int roundCount) {
         this.game = game;
         this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
         this.camera = game.camera;
-        this.meal = meal;
+        this.mealPlan = mealPlan;
+        this.meal = mealPlan.get(roundCount - 1);
         this.roundCount = roundCount;
-        this.currentStars = currentStars;
-        this.previousMeals = previousMeals;
         this.ingredientsWithRandom = new ArrayList<String>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
         System.out.println("\nRound: " + roundCount);
-        System.out.println("Stars: " + currentStars);
         System.out.println("Meal: " + meal.name);
         System.out.println("Difficulty: " + meal.difficulty + "\n");
 
@@ -396,9 +394,7 @@ public class KitchenScreen implements Screen {
     }
 
     public void nextRound() {
-        previousMeals.add(meal);
-
-        if (roundCount == this.maxRoundCount || currentStars - 1 <= 0) {
+        if (roundCount == this.maxRoundCount) {
             this.isEndGame = true;
 
             System.out.println("End game");
@@ -408,56 +404,10 @@ public class KitchenScreen implements Screen {
 
         this.roundCount += 1;
 
-        if (isRoundWin) {
-            if (this.currentStars < this.maxStars) {
-                this.currentStars += 1;
-            }
-
-            switch (meal.difficulty) {
-                case "easy":
-                    game.setScreen(new KitchenScreen(game, Meals.getRandomMediumMeal(previousMeals),
-                            roundCount,
-                            currentStars, previousMeals));
-                    this.dispose();
-                    break;
-                case "medium":
-                    game.setScreen(new KitchenScreen(game, Meals.getRandomHardMeal(previousMeals),
-                            roundCount,
-                            currentStars, previousMeals));
-                    this.dispose();
-                    break;
-                case "hard":
-                    game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
-                            roundCount,
-                            currentStars, previousMeals));
-                    this.dispose();
-                    break;
-            }
-        } else {
-            this.currentStars -= 1;
-
-            switch (meal.difficulty) {
-                case "easy":
-                    game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
-                            roundCount,
-                            currentStars, previousMeals));
-                    this.dispose();
-                    break;
-                case "medium":
-                    game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
-                            roundCount,
-                            currentStars, previousMeals));
-                    this.dispose();
-                    break;
-                case "hard":
-                    game.setScreen(new KitchenScreen(game, Meals.getRandomMediumMeal(previousMeals),
-                            roundCount,
-                            currentStars, previousMeals));
-                    this.dispose();
-                    break;
-
-            }
-        }
+        game.setScreen(new KitchenScreen(game,
+                mealPlan,
+                roundCount));
+        this.dispose();
     }
 
     private void resetState() {

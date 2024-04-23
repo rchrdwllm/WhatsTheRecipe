@@ -24,6 +24,8 @@ import com.whatstherecipe.game.components.InstructionsView;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
+import java.util.ArrayList;
+
 public class MainMenuScreen implements Screen {
     private final WhatsTheRecipe game;
     private Stage stage;
@@ -187,7 +189,7 @@ public class MainMenuScreen implements Screen {
     }
 
     private void playGame() {
-        Meal randomMeal = Meals.getRandomEasyMeal();
+        ArrayList<Meal> mealPlan = Meals.createMealPlan();
 
         RunnableAction panKitchenBg = new RunnableAction();
 
@@ -199,7 +201,7 @@ public class MainMenuScreen implements Screen {
                 switchToKitchenScreen.setRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        game.setScreen(new KitchenScreen(game, randomMeal));
+                        game.setScreen(new KitchenScreen(game, mealPlan));
                     }
                 });
 
