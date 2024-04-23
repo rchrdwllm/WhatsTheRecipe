@@ -133,7 +133,7 @@ public class KitchenScreen implements Screen {
 
         this.recipePaperView = new RecipePaperView(this);
 
-        new MealBanner(stage, meal, roundCount);
+        new MealBanner(this, stage, meal, roundCount);
 
         if (this.screenShows > 0) {
             resetState();
