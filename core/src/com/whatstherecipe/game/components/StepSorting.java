@@ -30,14 +30,22 @@ public class StepSorting {
     private Table leftTable;
     private Table centerTable;
     private Table rightTable;
+    private RecipePaperView recipePaperView;
+    private ArrayList<Label> stepLabels;
+    private ArrayList<Label> arrangedStepLabels;
+    private int maxTries = 2;
+    private int tries = 0;
 
     public StepSorting(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
         this.stage = recipePaperView.stage;
         this.meal = recipePaperView.meal;
+        this.recipePaperView = recipePaperView;
         this.shuffledSteps = new ArrayList<Step>(meal.steps);
         this.arrangedSteps = new ArrayList<Step>();
         this.sortedSteps = new ArrayList<Step>();
+        this.stepLabels = new ArrayList<Label>();
+        this.arrangedStepLabels = new ArrayList<Label>();
 
         initTables();
         randomizeSteps();
@@ -75,26 +83,77 @@ public class StepSorting {
     }
 
     private void checkSteps() {
+        this.tries += 1;
         this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
 
-        System.out.println("Arranged steps by player:");
+        if (!this.sortedSteps.isEmpty()) {
+            System.out.println("Arranged steps by player:");
 
-        for (Step step : this.sortedSteps) {
-            System.out.println(step.stepNumber + 1 + ". " + step.label);
-        }
+            for (Step step : this.sortedSteps) {
+                System.out.println(step.stepNumber + 1 + ". " + step.label);
+            }
 
-        Step.sort(sortedSteps);
+            Step.sort(sortedSteps);
 
-        System.out.println("Sorted steps:");
+            System.out.println("Sorted steps:");
 
-        for (Step step : this.sortedSteps) {
-            System.out.println(step.stepNumber + 1 + ". " + step.label);
-        }
+            for (Step step : this.sortedSteps) {
+                System.out.println(step.stepNumber + 1 + ". " + step.label);
+            }
 
-        if (arrangedSteps.equals(sortedSteps)) {
-            System.out.println("Correct steps! Cooking the meal...");
-        } else {
-            System.out.println("Incorrect steps! Please arrange the steps correctly.");
+            if (arrangedSteps.equals(sortedSteps)) {
+                System.out.println("\nCorrect steps! Cooking the meal...");
+
+                if (this.tries == 1) {
+                    System.out.println("Cooked the meal on first try. Best cook!");
+
+                    this.recipePaperView.kitchenScreen.isRoundWin = true;
+                    this.recipePaperView.kitchenScreen.nextRound();
+
+                    return;
+                } else if (this.tries == this.maxTries) {
+                    System.out.println("Cooked the meal on second try. Delicious!");
+
+                    this.recipePaperView.kitchenScreen.isRoundWin = true;
+                    this.recipePaperView.kitchenScreen.nextRound();
+
+                    return;
+                }
+            } else {
+                if (this.tries == this.maxTries) {
+                    System.out.println("\nFailed to cook the meal. Max tries reached! Game over!");
+
+                    this.recipePaperView.kitchenScreen.isEndGame = true;
+                } else {
+                    System.out.println("\nIncorrect steps! Please arrange the steps correctly. You lost a star!");
+                    this.recipePaperView.kitchenScreen.currentStars -= 1;
+
+                    arrangedSteps.clear();
+
+                    this.stepLabels.forEach(step -> {
+                        step.addAction(alpha(1f, 0.5f, Interpolation.pow5));
+                    });
+
+                    this.shuffledSteps.forEach(step -> {
+                        step.isSelected = false;
+                    });
+
+                    this.arrangedStepLabels.forEach(arrangedStepLabel -> {
+                        arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
+
+                        Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
+
+                        if (arrangedStepLabelCell != null) {
+                            arrangedStepLabelCell.padBottom(0);
+                            arrangedStepLabel.remove();
+                        }
+
+                        centerTable.invalidate();
+                    });
+                }
+            }
+
+            System.out.println("\nCurrent stars: " + this.recipePaperView.kitchenScreen.currentStars);
         }
     }
 
@@ -108,10 +167,10 @@ public class StepSorting {
         leftContainer.add(mealName).width(400).row();
 
         this.shuffledSteps.forEach(step -> {
-            final boolean[] isStepSelected = { false };
             Label stepLabel = new Label(step.stepNumber + 1 + ". " + step.label,
                     CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32));
 
+            this.stepLabels.add(stepLabel);
             stepLabel.setWrap(true);
 
             stepsContainer.add(stepLabel).width(400).padBottom(15).row();
@@ -122,7 +181,9 @@ public class StepSorting {
                     Label arrangedStepLabel = new Label(step.stepNumber + 1 + ". " + step.label,
                             CustomSkin.generateCustomLilitaOneFont(Colors.brown, 32));
 
-                    if (isStepSelected[0]) {
+                    arrangedStepLabels.add(arrangedStepLabel);
+
+                    if (step.isSelected) {
                         arrangedSteps.remove(step);
 
                         Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
@@ -132,16 +193,16 @@ public class StepSorting {
                             arrangedStepLabel.remove();
                         }
 
-                        stepLabel.addAction(alpha(1f));
+                        stepLabel.addAction(alpha(1f, 0.5f, Interpolation.pow5));
                         centerTable.invalidate();
 
-                        isStepSelected[0] = false;
+                        step.isSelected = false;
                     } else {
-                        stepLabel.addAction(alpha(0.5f));
+                        stepLabel.addAction(alpha(0.5f, 0.5f, Interpolation.pow5));
                         arrangedSteps.add(step);
                         centerTable.add(arrangedStepLabel).width(400).padBottom(15).row();
 
-                        isStepSelected[0] = true;
+                        step.isSelected = true;
                     }
 
                     arrangedStepLabel.setWrap(true);
@@ -157,10 +218,10 @@ public class StepSorting {
                                 arrangedStepLabel.remove();
                             }
 
-                            stepLabel.addAction(alpha(1f));
+                            stepLabel.addAction(alpha(1f, 0.5f, Interpolation.pow5));
                             centerTable.invalidate();
 
-                            isStepSelected[0] = false;
+                            step.isSelected = false;
 
                             return true;
                         }
@@ -185,10 +246,10 @@ public class StepSorting {
                 "Click on the meal steps on the left side of the screen to sort them on the recipe paper! You can remove and switch up the steps as you want by clicking again on the steps on the paper",
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
         instructions.add(new Label(
-                "Click anywhere on the brown area to dismiss the recipe paper.",
+                "Click on the 'cook' button if you're sure with the order of steps for this meal!",
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
         instructions.add(new Label(
-                "Finally, click on the 'cook' button if you're sure with the order of steps for this meal!",
+                "Remember: Trying to cook with the wrong steps will result in a disaster, costing you a star! Good luck!",
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
 
         instructions.forEach(instruction -> {
