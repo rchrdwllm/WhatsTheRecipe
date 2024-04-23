@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
+import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.ui.Colors;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -22,14 +23,16 @@ public class RecipePaperView {
     public Image recipe;
     private Image brownOverlay;
     private boolean recipePaperVisible = false;
+    KitchenScreen kitchenScreen;
     IngredientSelection ingredientSelection;
     StepSorting stepSorting;
 
-    public RecipePaperView(final WhatsTheRecipe game, Stage stage, Meal meal, String phase) {
-        this.game = game;
-        this.stage = stage;
-        this.meal = meal;
-        this.phase = phase;
+    public RecipePaperView(KitchenScreen kitchenScreen) {
+        this.game = kitchenScreen.game;
+        this.stage = kitchenScreen.stage;
+        this.meal = kitchenScreen.meal;
+        this.phase = kitchenScreen.phase;
+        this.kitchenScreen = kitchenScreen;
 
         this.stepSorting = new StepSorting(this);
         this.ingredientSelection = new IngredientSelection(this);
@@ -116,29 +119,6 @@ public class RecipePaperView {
                                 (this.game.V_HEIGHT / 2) - (recipe.getHeight() / 2), 0.75f, Interpolation.swingOut)));
 
                 this.ingredientSelection.show();
-
-                recipePaperVisible = true;
-            }
-        } else if (this.phase.equals("step-sorting")) {
-            if (recipePaperVisible) {
-                this.recipe.addAction(
-                        sequence(delay(0.5f), moveTo((this.game.V_WIDTH / 2) - (recipe.getWidth() / 2),
-                                -recipe.getHeight(), 0.75f, Interpolation.swingIn)));
-                this.brownOverlay.addAction(sequence(delay(1.25f), fadeOut(0.5f, Interpolation.pow5), removeOverlay));
-
-                this.stepSorting.hide();
-
-                recipePaperVisible = false;
-            } else {
-                this.stage.addActor(this.brownOverlay);
-                this.recipe.toFront();
-                this.brownOverlay.addAction(fadeIn(0.5f, Interpolation.pow5));
-                this.recipe.addAction(sequence(
-                        delay(0.5f),
-                        moveTo((this.game.V_WIDTH / 2) - (recipe.getWidth() / 2),
-                                (this.game.V_HEIGHT / 2) - (recipe.getHeight() / 2), 0.75f, Interpolation.swingOut)));
-
-                this.stepSorting.show();
 
                 recipePaperVisible = true;
             }
