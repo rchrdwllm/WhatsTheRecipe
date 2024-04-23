@@ -34,8 +34,8 @@ import com.whatstherecipe.game.components.RecipePaperView;
 import com.whatstherecipe.game.ui.Colors;
 
 public class KitchenScreen implements Screen {
-    private final WhatsTheRecipe game;
-    private Stage stage;
+    public final WhatsTheRecipe game;
+    public Stage stage;
     private Table tableRoot;
     private OrthographicCamera camera;
     private Image kitchenBg;
@@ -46,12 +46,15 @@ public class KitchenScreen implements Screen {
     private RecipePaperView recipePaperView;
     private ArrayList<String> ingredientsWithRandom;
     private ArrayList<ArrayList<Ingredient>> ingredients;
-    private ArrayList<Meal> previousMeals;
-    private Meal meal;
-    private int roundCount = 1;
-    private int currentStars = 3;
-    private boolean isRoundWin = false;
-    private String phase = "ingredient-selection";
+    public ArrayList<Meal> previousMeals;
+    public Meal meal;
+    private int maxRoundCount = 6;
+    public int roundCount = 1;
+    public int maxStars = 3;
+    public int currentStars = 3;
+    public boolean isRoundWin = false;
+    public boolean isEndGame = false;
+    public String phase = "ingredient-selection";
 
     public KitchenScreen(final WhatsTheRecipe game, Meal meal) {
         this.game = game;
@@ -61,6 +64,11 @@ public class KitchenScreen implements Screen {
         this.previousMeals = new ArrayList<Meal>();
         this.ingredientsWithRandom = new ArrayList<String>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
+
+        System.out.println("\nRound: " + roundCount);
+        System.out.println("Stars: " + currentStars);
+        System.out.println("Meal: " + meal.name);
+        System.out.println("Difficulty: " + meal.difficulty + "\n");
 
         randomizeIngredients();
         initComponents();
@@ -78,10 +86,10 @@ public class KitchenScreen implements Screen {
         this.ingredientsWithRandom = new ArrayList<String>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
-        // System.out.println("Round: " + roundCount);
-        // System.out.println("Stars: " + currentStars);
-        // System.out.println("Meal: " + meal.name);
-        // System.out.println("Difficulty: " + meal.difficulty);
+        System.out.println("\nRound: " + roundCount);
+        System.out.println("Stars: " + currentStars);
+        System.out.println("Meal: " + meal.name);
+        System.out.println("Difficulty: " + meal.difficulty + "\n");
 
         randomizeIngredients();
         initComponents();
@@ -123,7 +131,7 @@ public class KitchenScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(this.stage);
 
-        this.recipePaperView = new RecipePaperView(game, stage, meal, phase);
+        this.recipePaperView = new RecipePaperView(this);
 
         new MealBanner(stage, meal, roundCount);
 
@@ -387,43 +395,65 @@ public class KitchenScreen implements Screen {
         }
     }
 
-    private void nextRound() {
+    public void nextRound() {
         previousMeals.add(meal);
 
+        if (roundCount == this.maxRoundCount || currentStars - 1 <= 0) {
+            this.isEndGame = true;
+
+            System.out.println("End game");
+
+            return;
+        }
+
+        this.roundCount += 1;
+
         if (isRoundWin) {
+            if (this.currentStars < this.maxStars) {
+                this.currentStars += 1;
+            }
+
             switch (meal.difficulty) {
                 case "easy":
                     game.setScreen(new KitchenScreen(game, Meals.getRandomMediumMeal(previousMeals),
-                            roundCount + 1,
-                            currentStars + 1, previousMeals));
+                            roundCount,
+                            currentStars, previousMeals));
+                    this.dispose();
                     break;
                 case "medium":
                     game.setScreen(new KitchenScreen(game, Meals.getRandomHardMeal(previousMeals),
-                            roundCount + 1,
-                            currentStars + 1, previousMeals));
+                            roundCount,
+                            currentStars, previousMeals));
+                    this.dispose();
                     break;
                 case "hard":
-                    game.setScreen(new KitchenScreen(game, Meals.getRandomHardMeal(previousMeals),
-                            roundCount + 1,
-                            currentStars + 1, previousMeals));
+                    game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
+                            roundCount,
+                            currentStars, previousMeals));
+                    this.dispose();
                     break;
             }
         } else {
+            this.currentStars -= 1;
+
             switch (meal.difficulty) {
                 case "easy":
                     game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
-                            roundCount + 1,
-                            currentStars - 1, previousMeals));
+                            roundCount,
+                            currentStars, previousMeals));
+                    this.dispose();
                     break;
                 case "medium":
                     game.setScreen(new KitchenScreen(game, Meals.getRandomEasyMeal(previousMeals),
-                            roundCount + 1,
-                            currentStars - 1, previousMeals));
+                            roundCount,
+                            currentStars, previousMeals));
+                    this.dispose();
                     break;
                 case "hard":
                     game.setScreen(new KitchenScreen(game, Meals.getRandomMediumMeal(previousMeals),
-                            roundCount + 1,
-                            currentStars - 1, previousMeals));
+                            roundCount,
+                            currentStars, previousMeals));
+                    this.dispose();
                     break;
 
             }
