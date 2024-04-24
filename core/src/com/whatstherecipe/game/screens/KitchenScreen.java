@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meal;
+import com.whatstherecipe.game.components.BasketView;
 import com.whatstherecipe.game.components.Ingredient;
 import com.whatstherecipe.game.components.MealBanner;
 import com.whatstherecipe.game.components.RecipePaperView;
@@ -38,13 +39,16 @@ public class KitchenScreen implements Screen {
     private Table tableRoot;
     private OrthographicCamera camera;
     private Image kitchenBg;
+    private Image basket;
     private TextButton quitBtn;
     private int screenShows = 0;
     private ArrayList<Image> cabinetTriggers;
     private ArrayList<Image> cabinetImgs;
     private RecipePaperView recipePaperView;
+    private BasketView basketView;
     private ArrayList<String> ingredientsWithRandom;
     private ArrayList<ArrayList<Ingredient>> ingredients;
+    public ArrayList<Ingredient> ingredientsInBasket;
     public ArrayList<Meal> mealPlan;
     public Meal meal;
     private int maxRoundCount = 5;
@@ -59,6 +63,7 @@ public class KitchenScreen implements Screen {
         this.mealPlan = mealPlan;
         this.meal = mealPlan.get(0);
         this.ingredientsWithRandom = new ArrayList<String>();
+        this.ingredientsInBasket = new ArrayList<Ingredient>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
         System.out.println("Meal plan for this game:");
@@ -83,6 +88,7 @@ public class KitchenScreen implements Screen {
         this.meal = mealPlan.get(roundCount - 1);
         this.roundCount = roundCount;
         this.ingredientsWithRandom = new ArrayList<String>();
+        this.ingredientsInBasket = new ArrayList<Ingredient>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
         System.out.println("\nRound: " + roundCount);
@@ -130,6 +136,8 @@ public class KitchenScreen implements Screen {
         Gdx.input.setInputProcessor(this.stage);
 
         this.recipePaperView = new RecipePaperView(this);
+        this.renderBasket();
+        this.basketView = new BasketView(this);
 
         new MealBanner(this, stage, meal, roundCount);
 
@@ -227,6 +235,11 @@ public class KitchenScreen implements Screen {
                                 scaleBy(0.25f, 0.25f, 2f, Interpolation.pow5),
                                 moveBy(game.V_WIDTH, 0, 2f, Interpolation.pow5)),
                         switchToMainMenuScreen));
+
+                basket.addAction(sequence(parallel(
+                        scaleBy(0.25f, 0.25f, 2f, Interpolation.pow5),
+                        moveBy(game.V_WIDTH, 0, 2.05f, Interpolation.pow5)),
+                        alpha(0f)));
             }
         });
 
@@ -310,6 +323,7 @@ public class KitchenScreen implements Screen {
                     closeCabinetBtn.toFront();
                     stage.addActor(closeCabinetBtn);
                     recipePaperView.recipeRef.toFront();
+                    basket.toFront();
                     ingredients.get(index).forEach(ingredient -> {
                         ingredient.toggleIngredient();
                     });
@@ -345,7 +359,7 @@ public class KitchenScreen implements Screen {
             int cabinetIndex = i;
 
             for (int j = 0; j < Ingredients.ingredientsList[i].length; j++) {
-                Ingredient ingredient = new Ingredient(this.game, this.stage, Ingredients.ingredientsList[i][j]);
+                Ingredient ingredient = new Ingredient(this.game, this.stage, Ingredients.ingredientsList[i][j], this);
 
                 ingredient.cabinetIndex = cabinetIndex;
 
@@ -356,6 +370,27 @@ public class KitchenScreen implements Screen {
                     }
                 });
             }
+        }
+    }
+
+    private void renderBasket() {
+        if (this.game.assets.isLoaded("basket.png")) {
+            Texture basketTexture = this.game.assets.get("basket.png", Texture.class);
+
+            this.basket = new Image(basketTexture);
+            this.basket.setPosition(947, 553);
+            this.stage.addActor(basket);
+            this.basket.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
+
+            this.basket.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    basketView.toggleBasket();
+
+                    return true;
+                }
+
+            });
         }
     }
 
