@@ -3,10 +3,13 @@ package com.whatstherecipe.game.components;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.screens.KitchenScreen;
 
 public class Ingredient {
     private final WhatsTheRecipe game;
@@ -17,14 +20,17 @@ public class Ingredient {
     public String fileName;
     public Image ingredient;
     public int cabinetIndex;
-    private boolean isToggled = false;
+    public boolean isToggled = false;
+    public boolean isAdded = false;
+    private KitchenScreen kitchenScreen;
 
-    public Ingredient(final WhatsTheRecipe game, Stage stage, String name) {
+    public Ingredient(final WhatsTheRecipe game, Stage stage, String name, KitchenScreen kitchenScreen) {
         this.game = game;
         this.stage = stage;
         this.name = name;
         this.fileName = name + ".png";
         this.path = directory + fileName;
+        this.kitchenScreen = kitchenScreen;
 
         initIngredient();
     }
@@ -39,6 +45,29 @@ public class Ingredient {
                     ingredient.getHeight());
             this.ingredient.setPosition(0, 0);
             this.ingredient.addAction(alpha(0));
+
+            this.ingredient.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    toggleToBasket();
+
+                    return true;
+                }
+            });
+        }
+    }
+
+    public void toggleToBasket() {
+        if (!isAdded) {
+            this.ingredient.addAction(sequence(fadeOut(0.25f), run(() -> this.ingredient.remove())));
+            this.kitchenScreen.ingredientsInBasket.add(this);
+
+            this.isAdded = true;
+        } else {
+            this.stage.addActor(this.ingredient);
+            this.kitchenScreen.ingredientsInBasket.remove(this);
+
+            this.isAdded = false;
         }
     }
 
@@ -50,10 +79,12 @@ public class Ingredient {
 
             this.isToggled = false;
         } else {
-            this.stage.addActor(this.ingredient);
-            this.ingredient.addAction(fadeIn(0.5f));
+            if (!isAdded) {
+                this.stage.addActor(this.ingredient);
+                this.ingredient.addAction(fadeIn(0.5f));
 
-            this.isToggled = true;
+                this.isToggled = true;
+            }
         }
     }
 }
