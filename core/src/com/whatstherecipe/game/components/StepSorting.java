@@ -104,7 +104,7 @@ public class StepSorting {
         this.tries += 1;
         this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
 
-        if (!this.sortedSteps.isEmpty()) {
+        if (!this.sortedSteps.isEmpty() && this.sortedSteps.size() == this.meal.steps.size()) {
             System.out.println("Arranged steps by player:");
 
             for (Step step : this.sortedSteps) {
