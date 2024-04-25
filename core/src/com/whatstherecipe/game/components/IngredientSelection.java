@@ -26,7 +26,6 @@ public class IngredientSelection {
     private Table leftTable;
     private Table centerTable;
     private Table rightTable;
-    private StepSorting stepSorting;
     private RecipePaperView recipePaperView;
     private ArrayList<Ingredient> selectedIngredients;
     private ArrayList<String> selectedIngredientsString;
@@ -35,7 +34,6 @@ public class IngredientSelection {
         this.game = recipePaperView.game;
         this.stage = recipePaperView.stage;
         this.meal = recipePaperView.meal;
-        this.stepSorting = recipePaperView.stepSorting;
         this.recipePaperView = recipePaperView;
         this.selectedIngredients = new ArrayList<Ingredient>();
         this.selectedIngredientsString = new ArrayList<String>();
