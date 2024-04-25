@@ -266,7 +266,7 @@ public class StepSorting {
                 "Click on the 'cook' button if you're sure with the order of steps for this meal!",
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
         instructions.add(new Label(
-                "Remember: Trying to cook with the wrong steps will result in a disaster, costing you a star! Good luck!",
+                "Remember: Trying to cook with the wrong steps will result in a disaster, costing you some points! Good luck!",
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
 
         instructions.forEach(instruction -> {

@@ -143,7 +143,7 @@ public class IngredientSelection {
         instructions.add(new Label("Click on the button below to check if your basket contains the right ingredients!",
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
         instructions.add(new Label(
-                "Remember: Having the wrong collection of ingredients will cost you a star, and the right collection will give you one star (if you don't already have 3 stars)!",
+                "Remember: Having the wrong collection of ingredients won't allow you to proceed to the sorting stage of the round!",
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
 
         instructions.forEach(instruction -> {
