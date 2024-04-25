@@ -107,13 +107,15 @@ public class BasketView {
         ingredientsInBasket.forEach(ingredient -> {
             Table ingredientTable = new Table();
             Label label = new Label(ingredient.name, CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 48));
+            Image ingredientImage = new Image(this.game.assets.get(ingredient.name + "-basket.png", Texture.class));
             TextButton removeBtn = new TextButton("Remove",
                     this.game.skin.get("text-button-default", TextButtonStyle.class));
 
             label.setAlignment(Align.center);
 
-            ingredientTable.add(label).center().row();
-            ingredientTable.add(removeBtn).center().padTop(16);
+            ingredientTable.add(ingredientImage).center().padBottom(10).row();
+            ingredientTable.add(label).center().padBottom(10).row();
+            ingredientTable.add(removeBtn).center();
 
             if (row1.getChildren().size < 4) {
                 row1.add(ingredientTable).center().expand();

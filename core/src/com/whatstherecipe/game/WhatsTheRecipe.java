@@ -72,6 +72,14 @@ public class WhatsTheRecipe extends Game {
 			}
 		}
 
+		for (int i = 0; i < Ingredients.ingredientsList.length; i++) {
+			for (int j = 0; j < Ingredients.ingredientsList[i].length; j++) {
+				System.out.println("ingredients/basket-view/" + Ingredients.ingredientsList[i][j] + "-basket.png");
+				this.assets.load("ingredients/basket-view/" + Ingredients.ingredientsList[i][j] + "-basket.png",
+						Texture.class);
+			}
+		}
+
 		this.assets.finishLoading();
 	}
 }
