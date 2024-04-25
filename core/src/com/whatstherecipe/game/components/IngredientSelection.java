@@ -11,12 +11,10 @@ import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.ui.Colors;
 import com.whatstherecipe.game.ui.CustomSkin;
+import java.util.ArrayList;
+import com.badlogic.gdx.math.Interpolation;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-
-import java.util.ArrayList;
-
-import com.badlogic.gdx.math.Interpolation;
 
 public class IngredientSelection {
     public final WhatsTheRecipe game;
@@ -28,8 +26,7 @@ public class IngredientSelection {
     private Table rightTable;
     private RecipePaperView recipePaperView;
     private StepSorting stepSorting;
-    private ArrayList<Ingredient> selectedIngredients;
-    private ArrayList<String> selectedIngredientsString;
+    private ArrayList<String> selectedIngredients;
 
     public IngredientSelection(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -37,8 +34,7 @@ public class IngredientSelection {
         this.meal = recipePaperView.meal;
         this.stepSorting = recipePaperView.stepSorting;
         this.recipePaperView = recipePaperView;
-        this.selectedIngredients = new ArrayList<Ingredient>();
-        this.selectedIngredientsString = new ArrayList<String>();
+        this.selectedIngredients = new ArrayList<String>();
 
         initTables();
         renderLeft();
@@ -63,11 +59,6 @@ public class IngredientSelection {
         this.table.toFront();
         this.table.addAction(alpha(0f));
         this.table.addAction(sequence(delay(1f, fadeIn(0.5f, Interpolation.pow5))));
-
-        this.selectedIngredients.addAll(this.recipePaperView.kitchenScreen.ingredientsInBasket);
-        this.selectedIngredients.forEach(ingredient -> {
-            this.selectedIngredientsString.add(ingredient.name);
-        });
     }
 
     public void hide() {
@@ -111,6 +102,40 @@ public class IngredientSelection {
         }
     }
 
+    public void checkIngredients() {
+        this.selectedIngredients.clear();
+
+        System.out.println("\nSelected ingredients:");
+
+        this.recipePaperView.kitchenScreen.ingredientsInBasket.forEach(ingredient -> {
+            this.selectedIngredients.add(ingredient.name);
+
+            System.out.println(ingredient.name);
+        });
+
+        System.out.println("Correct meal ingredients:");
+
+        this.meal.ingredients.forEach(ingredient -> {
+            System.out.println(ingredient);
+        });
+
+        if (selectedIngredients.containsAll(meal.ingredients)) {
+            if (selectedIngredients.size() == meal.ingredients.size()) {
+                System.out.println("Ingredients match!");
+
+                this.hide();
+
+                stepSorting.show();
+            } else {
+                System.out.println("Ingredients don't match! (Length mismatch)");
+                System.out.println("Selected ingredients length: " + selectedIngredients.size());
+                System.out.println("Correct meal ingredients length: " + meal.ingredients.size());
+            }
+        } else {
+            System.out.println("Ingredients don't match!");
+        }
+    }
+
     private void renderRight() {
         Table instructionsContainer = new Table();
         ArrayList<Label> instructions = new ArrayList<Label>();
@@ -136,9 +161,7 @@ public class IngredientSelection {
         checkBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                hide();
-
-                stepSorting.show();
+                checkIngredients();
 
                 return true;
             }
