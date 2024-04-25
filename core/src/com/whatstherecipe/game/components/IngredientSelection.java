@@ -79,7 +79,7 @@ public class IngredientSelection {
                         + meal.name + ".",
                         CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
         instructions.add(new Label(
-                "Use your basket at the bottom right for collecting ingredients, viewing them, as well as removing those that you don't want anymore!",
+                "Use your basket at the middle in the kitchen for collecting ingredients, viewing them, as well as removing those that you don't want anymore!",
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32)));
 
         instructions.forEach(instruction -> {
@@ -127,7 +127,6 @@ public class IngredientSelection {
 
                 stepSorting.show();
             } else {
-                System.out.println("Ingredients don't match! (Length mismatch)");
                 System.out.println("Selected ingredients length: " + selectedIngredients.size());
                 System.out.println("Correct meal ingredients length: " + meal.ingredients.size());
             }
