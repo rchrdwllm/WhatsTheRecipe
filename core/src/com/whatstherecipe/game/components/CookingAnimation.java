@@ -10,9 +10,12 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.ui.Colors;
+import com.whatstherecipe.game.ui.CustomSkin;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -42,11 +45,14 @@ public class CookingAnimation {
 
         renderTable();
         renderOverlay();
+        renderAnimation();
+        renderLabel();
     }
 
     private void renderTable() {
         this.table = new Table();
         this.table.setFillParent(true);
+        this.table.addAction(alpha(0f));
     }
 
     private void renderOverlay() {
@@ -68,11 +74,23 @@ public class CookingAnimation {
         });
     }
 
+    private void renderAnimation() {
+        this.table.add(this.cookingActor).center();
+    }
+
+    public void renderLabel() {
+        Label label = new Label("Cooking meal...", CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 48));
+
+        label.setAlignment(Align.center);
+
+        this.table.row();
+        this.table.add(label).center().padTop(16);
+    }
+
     public void toggleAnimation() {
         if (isToggled) {
             this.cookingActor.addAction(fadeOut(0.5f));
             this.brownOverlay.addAction(sequence(fadeOut(0.5f), run(() -> {
-                this.cookingActor.remove();
                 this.brownOverlay.remove();
                 this.table.remove();
             })));
@@ -81,9 +99,8 @@ public class CookingAnimation {
         } else {
             this.stage.addActor(this.brownOverlay);
             this.stage.addActor(this.table);
-            this.table.add(this.cookingActor).center();
 
-            this.cookingActor.addAction(fadeIn(0.5f));
+            this.table.addAction(fadeIn(0.5f));
             this.brownOverlay.addAction(fadeIn(0.5f));
 
             isToggled = true;
