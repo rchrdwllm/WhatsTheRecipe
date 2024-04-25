@@ -32,6 +32,7 @@ public class StepSorting {
     private Table rightTable;
     private ArrayList<Label> stepLabels;
     private ArrayList<Label> arrangedStepLabels;
+    private ArrayList<String> selectedSteps;
     private int maxTries = 0;
     private int tries = 0;
     private CookingAnimation cookingAnimation;
@@ -47,6 +48,7 @@ public class StepSorting {
         this.sortedSteps = new ArrayList<Step>();
         this.stepLabels = new ArrayList<Label>();
         this.arrangedStepLabels = new ArrayList<Label>();
+        this.selectedSteps = new ArrayList<String>();
 
         determineMaxTries();
         initTables();
@@ -195,9 +197,16 @@ public class StepSorting {
             stepLabel.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    Label arrangedStepLabel = new Label(step.stepNumber + 1 + ". " + step.label,
+                    String labelText = step.stepNumber + 1 + ". " + step.label;
+
+                    if (selectedSteps.contains(labelText)) {
+                        return true;
+                    }
+
+                    Label arrangedStepLabel = new Label(labelText,
                             CustomSkin.generateCustomLilitaOneFont(Colors.brown, 32));
 
+                    selectedSteps.add(labelText);
                     arrangedStepLabels.add(arrangedStepLabel);
 
                     if (step.isSelected) {
@@ -237,6 +246,8 @@ public class StepSorting {
 
                             stepLabel.addAction(alpha(1f, 0.25f));
                             centerTable.invalidate();
+
+                            selectedSteps.remove(labelText);
 
                             step.isSelected = false;
 
