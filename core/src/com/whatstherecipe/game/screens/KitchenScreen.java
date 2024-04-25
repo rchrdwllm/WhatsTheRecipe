@@ -172,14 +172,15 @@ public class KitchenScreen implements Screen {
 
         this.tableRoot.setFillParent(true);
         this.stage.addActor(tableRoot);
-        this.stage.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.print("x: " + x + ", y: " + y + "\n");
+        // this.stage.addListener(new InputListener() {
+        // @Override
+        // public boolean touchDown(InputEvent event, float x, float y, int pointer, int
+        // button) {
+        // System.out.print("x: " + x + ", y: " + y + "\n");
 
-                return true;
-            }
-        });
+        // return true;
+        // }
+        // });
     }
 
     private void renderKitchenBg() {
@@ -405,9 +406,9 @@ public class KitchenScreen implements Screen {
         try {
             this.ingredients.get(1).get(0).ingredient.setPosition(1196, 352);
             this.ingredients.get(1).get(1).ingredient.setPosition(1300, 352);
-            this.ingredients.get(1).get(2).ingredient.setPosition(1159, 156);
-            this.ingredients.get(1).get(3).ingredient.setPosition(1252, 156);
-            this.ingredients.get(1).get(4).ingredient.setPosition(1330, 156);
+            this.ingredients.get(1).get(2).ingredient.setPosition(1196, 156);
+            this.ingredients.get(1).get(3).ingredient.setPosition(1300, 156);
+            this.ingredients.get(1).get(4).ingredient.setPosition(1300, 156);
         } catch (IndexOutOfBoundsException e) {
         }
 
