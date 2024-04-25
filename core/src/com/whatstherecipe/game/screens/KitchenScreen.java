@@ -408,6 +408,7 @@ public class KitchenScreen implements Screen {
             this.ingredients.get(1).get(1).ingredient.setPosition(1300, 352);
             this.ingredients.get(1).get(2).ingredient.setPosition(1196, 156);
             this.ingredients.get(1).get(3).ingredient.setPosition(1300, 156);
+            this.ingredients.get(1).get(4).ingredient.setPosition(1300, 156);
         } catch (IndexOutOfBoundsException e) {
         }
 

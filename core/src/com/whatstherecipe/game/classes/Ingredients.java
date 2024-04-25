@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Ingredients {
     public static String[][] ingredientsList = {
             { "bile", "suka", "ketchup", "chicharon", "sisig-meat" }, // 0
-            { "calamansi", "chili", "ginger", "pork-ribs", "shrimps", "toyo" }, // 1
-            { "onion", "garlic", "mayonnaise", "patis", "peppercorn" }, // 2
+            { "calamansi", "chili", "ginger", "pork-ribs", "shrimps", "peppercorn" }, // 1
+            { "onion", "garlic", "mayonnaise", "patis", "toyo" }, // 2
             { "rice-noodles", "tamarind", "tomatoes", "chicken", "goat-meat" } // 3
     };
 
