@@ -28,6 +28,8 @@ public class IngredientSelection {
     private Table rightTable;
     private StepSorting stepSorting;
     private RecipePaperView recipePaperView;
+    private ArrayList<Ingredient> selectedIngredients;
+    private ArrayList<String> selectedIngredientsString;
 
     public IngredientSelection(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -35,6 +37,8 @@ public class IngredientSelection {
         this.meal = recipePaperView.meal;
         this.stepSorting = recipePaperView.stepSorting;
         this.recipePaperView = recipePaperView;
+        this.selectedIngredients = new ArrayList<Ingredient>();
+        this.selectedIngredientsString = new ArrayList<String>();
 
         initTables();
         renderLeft();
@@ -59,6 +63,11 @@ public class IngredientSelection {
         this.table.toFront();
         this.table.addAction(alpha(0f));
         this.table.addAction(sequence(delay(1f, fadeIn(0.5f, Interpolation.pow5))));
+
+        this.selectedIngredients.addAll(this.recipePaperView.kitchenScreen.ingredientsInBasket);
+        this.selectedIngredients.forEach(ingredient -> {
+            this.selectedIngredientsString.add(ingredient.name);
+        });
     }
 
     public void hide() {
@@ -127,11 +136,17 @@ public class IngredientSelection {
         checkBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                hide();
+                selectedIngredientsString.forEach(ingredient -> {
+                    System.out.println(ingredient);
+                });
 
-                recipePaperView.phase = "step-sorting";
+                meal.ingredients.forEach(ingredient -> {
+                    System.out.println(ingredient);
+                });
 
-                stepSorting.show();
+                if (selectedIngredientsString.equals(meal.ingredients)) {
+                    System.out.println("All ingredients are correct!");
+                }
 
                 return true;
             }

@@ -69,6 +69,7 @@ public class BasketView {
         this.row2 = new Table();
 
         this.table.toFront();
+        this.table.addAction(alpha(0));
     }
 
     public void toggleBasket() {
@@ -98,36 +99,44 @@ public class BasketView {
             this.stage.addActor(this.table);
             this.table.addAction(fadeIn(0.5f, Interpolation.pow5));
 
-            ingredientsInBasket.forEach(ingredient -> {
-                Table ingredientTable = new Table();
-                Label label = new Label(ingredient.name, CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 48));
-                TextButton removeBtn = new TextButton("Remove",
-                        this.game.skin.get("text-button-default", TextButtonStyle.class));
-
-                label.setAlignment(Align.center);
-
-                ingredientTable.add(label).center().row();
-                ingredientTable.add(removeBtn).center().padTop(16);
-
-                if (row1.getChildren().size < 4) {
-                    row1.add(ingredientTable).center().expand();
-                } else {
-                    row2.add(ingredientTable).center().expand();
-                }
-
-                removeBtn.addListener(new InputListener() {
-                    @Override
-                    public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y,
-                            int pointer, int button) {
-                        ingredient.toggleToBasket();
-                        ingredientTable.remove();
-
-                        return true;
-                    }
-                });
-            });
-
-            basketVisible = true;
+            addIngredients();
         }
+    }
+
+    private void addIngredients() {
+        ingredientsInBasket.forEach(ingredient -> {
+            Table ingredientTable = new Table();
+            Label label = new Label(ingredient.name, CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 48));
+            TextButton removeBtn = new TextButton("Remove",
+                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+            label.setAlignment(Align.center);
+
+            ingredientTable.add(label).center().row();
+            ingredientTable.add(removeBtn).center().padTop(16);
+
+            if (row1.getChildren().size < 4) {
+                row1.add(ingredientTable).center().expand();
+            } else {
+                row2.add(ingredientTable).center().expand();
+            }
+
+            removeBtn.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y,
+                        int pointer, int button) {
+                    ingredient.toggleToBasket();
+
+                    row1.clear();
+                    row2.clear();
+
+                    addIngredients();
+
+                    return true;
+                }
+            });
+        });
+
+        basketVisible = true;
     }
 }

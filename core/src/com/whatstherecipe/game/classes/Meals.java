@@ -52,8 +52,7 @@ public class Meals {
                 };
                 mediumMeals.add(new Meal("Sisig", "medium", sisigIngredients, sisigSteps));
 
-                String[] papaitanIngredients = { "bile", "ginger", "onion", "garlic", "peppercorn" }; // Kulang Goat
-                                                                                                      // Meat
+                String[] papaitanIngredients = { "bile", "ginger", "onion", "garlic", "peppercorn", "goat-meat" };
                 String[] papaitanSteps = {
                                 "In a pot, combine the goat meat, ginger, and water. Bring to a boil and simmer until the meat is tender.",
                                 "Add the bile and stir to combine.",

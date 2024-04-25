@@ -23,9 +23,9 @@ public class RecipePaperView {
     public Image recipe;
     private Image brownOverlay;
     private boolean recipePaperVisible = false;
-    KitchenScreen kitchenScreen;
-    IngredientSelection ingredientSelection;
-    StepSorting stepSorting;
+    public KitchenScreen kitchenScreen;
+    public IngredientSelection ingredientSelection;
+    public StepSorting stepSorting;
 
     public RecipePaperView(KitchenScreen kitchenScreen) {
         this.game = kitchenScreen.game;
