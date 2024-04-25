@@ -27,6 +27,7 @@ public class BasketView {
     private Table row1;
     private Table row2;
     private Stage stage;
+    private Label emptyLabel;
     private KitchenScreen kitchenScreen;
     private ArrayList<Ingredient> ingredientsInBasket;
     private Image brownOverlay;
@@ -39,6 +40,7 @@ public class BasketView {
         this.ingredientsInBasket = kitchenScreen.ingredientsInBasket;
 
         renderOverlay();
+        renderEmptyLabel();
         renderTable();
     }
 
@@ -61,6 +63,13 @@ public class BasketView {
         });
     }
 
+    private void renderEmptyLabel() {
+        this.emptyLabel = new Label("Your basket is empty!",
+                CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 48));
+        this.emptyLabel.setAlignment(Align.center);
+        this.emptyLabel.addAction(alpha(0));
+    }
+
     private void renderTable() {
         this.table = new Table();
         this.table.setFillParent(true);
@@ -76,34 +85,69 @@ public class BasketView {
         this.ingredientsInBasket = this.kitchenScreen.ingredientsInBasket;
 
         if (basketVisible) {
-            this.table.addAction(fadeOut(0.5f, Interpolation.pow5));
-            this.brownOverlay.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                this.brownOverlay.remove();
+            this.table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
                 this.table.remove();
-                this.row1.remove();
-                this.row2.remove();
-
-                this.table.clear();
-                this.row1.clear();
-                this.row2.clear();
             })));
+
+            if (ingredientsInBasket.isEmpty()) {
+                this.emptyLabel.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                    this.emptyLabel.remove();
+                })));
+                this.brownOverlay.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                    this.brownOverlay.remove();
+                })));
+            } else {
+                this.brownOverlay.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                    this.brownOverlay.remove();
+                    this.table.remove();
+                    this.row1.remove();
+                    this.row2.remove();
+
+                    this.table.clear();
+                    this.row1.clear();
+                    this.row2.clear();
+                })));
+            }
 
             basketVisible = false;
         } else {
+            this.table.clear();
+
             this.stage.addActor(this.brownOverlay);
             this.brownOverlay.addAction(fadeIn(0.5f, Interpolation.pow5));
-
-            this.table.add(this.row1).padTop(50).grow().padBottom(50).row();
-            this.table.add(this.row2).padTop(50).grow().padBottom(50);
 
             this.stage.addActor(this.table);
             this.table.addAction(fadeIn(0.5f, Interpolation.pow5));
 
-            addIngredients();
+            if (ingredientsInBasket.isEmpty()) {
+                this.table.add(emptyLabel).center();
+                this.emptyLabel.addAction(alpha(0));
+                this.emptyLabel.addAction(fadeIn(0.5f, Interpolation.pow5));
+                this.emptyLabel.toFront();
+            } else {
+                this.table.add(this.row1).padTop(50).grow().padBottom(50).row();
+                this.table.add(this.row2).padTop(50).grow().padBottom(50);
+
+                addIngredients();
+            }
+
+            basketVisible = true;
         }
     }
 
     private void addIngredients() {
+        if (ingredientsInBasket.isEmpty()) {
+            this.table.clear();
+            this.table.clearChildren();
+
+            this.table.add(emptyLabel).center();
+            this.emptyLabel.addAction(alpha(0));
+            this.emptyLabel.addAction(fadeIn(0.5f, Interpolation.pow5));
+            this.emptyLabel.toFront();
+
+            return;
+        }
+
         ingredientsInBasket.forEach(ingredient -> {
             Table ingredientTable = new Table();
             Image ingredientImage = new Image(
@@ -146,7 +190,5 @@ public class BasketView {
                 }
             });
         });
-
-        basketVisible = true;
     }
 }
