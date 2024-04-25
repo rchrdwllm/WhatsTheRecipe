@@ -27,6 +27,7 @@ public class IngredientSelection {
     private Table centerTable;
     private Table rightTable;
     private RecipePaperView recipePaperView;
+    private StepSorting stepSorting;
     private ArrayList<Ingredient> selectedIngredients;
     private ArrayList<String> selectedIngredientsString;
 
@@ -34,6 +35,7 @@ public class IngredientSelection {
         this.game = recipePaperView.game;
         this.stage = recipePaperView.stage;
         this.meal = recipePaperView.meal;
+        this.stepSorting = recipePaperView.stepSorting;
         this.recipePaperView = recipePaperView;
         this.selectedIngredients = new ArrayList<Ingredient>();
         this.selectedIngredientsString = new ArrayList<String>();
@@ -134,17 +136,9 @@ public class IngredientSelection {
         checkBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                selectedIngredientsString.forEach(ingredient -> {
-                    System.out.println(ingredient);
-                });
+                hide();
 
-                meal.ingredients.forEach(ingredient -> {
-                    System.out.println(ingredient);
-                });
-
-                if (selectedIngredientsString.equals(meal.ingredients)) {
-                    System.out.println("All ingredients are correct!");
-                }
+                stepSorting.show();
 
                 return true;
             }

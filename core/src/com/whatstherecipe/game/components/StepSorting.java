@@ -30,11 +30,12 @@ public class StepSorting {
     private Table leftTable;
     private Table centerTable;
     private Table rightTable;
-    private RecipePaperView recipePaperView;
     private ArrayList<Label> stepLabels;
     private ArrayList<Label> arrangedStepLabels;
     private int maxTries = 0;
     private int tries = 0;
+    private CookingAnimation cookingAnimation;
+    private RecipePaperView recipePaperView;
 
     public StepSorting(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -52,6 +53,7 @@ public class StepSorting {
         randomizeSteps();
         renderLeft();
         renderRight();
+        prepareCookingAnimation();
     }
 
     private void determineMaxTries() {
@@ -103,6 +105,8 @@ public class StepSorting {
     private void checkSteps() {
         this.tries += 1;
         this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
+
+        this.cookingAnimation.toggleAnimation();
 
         if (!this.sortedSteps.isEmpty() && this.sortedSteps.size() == this.meal.steps.size()) {
             System.out.println("Arranged steps by player:");
@@ -285,5 +289,9 @@ public class StepSorting {
         rightContainer.add(cookBtn).padTop(50);
 
         this.rightTable.add(rightContainer);
+    }
+
+    private void prepareCookingAnimation() {
+        this.cookingAnimation = new CookingAnimation(this.game, this.stage);
     }
 }
