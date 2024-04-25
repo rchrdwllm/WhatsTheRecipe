@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -148,7 +149,76 @@ public class BasketView {
             return;
         }
 
-        ingredientsInBasket.forEach(ingredient -> {
+        for (int i = 0; i < ingredientsInBasket.size(); i++) {
+            Ingredient ingredient = ingredientsInBasket.get(i);
+
+            Table ingredientTable = new Table();
+            Image ingredientImage = new Image(
+                    this.game.assets.get("ingredients/basket-view/" + ingredient.name + "-basket.png", Texture.class));
+            Table ingredientImageTable = new Table();
+
+            ingredientImageTable.add(ingredientImage).center();
+
+            Table ingredientLabelsTable = new Table();
+            Label label = new Label(ingredient.name, CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 48));
+            TextButton removeBtn = new TextButton("Remove",
+                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+            label.setAlignment(Align.center);
+
+            ingredientLabelsTable.add(label).center().padBottom(10).row();
+            ingredientLabelsTable.add(removeBtn).center();
+
+            ingredientTable.add(ingredientImageTable).center().height(185).padBottom(10).row();
+            ingredientTable.add(ingredientLabelsTable).center();
+
+            Group ingredientGroup = new Group();
+
+            ingredientGroup.addActor(ingredientTable);
+            ingredientGroup.addAction(parallel(scaleTo(0.2f, 0.2f), alpha(0)));
+
+            if (row1.getChildren().size < 4) {
+                row1.add(ingredientGroup).center().expand();
+            } else {
+                row2.add(ingredientGroup).center().expand();
+            }
+
+            ingredientGroup.addAction(sequence(delay(i * 0.1f), parallel(scaleTo(1, 1, 0.5f, Interpolation.swingOut),
+                    fadeIn(0.5f, Interpolation.pow5))));
+
+            removeBtn.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y,
+                        int pointer, int button) {
+                    ingredient.toggleToBasket();
+
+                    row1.clear();
+                    row2.clear();
+
+                    updateIngredients();
+
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void updateIngredients() {
+        if (ingredientsInBasket.isEmpty()) {
+            this.table.clear();
+            this.table.clearChildren();
+
+            this.table.add(emptyLabel).center();
+            this.emptyLabel.addAction(alpha(0));
+            this.emptyLabel.addAction(fadeIn(0.5f, Interpolation.pow5));
+            this.emptyLabel.toFront();
+
+            return;
+        }
+
+        for (int i = 0; i < ingredientsInBasket.size(); i++) {
+            Ingredient ingredient = ingredientsInBasket.get(i);
+
             Table ingredientTable = new Table();
             Image ingredientImage = new Image(
                     this.game.assets.get("ingredients/basket-view/" + ingredient.name + "-basket.png", Texture.class));
@@ -184,11 +254,11 @@ public class BasketView {
                     row1.clear();
                     row2.clear();
 
-                    addIngredients();
+                    updateIngredients();
 
                     return true;
                 }
             });
-        });
+        }
     }
 }
