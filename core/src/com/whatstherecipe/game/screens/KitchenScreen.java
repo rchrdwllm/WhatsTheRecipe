@@ -54,6 +54,8 @@ public class KitchenScreen implements Screen {
     private int maxRoundCount = 5;
     public int roundCount = 1;
     public boolean isEndGame = false;
+    public int selectionTime;
+    public int sortingTime;
     public String phase = "ingredient-selection";
 
     public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan) {
@@ -77,6 +79,7 @@ public class KitchenScreen implements Screen {
         System.out.println("Difficulty: " + meal.difficulty + "\n");
 
         randomizeIngredients();
+        determineTime();
         initComponents();
     }
 
@@ -164,6 +167,32 @@ public class KitchenScreen implements Screen {
             } else {
                 this.ingredientsWithRandom.add(this.meal.ingredients.get(i));
             }
+        }
+    }
+
+    private void determineTime() {
+        switch (this.meal.difficulty) {
+            case "easy":
+                this.selectionTime = 60000;
+                break;
+            case "medium":
+                this.selectionTime = 60000;
+                break;
+            case "hard":
+                this.selectionTime = 60000;
+                break;
+        }
+
+        switch (this.meal.difficulty) {
+            case "easy":
+                this.sortingTime = 120000;
+                break;
+            case "medium":
+                this.sortingTime = 60000;
+                break;
+            case "hard":
+                this.sortingTime = 30000;
+                break;
         }
     }
 
