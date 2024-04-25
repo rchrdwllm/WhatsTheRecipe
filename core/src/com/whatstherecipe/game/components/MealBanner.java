@@ -43,7 +43,7 @@ public class MealBanner {
         if (minutes == 0) {
             this.selectionTimeString = seconds + " seconds";
         } else if (seconds == 0) {
-            this.selectionTimeString = minutes + " minutes";
+            this.selectionTimeString = minutes + " minute";
         }
     }
 
@@ -84,7 +84,7 @@ public class MealBanner {
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32));
         Label instructionsLabel = new Label(
                 "You've got " + this.selectionTimeString
-                        + " to collect the required ingredients from the kitchen cabinets. Good luck!",
+                        + " to collect the required ingredients from the kitchen cabinets before finding out the correct steps. Good luck!",
                 CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 48));
 
         roundNumber.setAlignment(Align.center);
