@@ -1,8 +1,10 @@
 package com.whatstherecipe.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +25,7 @@ public class WhatsTheRecipe extends Game {
 	public MainMenuScreen mainMenuScreen;
 	public Meals meals;
 	public CustomSkin skin;
+	public Sound clickSound;
 
 	@Override
 	public void create() {
@@ -33,6 +36,7 @@ public class WhatsTheRecipe extends Game {
 		this.loadingScreen = new LoadingScreen(this);
 		this.mainMenuScreen = new MainMenuScreen(this);
 		this.meals = new Meals();
+		this.clickSound = Gdx.audio.newSound(Gdx.files.internal("audio/click.mp3"));
 
 		queueLoadingAssets();
 
@@ -52,6 +56,7 @@ public class WhatsTheRecipe extends Game {
 		this.loadingScreen.dispose();
 		this.mainMenuScreen.dispose();
 		this.skin.dispose();
+		this.clickSound.dispose();
 	}
 
 	private void queueLoadingAssets() {

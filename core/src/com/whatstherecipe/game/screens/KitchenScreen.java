@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -41,6 +42,7 @@ public class KitchenScreen implements Screen {
     private Image kitchenBg;
     private Image basket;
     private TextButton quitBtn;
+    private Sound clickSound;
     private int screenShows = 0;
     private ArrayList<Image> cabinetTriggers;
     private ArrayList<Image> cabinetImgs;
@@ -62,6 +64,7 @@ public class KitchenScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
         this.camera = game.camera;
+        this.clickSound = Gdx.audio.newSound(Gdx.files.internal("assets/audio/click.mp3"));
         this.mealPlan = mealPlan;
         this.meal = mealPlan.get(0);
         this.ingredientsWithRandom = new ArrayList<String>();
@@ -235,6 +238,7 @@ public class KitchenScreen implements Screen {
         this.quitBtn.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
+                        clickSound.play();
                         transitionToMainMenu();
                     }
 
