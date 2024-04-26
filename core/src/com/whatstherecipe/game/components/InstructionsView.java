@@ -48,13 +48,13 @@ public class InstructionsView {
     }
 
     private void initPaper() {
-        if (this.game.assets.isLoaded("paper.png")) {
-            Texture paperTexture = this.game.assets.get("paper.png", Texture.class);
+        if (this.game.assets.isLoaded("how-to-play-book.png")) {
+            Texture paperTexture = this.game.assets.get("how-to-play-book.png", Texture.class);
 
             this.paper = new Image(paperTexture);
             this.paper.setOrigin(Align.center);
-            this.paper.setWidth((float) (paper.getWidth() / 1.25));
-            this.paper.setHeight((float) (paper.getHeight() / 1.25));
+            this.paper.setWidth((float) (paper.getWidth()));
+            this.paper.setHeight((float) (paper.getHeight()));
             this.paper.setPosition((this.game.V_WIDTH / 2) - (paper.getWidth() / 2), -paper.getHeight());
             this.stage.addActor(this.paper);
         }

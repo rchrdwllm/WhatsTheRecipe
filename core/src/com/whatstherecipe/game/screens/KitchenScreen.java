@@ -201,15 +201,14 @@ public class KitchenScreen implements Screen {
 
         this.tableRoot.setFillParent(true);
         this.stage.addActor(tableRoot);
-        // this.stage.addListener(new InputListener() {
-        // @Override
-        // public boolean touchDown(InputEvent event, float x, float y, int pointer, int
-        // button) {
-        // System.out.print("x: " + x + ", y: " + y + "\n");
+        this.stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.print("x: " + x + ", y: " + y + "\n");
 
-        // return true;
-        // }
-        // });
+                return true;
+            }
+        });
     }
 
     private void renderKitchenBg() {
