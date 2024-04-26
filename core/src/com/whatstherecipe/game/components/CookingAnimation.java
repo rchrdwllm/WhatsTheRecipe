@@ -1,6 +1,7 @@
 package com.whatstherecipe.game.components;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -21,6 +22,7 @@ import com.whatstherecipe.game.ui.CustomSkin;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class CookingAnimation {
+    private final WhatsTheRecipe game;
     private Stage stage;
     private TextureAtlas cookingAtlas;
     private float FRAME_TIME = 0.166f;
@@ -28,8 +30,10 @@ public class CookingAnimation {
     public AnimatedActor cookingActor;
     private Image brownOverlay;
     private Table table;
+    private Music cookingSound;
 
     public CookingAnimation(final WhatsTheRecipe game, Stage stage) {
+        this.game = game;
         this.stage = stage;
         this.cookingAtlas = new TextureAtlas(Gdx.files.internal("cooking/cooking.atlas"));
         this.cookingAnimation = new Animation<TextureRegion>(FRAME_TIME, cookingAtlas.findRegions("cooking"),
@@ -43,6 +47,7 @@ public class CookingAnimation {
         this.cookingActor.setPosition((game.V_WIDTH / 2) - (cookingActor.getWidth() / 2),
                 (game.V_HEIGHT / 2) - (cookingActor.getHeight() / 2));
 
+        prepareSound();
         renderTable();
         renderOverlay();
         renderAnimation();
@@ -90,6 +95,7 @@ public class CookingAnimation {
     public void toggleAnimation() {
         this.stage.addActor(this.brownOverlay);
         this.stage.addActor(this.table);
+        this.cookingSound.play();
 
         this.brownOverlay.addAction(fadeIn(0.5f));
         this.table.addAction(sequence(fadeIn(0.5f), delay(2f), run(() -> {
@@ -99,5 +105,11 @@ public class CookingAnimation {
                 this.brownOverlay.remove();
             })));
         })));
+    }
+
+    private void prepareSound() {
+        if (this.game.assets.isLoaded("audio/cooking-sound.mp3")) {
+            this.cookingSound = this.game.assets.get("audio/cooking-sound.mp3", Music.class);
+        }
     }
 }
