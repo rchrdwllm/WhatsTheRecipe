@@ -109,6 +109,8 @@ public class StepSorting {
         this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
 
         if (!this.sortedSteps.isEmpty()) {
+            System.out.println("\nCooking the meal...");
+
             this.cookingAnimation.toggleAnimation();
             this.stage.addAction(sequence(delay(2f), run(() -> {
                 if (this.sortedSteps.size() == this.meal.steps.size()) {
@@ -127,7 +129,6 @@ public class StepSorting {
                     }
 
                     if (arrangedSteps.equals(sortedSteps)) {
-                        System.out.println("\nCooking the meal...");
                         System.out.println("Correct steps! Proceeding to next meal...");
 
                         if (this.tries == 1) {
@@ -142,7 +143,8 @@ public class StepSorting {
                     } else {
                         if (this.tries == this.maxTries) {
                             System.out.println(
-                                    "\nFailed to cook the meal. Max tries reached! Proceeding to next meal...");
+                                    "\nFailed to cook the meal. " + (this.tries) + "/" + (this.maxTries)
+                                            + " tries! Proceeding to next meal...");
 
                             this.recipePaperView.kitchenScreen.nextRound();
                         } else {
