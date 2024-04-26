@@ -127,8 +127,7 @@ public class IngredientSelection {
 
                 stepSorting.show();
             } else {
-                System.out.println("Selected ingredients length: " + selectedIngredients.size());
-                System.out.println("Correct meal ingredients length: " + meal.ingredients.size());
+                System.out.println("Ingredients don't match!");
             }
         } else {
             System.out.println("Ingredients don't match!");
