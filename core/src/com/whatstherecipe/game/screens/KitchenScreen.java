@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.classes.ClickSound;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.components.BasketView;
@@ -42,7 +43,7 @@ public class KitchenScreen implements Screen {
     private Image kitchenBg;
     private Image basket;
     private TextButton quitBtn;
-    private Sound clickSound;
+    private ClickSound clickSound;
     private int screenShows = 0;
     private ArrayList<Image> cabinetTriggers;
     private ArrayList<Image> cabinetImgs;
@@ -64,7 +65,7 @@ public class KitchenScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
         this.camera = game.camera;
-        this.clickSound = Gdx.audio.newSound(Gdx.files.internal("assets/audio/click.mp3"));
+        this.clickSound = new ClickSound();
         this.mealPlan = mealPlan;
         this.meal = mealPlan.get(0);
         this.ingredientsWithRandom = new ArrayList<String>();
@@ -143,8 +144,6 @@ public class KitchenScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(this.stage);
 
-        this.clickSound = Gdx.audio.newSound(Gdx.files.internal("assets/audio/click.mp3"));
-
         this.recipePaperView = new RecipePaperView(this);
         this.renderBasket();
         this.basketView = new BasketView(this);
@@ -208,15 +207,14 @@ public class KitchenScreen implements Screen {
 
         this.tableRoot.setFillParent(true);
         this.stage.addActor(tableRoot);
-        // this.stage.addListener(new InputListener() {
-        // @Override
-        // public boolean touchDown(InputEvent event, float x, float y, int pointer, int
-        // button) {
-        // System.out.print("x: " + x + ", y: " + y + "\n");
+        this.stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.print("x: " + x + ", y: " + y + "\n");
 
-        // return true;
-        // }
-        // });
+                return true;
+            }
+        });
     }
 
     private void renderKitchenBg() {

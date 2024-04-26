@@ -4,8 +4,6 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.classes.ClickSound;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.ui.Colors;
@@ -28,11 +27,11 @@ public class IngredientSelection {
     private Table leftTable;
     private Table centerTable;
     private Table rightTable;
-    private Sound clickSound;
     private RecipePaperView recipePaperView;
     private StepSorting stepSorting;
     private ArrayList<String> selectedIngredients;
     private KitchenScreen kitchenScreen;
+    private ClickSound clickSound;
 
     public IngredientSelection(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -42,7 +41,7 @@ public class IngredientSelection {
         this.kitchenScreen = recipePaperView.kitchenScreen;
         this.recipePaperView = recipePaperView;
         this.selectedIngredients = new ArrayList<String>();
-        this.clickSound = Gdx.audio.newSound(Gdx.files.internal("assets/audio/click.mp3"));
+        this.clickSound = new ClickSound();
 
         initTables();
         renderLeft();
