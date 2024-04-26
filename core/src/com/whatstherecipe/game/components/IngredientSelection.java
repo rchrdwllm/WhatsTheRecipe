@@ -1,5 +1,12 @@
 package com.whatstherecipe.game.components;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,10 +19,6 @@ import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.ui.Colors;
 import com.whatstherecipe.game.ui.CustomSkin;
-import java.util.ArrayList;
-import com.badlogic.gdx.math.Interpolation;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class IngredientSelection {
     public final WhatsTheRecipe game;
@@ -25,6 +28,7 @@ public class IngredientSelection {
     private Table leftTable;
     private Table centerTable;
     private Table rightTable;
+    private Sound clickSound;
     private RecipePaperView recipePaperView;
     private StepSorting stepSorting;
     private ArrayList<String> selectedIngredients;
@@ -38,6 +42,7 @@ public class IngredientSelection {
         this.kitchenScreen = recipePaperView.kitchenScreen;
         this.recipePaperView = recipePaperView;
         this.selectedIngredients = new ArrayList<String>();
+        this.clickSound = Gdx.audio.newSound(Gdx.files.internal("assets/audio/click.mp3"));
 
         initTables();
         renderLeft();
@@ -68,6 +73,10 @@ public class IngredientSelection {
         this.table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
             this.table.remove();
         })));
+    }
+
+    public void dispose() {
+        this.clickSound.dispose();
     }
 
     private void renderLeft() {
@@ -164,6 +173,7 @@ public class IngredientSelection {
         checkBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                clickSound.play();
                 checkIngredients();
 
                 return true;

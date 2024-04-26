@@ -113,6 +113,7 @@ public class KitchenScreen implements Screen {
 
     @Override
     public void hide() {
+        this.clickSound.dispose();
     }
 
     @Override
@@ -141,6 +142,8 @@ public class KitchenScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this.stage);
+
+        this.clickSound = Gdx.audio.newSound(Gdx.files.internal("assets/audio/click.mp3"));
 
         this.recipePaperView = new RecipePaperView(this);
         this.renderBasket();
@@ -323,6 +326,7 @@ public class KitchenScreen implements Screen {
             cabinetTrigger.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    clickSound.play();
                     Image cabinetImg = cabinetImgs.get(index);
 
                     closeCabinetBtn.clear();
