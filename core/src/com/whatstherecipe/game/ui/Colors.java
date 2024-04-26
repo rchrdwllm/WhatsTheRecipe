@@ -8,5 +8,6 @@ public class Colors {
     public static Color lightBrown = Color.valueOf("#F1E4CF");
     public static Color brown = Color.valueOf("#744E2B");
     public static Color darkBrown = Color.valueOf("#593C21");
+    public static Color brownOverlayOpacity = Color.valueOf("#2A1C0EA5");
     public static Color transparent = Color.valueOf("#FFFFFF00");
 }
