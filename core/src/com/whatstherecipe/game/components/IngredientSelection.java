@@ -135,11 +135,31 @@ public class IngredientSelection {
             if (selectedIngredients.size() == meal.ingredients.size()) {
                 System.out.println("Ingredients match!");
 
-                hide();
+                TextButton nextBtn = new TextButton("Next",
+                        this.game.skin.get("text-button-default", TextButtonStyle.class));
+                ArrayList<TextButton> buttons = new ArrayList<TextButton>();
 
-                this.kitchenScreen.phase = "step-sorting";
+                buttons.add(nextBtn);
 
-                stepSorting.show();
+                Popup popup = new Popup(this.stage, "Ingredients match!",
+                        "You can now proceed to the sorting stage of the round! Well done!", buttons);
+
+                popup.show();
+
+                nextBtn.addListener(new InputListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        popup.hide();
+
+                        hide();
+
+                        kitchenScreen.phase = "step-sorting";
+
+                        stepSorting.show();
+
+                        return true;
+                    }
+                });
             } else {
                 System.out.println("Ingredients don't match!");
             }
