@@ -68,7 +68,7 @@ public class KitchenScreen implements Screen {
         this.ingredientsInBasket = new ArrayList<Ingredient>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
 
-        System.out.println("Meal plan for this game:");
+        System.out.println("\nMeal plan for this game:");
 
         mealPlan.forEach(meal -> {
             System.out.println(meal.name + " - " + meal.difficulty);
@@ -436,16 +436,17 @@ public class KitchenScreen implements Screen {
         try {
             this.ingredients.get(1).get(0).ingredient.setPosition(1196, 352);
             this.ingredients.get(1).get(1).ingredient.setPosition(1300, 352);
-            this.ingredients.get(1).get(2).ingredient.setPosition(1196, 156);
-            this.ingredients.get(1).get(3).ingredient.setPosition(1300, 156);
-            this.ingredients.get(1).get(4).ingredient.setPosition(1300, 156);
+            this.ingredients.get(1).get(2).ingredient.setPosition(1161, 156);
+            this.ingredients.get(1).get(3).ingredient.setPosition(1260, 156);
+            this.ingredients.get(1).get(4).ingredient.setPosition(1329, 156);
         } catch (IndexOutOfBoundsException e) {
         }
 
         try {
-            this.ingredients.get(2).get(0).ingredient.setPosition(1148, 888);
-            this.ingredients.get(2).get(1).ingredient.setPosition(1240, 888);
-            this.ingredients.get(2).get(2).ingredient.setPosition(1203, 888);
+            this.ingredients.get(2).get(0).ingredient.setPosition(1161, 888);
+            this.ingredients.get(2).get(1).ingredient.setPosition(1217, 888);
+            this.ingredients.get(2).get(2).ingredient.setPosition(1285, 888);
+            this.ingredients.get(2).get(3).ingredient.setPosition(1342, 888);
         } catch (IndexOutOfBoundsException e) {
         }
 
