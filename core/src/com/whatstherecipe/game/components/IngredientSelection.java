@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
+import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.ui.Colors;
 import com.whatstherecipe.game.ui.CustomSkin;
 import java.util.ArrayList;
@@ -27,12 +28,14 @@ public class IngredientSelection {
     private RecipePaperView recipePaperView;
     private StepSorting stepSorting;
     private ArrayList<String> selectedIngredients;
+    private KitchenScreen kitchenScreen;
 
     public IngredientSelection(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
         this.stage = recipePaperView.stage;
         this.meal = recipePaperView.meal;
         this.stepSorting = recipePaperView.stepSorting;
+        this.kitchenScreen = recipePaperView.kitchenScreen;
         this.recipePaperView = recipePaperView;
         this.selectedIngredients = new ArrayList<String>();
 
@@ -123,7 +126,9 @@ public class IngredientSelection {
             if (selectedIngredients.size() == meal.ingredients.size()) {
                 System.out.println("Ingredients match!");
 
-                this.hide();
+                hide();
+
+                this.kitchenScreen.phase = "step-sorting";
 
                 stepSorting.show();
             } else {

@@ -18,7 +18,6 @@ public class RecipePaperView {
     public final WhatsTheRecipe game;
     public Stage stage;
     public Meal meal;
-    public String phase;
     public Image recipeRef;
     public Image recipe;
     private Image brownOverlay;
@@ -31,7 +30,6 @@ public class RecipePaperView {
         this.game = kitchenScreen.game;
         this.stage = kitchenScreen.stage;
         this.meal = kitchenScreen.meal;
-        this.phase = kitchenScreen.phase;
         this.kitchenScreen = kitchenScreen;
 
         this.stepSorting = new StepSorting(this);
@@ -99,7 +97,7 @@ public class RecipePaperView {
             }
         });
 
-        if (this.phase.equals("ingredient-selection")) {
+        if (this.kitchenScreen.phase.equals("ingredient-selection")) {
             if (recipePaperVisible) {
                 this.recipe.addAction(
                         sequence(delay(0.5f), moveTo((this.game.V_WIDTH / 2) - (recipe.getWidth() / 2),
