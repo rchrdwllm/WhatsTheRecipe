@@ -88,8 +88,6 @@ public class CookingAnimation {
     }
 
     public void toggleAnimation() {
-        System.out.println("Cooking animation toggled");
-
         this.stage.addActor(this.brownOverlay);
         this.stage.addActor(this.table);
 
