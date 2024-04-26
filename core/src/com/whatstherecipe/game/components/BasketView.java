@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.whatstherecipe.game.WhatsTheRecipe;
+import com.whatstherecipe.game.classes.ClickSound;
 import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.ui.Colors;
 import com.whatstherecipe.game.ui.CustomSkin;
@@ -32,6 +33,7 @@ public class BasketView {
     private KitchenScreen kitchenScreen;
     private ArrayList<Ingredient> ingredientsInBasket;
     private Image brownOverlay;
+    private ClickSound clickSound;
     private boolean basketVisible = false;
 
     public BasketView(KitchenScreen kitchenScreen) {
@@ -39,6 +41,7 @@ public class BasketView {
         this.kitchenScreen = kitchenScreen;
         this.stage = kitchenScreen.stage;
         this.ingredientsInBasket = kitchenScreen.ingredientsInBasket;
+        this.clickSound = new ClickSound();
 
         renderOverlay();
         renderEmptyLabel();
@@ -190,6 +193,7 @@ public class BasketView {
                 @Override
                 public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y,
                         int pointer, int button) {
+                    clickSound.play();
                     ingredient.toggleToBasket();
 
                     row1.clear();
@@ -249,6 +253,7 @@ public class BasketView {
                 @Override
                 public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y,
                         int pointer, int button) {
+                    clickSound.play();
                     ingredient.toggleToBasket();
 
                     row1.clear();
