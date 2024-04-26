@@ -1,7 +1,12 @@
 package com.whatstherecipe.game.screens;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,10 +27,6 @@ import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.classes.Meals;
 import com.whatstherecipe.game.components.InstructionsView;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-
-import java.util.ArrayList;
-
 public class MainMenuScreen implements Screen {
     private final WhatsTheRecipe game;
     private Stage stage;
@@ -35,6 +36,7 @@ public class MainMenuScreen implements Screen {
     private Image kitchenBg;
     private int screenShows = 0;
     private InstructionsView instructionsView;
+    private Music backgroundMusic;
 
     public MainMenuScreen(final WhatsTheRecipe game) {
         this.game = game;
@@ -46,6 +48,9 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
+        if (backgroundMusic != null) {
+            backgroundMusic.dispose();
+        }
         this.stage.dispose();
     }
 
@@ -92,6 +97,18 @@ public class MainMenuScreen implements Screen {
         }
 
         this.screenShows += 1;
+        if (game.assets.isLoaded("background.mp3")) {
+            backgroundMusic = game.assets.get("background.mp3", Music.class);
+            backgroundMusic.setLooping(true); // If you want the music to loop
+            backgroundMusic.play();
+        } else {
+            game.assets.load("background.mp3", Music.class);
+            game.assets.finishLoading();
+            backgroundMusic = game.assets.get("background.mp3", Music.class);
+            backgroundMusic.setLooping(true); // If you want the music to loop
+            backgroundMusic.play();
+
+        }
     }
 
     private void initComponents() {
