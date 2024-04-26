@@ -77,8 +77,8 @@ public class StepSorting {
 
     public void show() {
         this.stage.addActor(table);
-        this.table.toFront();
         this.table.addAction(alpha(0f));
+        this.table.toFront();
         this.table.addAction(sequence(delay(1f, fadeIn(0.5f, Interpolation.pow5))));
     }
 
@@ -108,71 +108,73 @@ public class StepSorting {
         this.tries += 1;
         this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
 
-        this.cookingAnimation.toggleAnimation();
+        if (!this.sortedSteps.isEmpty()) {
+            this.cookingAnimation.toggleAnimation();
+            this.stage.addAction(sequence(delay(2f), run(() -> {
+                if (this.sortedSteps.size() == this.meal.steps.size()) {
+                    System.out.println("Arranged steps by player:");
 
-        if (!this.sortedSteps.isEmpty() && this.sortedSteps.size() == this.meal.steps.size()) {
-            System.out.println("Arranged steps by player:");
+                    for (Step step : this.sortedSteps) {
+                        System.out.println(step.stepNumber + 1 + ". " + step.label);
+                    }
 
-            for (Step step : this.sortedSteps) {
-                System.out.println(step.stepNumber + 1 + ". " + step.label);
-            }
+                    Step.sort(sortedSteps);
 
-            Step.sort(sortedSteps);
+                    System.out.println("Sorted steps:");
 
-            System.out.println("Sorted steps:");
+                    for (Step step : this.sortedSteps) {
+                        System.out.println(step.stepNumber + 1 + ". " + step.label);
+                    }
 
-            for (Step step : this.sortedSteps) {
-                System.out.println(step.stepNumber + 1 + ". " + step.label);
-            }
+                    if (arrangedSteps.equals(sortedSteps)) {
+                        System.out.println("\nCooking the meal...");
+                        System.out.println("Correct steps! Proceeding to next meal...");
 
-            if (arrangedSteps.equals(sortedSteps)) {
-                System.out.println("\nCorrect steps! Cooking the meal...");
+                        if (this.tries == 1) {
+                            this.recipePaperView.kitchenScreen.nextRound();
 
-                if (this.tries == 1) {
-                    System.out.println("Cooked the meal on first try. Best cook!");
+                            return;
+                        } else if (this.tries == this.maxTries) {
+                            this.recipePaperView.kitchenScreen.nextRound();
 
-                    this.recipePaperView.kitchenScreen.nextRound();
-
-                    return;
-                } else if (this.tries == this.maxTries) {
-                    System.out.println("Cooked the meal on second try. Delicious!");
-
-                    this.recipePaperView.kitchenScreen.nextRound();
-
-                    return;
-                }
-            } else {
-                if (this.tries == this.maxTries) {
-                    System.out.println("\nFailed to cook the meal. Max tries reached! Proceeding to next meal...");
-
-                    this.recipePaperView.kitchenScreen.nextRound();
-                } else {
-                    System.out.println("\nIncorrect steps! Please arrange the steps correctly.");
-
-                    arrangedSteps.clear();
-
-                    this.stepLabels.forEach(step -> {
-                        step.addAction(alpha(1f, 0.25f));
-                    });
-
-                    this.shuffledSteps.forEach(step -> {
-                        step.isSelected = false;
-                    });
-
-                    this.arrangedStepLabels.forEach(arrangedStepLabel -> {
-                        arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
-
-                        Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
-
-                        if (arrangedStepLabelCell != null) {
-                            arrangedStepLabelCell.padBottom(0);
-                            arrangedStepLabel.remove();
+                            return;
                         }
+                    } else {
+                        if (this.tries == this.maxTries) {
+                            System.out.println(
+                                    "\nFailed to cook the meal. Max tries reached! Proceeding to next meal...");
 
-                        centerTable.invalidate();
-                    });
+                            this.recipePaperView.kitchenScreen.nextRound();
+                        } else {
+                            System.out.println("\nIncorrect steps! Please arrange the steps correctly.");
+
+                            arrangedSteps.clear();
+                            selectedSteps.clear();
+
+                            this.stepLabels.forEach(step -> {
+                                step.addAction(alpha(1f, 0.25f));
+                            });
+
+                            this.shuffledSteps.forEach(step -> {
+                                step.isSelected = false;
+                            });
+
+                            this.arrangedStepLabels.forEach(arrangedStepLabel -> {
+                                arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
+
+                                Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
+
+                                if (arrangedStepLabelCell != null) {
+                                    arrangedStepLabelCell.padBottom(0);
+                                    arrangedStepLabel.remove();
+                                }
+
+                                centerTable.invalidate();
+                            });
+                        }
+                    }
                 }
-            }
+            })));
         }
     }
 

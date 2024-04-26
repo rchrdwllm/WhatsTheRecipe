@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -26,7 +27,6 @@ public class CookingAnimation {
     public Animation<TextureRegion> cookingAnimation;
     public AnimatedActor cookingActor;
     private Image brownOverlay;
-    private boolean isToggled = false;
     private Table table;
 
     public CookingAnimation(final WhatsTheRecipe game, Stage stage) {
@@ -88,22 +88,18 @@ public class CookingAnimation {
     }
 
     public void toggleAnimation() {
-        if (isToggled) {
-            this.cookingActor.addAction(fadeOut(0.5f));
-            this.brownOverlay.addAction(sequence(fadeOut(0.5f), run(() -> {
-                this.brownOverlay.remove();
+        System.out.println("Cooking animation toggled");
+
+        this.stage.addActor(this.brownOverlay);
+        this.stage.addActor(this.table);
+
+        this.brownOverlay.addAction(fadeIn(0.5f));
+        this.table.addAction(sequence(fadeIn(0.5f), delay(2f), run(() -> {
+            this.brownOverlay.addAction(fadeOut(0.5f, Interpolation.pow5));
+            this.table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
                 this.table.remove();
+                this.brownOverlay.remove();
             })));
-
-            isToggled = false;
-        } else {
-            this.stage.addActor(this.brownOverlay);
-            this.stage.addActor(this.table);
-
-            this.table.addAction(fadeIn(0.5f));
-            this.brownOverlay.addAction(fadeIn(0.5f));
-
-            isToggled = true;
-        }
+        })));
     }
 }
