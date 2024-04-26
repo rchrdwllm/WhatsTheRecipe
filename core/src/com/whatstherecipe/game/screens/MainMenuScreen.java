@@ -97,18 +97,8 @@ public class MainMenuScreen implements Screen {
         }
 
         this.screenShows += 1;
-        if (game.assets.isLoaded("background.mp3")) {
-            backgroundMusic = game.assets.get("background.mp3", Music.class);
-            backgroundMusic.setLooping(true); // If you want the music to loop
-            backgroundMusic.play();
-        } else {
-            game.assets.load("background.mp3", Music.class);
-            game.assets.finishLoading();
-            backgroundMusic = game.assets.get("background.mp3", Music.class);
-            backgroundMusic.setLooping(true); // If you want the music to loop
-            backgroundMusic.play();
 
-        }
+        playBgMusic();
     }
 
     private void initComponents() {
@@ -235,6 +225,14 @@ public class MainMenuScreen implements Screen {
                         fadeOut(0.75f, Interpolation.pow5),
                         moveBy(-350, 0, 0.5f, Interpolation.swingIn)),
                 panKitchenBg));
+    }
+
+    private void playBgMusic() {
+        if (this.game.assets.isLoaded("audio/background.mp3")) {
+            this.backgroundMusic = this.game.assets.get("audio/background.mp3", Music.class);
+            this.backgroundMusic.setLooping(true);
+            this.backgroundMusic.play();
+        }
     }
 
     private void resetState() {
