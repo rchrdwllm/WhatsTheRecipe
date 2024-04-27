@@ -319,6 +319,8 @@ public class KitchenScreen implements Screen {
             cabinetTrigger.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.openCabinetSound.play();
+
                     Image cabinetImg = cabinetImgs.get(index);
 
                     closeCabinetBtn.clear();
@@ -329,7 +331,7 @@ public class KitchenScreen implements Screen {
                     closeCabinetBtn.addListener(new InputListener() {
                         @Override
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                            game.sounds.clickSound.play();
+                            game.sounds.closeCabinetSound.play();
 
                             RunnableAction removeItems = new RunnableAction();
 
