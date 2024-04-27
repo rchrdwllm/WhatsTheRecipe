@@ -38,17 +38,19 @@ public class RecipePaperView {
     }
 
     private void renderOverlay() {
-        this.brownOverlay = new Image(this.game.assets.get("wood-bg.png", Texture.class));
-        this.brownOverlay.setFillParent(true);
-        this.brownOverlay.addAction(alpha(0));
+        if (this.game.assets.isLoaded("wood-bg.png")) {
+            this.brownOverlay = new Image(this.game.assets.get("wood-bg.png", Texture.class));
+            this.brownOverlay.setFillParent(true);
+            this.brownOverlay.addAction(alpha(0));
 
-        this.brownOverlay.addListener((EventListener) event -> {
-            if (event.toString().contains("touchDown")) {
-                toggleRecipePaper();
-            }
+            this.brownOverlay.addListener((EventListener) event -> {
+                if (event.toString().contains("touchDown")) {
+                    toggleRecipePaper();
+                }
 
-            return false;
-        });
+                return false;
+            });
+        }
     }
 
     private void initRecipePaper() {

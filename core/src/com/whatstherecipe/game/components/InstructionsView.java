@@ -1,6 +1,5 @@
 package com.whatstherecipe.game.components;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.whatstherecipe.game.WhatsTheRecipe;
-import com.whatstherecipe.game.ui.Colors;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -29,22 +27,19 @@ public class InstructionsView {
     }
 
     private void renderOverlay() {
-        Pixmap brownPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        if (this.game.assets.isLoaded("wood-bg.png")) {
+            this.brownOverlay = new Image(this.game.assets.get("wood-bg.png", Texture.class));
+            this.brownOverlay.setFillParent(true);
+            this.brownOverlay.addAction(alpha(0));
 
-        brownPixmap.setColor(Colors.darkBrown);
-        brownPixmap.fillRectangle(0, 0, 1, 1);
+            this.brownOverlay.addListener((EventListener) event -> {
+                if (event.toString().contains("touchDown")) {
+                    toggleInstructions();
+                }
 
-        this.brownOverlay = new Image(new Texture(brownPixmap));
-        this.brownOverlay.setFillParent(true);
-        this.brownOverlay.addAction(alpha(0));
-
-        this.brownOverlay.addListener((EventListener) event -> {
-            if (event.toString().contains("touchDown")) {
-                toggleInstructions();
-            }
-
-            return false;
-        });
+                return false;
+            });
+        }
     }
 
     private void initPaper() {
