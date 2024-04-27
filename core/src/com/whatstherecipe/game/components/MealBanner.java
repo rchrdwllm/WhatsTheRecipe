@@ -63,7 +63,7 @@ public class MealBanner {
                     alpha(0),
                     delay(0.05f),
                     fadeIn(0.5f, Interpolation.pow5),
-                    delay(5.5f),
+                    delay(5f),
                     fadeOut(0.5f, Interpolation.pow5), run(() -> {
                         this.brownOverlay.remove();
                     })));
