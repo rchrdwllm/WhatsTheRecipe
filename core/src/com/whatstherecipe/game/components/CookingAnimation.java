@@ -1,7 +1,6 @@
 package com.whatstherecipe.game.components;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -30,7 +29,6 @@ public class CookingAnimation {
     public AnimatedActor cookingActor;
     private Image brownOverlay;
     private Table table;
-    private Sound cookingSound;
 
     public CookingAnimation(final WhatsTheRecipe game, Stage stage) {
         this.game = game;
@@ -47,7 +45,6 @@ public class CookingAnimation {
         this.cookingActor.setPosition((game.V_WIDTH / 2) - (cookingActor.getWidth() / 2),
                 (game.V_HEIGHT / 2) - (cookingActor.getHeight() / 2));
 
-        prepareSound();
         renderTable();
         renderOverlay();
         renderAnimation();
@@ -95,7 +92,7 @@ public class CookingAnimation {
     public void toggleAnimation() {
         this.stage.addActor(this.brownOverlay);
         this.stage.addActor(this.table);
-        this.cookingSound.play();
+        this.game.sounds.cookingSound.play();
 
         this.brownOverlay.addAction(fadeIn(0.5f));
         this.table.addAction(sequence(fadeIn(0.5f), delay(2f), run(() -> {
@@ -105,11 +102,5 @@ public class CookingAnimation {
                 this.brownOverlay.remove();
             })));
         })));
-    }
-
-    private void prepareSound() {
-        if (this.game.assets.isLoaded("audio/cooking.mp3")) {
-            this.cookingSound = this.game.assets.get("audio/cooking.mp3", Sound.class);
-        }
     }
 }
