@@ -141,6 +141,7 @@ public class IngredientSelection {
                 nextBtn.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        game.sounds.clickSound.play();
                         popup.hide();
 
                         hide();

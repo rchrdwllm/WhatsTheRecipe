@@ -34,8 +34,7 @@ public class Popup {
         initOverlay();
         initTables();
         initBg();
-        initLabels(title, message);
-        addBtns(buttons);
+        initLabels(title, message, buttons);
     }
 
     private void initOverlay() {
@@ -77,12 +76,19 @@ public class Popup {
         }
     }
 
-    private void initLabels(String title, String message) {
+    private void initLabels(String title, String message, ArrayList<TextButton> buttons) {
         Label titleLabel = new Label(title, CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 64));
         Label messageLabel = new Label(message, CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32));
+        Table buttonsRow = new Table();
 
         this.mainContainer.add(titleLabel).center().row();
         this.mainContainer.add(messageLabel).center().padTop(16).row();
+
+        buttons.forEach(button -> {
+            buttonsRow.add(button).padTop(16).padLeft(8).padRight(8);
+        });
+
+        this.mainContainer.add(buttonsRow).center().padTop(32);
 
         this.mainGroup = new Group();
         mainGroup.addActor(mainContainer);
@@ -92,12 +98,6 @@ public class Popup {
         mainGroup.setOrigin(Align.center);
         mainGroup.addAction(parallel(alpha(0), scaleTo(0.2f, 0.2f)));
         this.stage.addActor(mainGroup);
-    }
-
-    private void addBtns(ArrayList<TextButton> buttons) {
-        buttons.forEach(button -> {
-            this.mainContainer.add(button).center().padTop(16).padLeft(8).padRight(8);
-        });
     }
 
     public void show() {

@@ -131,15 +131,27 @@ public class StepSorting {
                     if (arrangedSteps.equals(sortedSteps)) {
                         System.out.println("Correct steps! Proceeding to next meal...");
 
-                        if (this.tries == 1) {
-                            this.recipePaperView.kitchenScreen.nextRound();
+                        ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                        TextButton nextBtn = new TextButton("Next meal",
+                                this.game.skin.get("text-button-default", TextButtonStyle.class));
 
-                            return;
-                        } else if (this.tries == this.maxTries) {
-                            this.recipePaperView.kitchenScreen.nextRound();
+                        buttons.add(nextBtn);
 
-                            return;
-                        }
+                        Popup popup = new Popup(this.game, this.stage, "Correct steps!",
+                                "You've successfully cooked the meal!", buttons);
+
+                        nextBtn.addListener(new InputListener() {
+                            @Override
+                            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                game.sounds.clickSound.play();
+                                popup.hide();
+                                recipePaperView.kitchenScreen.nextRound();
+
+                                return true;
+                            }
+                        });
+
+                        popup.show();
                     } else {
                         if (this.tries == this.maxTries) {
                             System.out.println(
@@ -150,29 +162,67 @@ public class StepSorting {
                         } else {
                             System.out.println("\nIncorrect steps! Please arrange the steps correctly.");
 
-                            arrangedSteps.clear();
-                            selectedSteps.clear();
+                            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                            TextButton tryAgainBtn = new TextButton("Try again",
+                                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+                            TextButton giveUpBtn = new TextButton("Give up",
+                                    this.game.skin.get("text-button-default", TextButtonStyle.class));
 
-                            this.stepLabels.forEach(step -> {
-                                step.addAction(alpha(1f, 0.25f));
-                            });
+                            buttons.add(tryAgainBtn);
+                            buttons.add(giveUpBtn);
 
-                            this.shuffledSteps.forEach(step -> {
-                                step.isSelected = false;
-                            });
+                            Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
+                                    "Failed to cook the meal! You may try again or end the game here.",
+                                    buttons);
 
-                            this.arrangedStepLabels.forEach(arrangedStepLabel -> {
-                                arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
+                            tryAgainBtn.addListener(new InputListener() {
+                                @Override
+                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                    game.sounds.clickSound.play();
+                                    popup.hide();
 
-                                Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
+                                    arrangedSteps.clear();
+                                    selectedSteps.clear();
 
-                                if (arrangedStepLabelCell != null) {
-                                    arrangedStepLabelCell.padBottom(0);
-                                    arrangedStepLabel.remove();
+                                    stepLabels.forEach(step -> {
+                                        step.addAction(alpha(1f, 0.25f));
+                                    });
+
+                                    shuffledSteps.forEach(step -> {
+                                        step.isSelected = false;
+                                    });
+
+                                    arrangedStepLabels.forEach(arrangedStepLabel -> {
+                                        arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
+
+                                        Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
+
+                                        if (arrangedStepLabelCell != null) {
+                                            arrangedStepLabelCell.padBottom(0);
+                                            arrangedStepLabel.remove();
+                                        }
+
+                                        centerTable.invalidate();
+                                    });
+
+                                    return true;
                                 }
-
-                                centerTable.invalidate();
                             });
+
+                            giveUpBtn.addListener(new InputListener() {
+                                @Override
+                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                    game.sounds.clickSound.play();
+                                    popup.hide();
+
+                                    recipePaperView.kitchenScreen.roundCount = 5;
+                                    recipePaperView.kitchenScreen.nextRound();
+
+                                    return true;
+                                }
+                            });
+
+                            popup.show();
                         }
                     }
                 }
