@@ -167,6 +167,7 @@ public class IngredientSelection {
                 tryAgainBtn.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        game.sounds.clickSound.play();
                         popup.hide();
 
                         return true;
@@ -190,6 +191,7 @@ public class IngredientSelection {
             tryAgainBtn.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.clickSound.play();
                     popup.hide();
 
                     return true;

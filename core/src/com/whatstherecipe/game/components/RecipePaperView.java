@@ -88,8 +88,6 @@ public class RecipePaperView {
     }
 
     public void toggleRecipePaper() {
-        this.game.sounds.paperSound.play();
-
         RunnableAction removeOverlay = new RunnableAction();
 
         removeOverlay.setRunnable(new Runnable() {
@@ -101,6 +99,8 @@ public class RecipePaperView {
 
         if (this.kitchenScreen.phase.equals("ingredient-selection")) {
             if (recipePaperVisible) {
+                this.game.sounds.paperSound.play();
+
                 this.recipe.addAction(
                         sequence(delay(0.5f), moveTo((this.game.V_WIDTH / 2) - (recipe.getWidth() / 2),
                                 -recipe.getHeight(), 0.75f, Interpolation.swingIn)));
@@ -110,6 +110,8 @@ public class RecipePaperView {
 
                 recipePaperVisible = false;
             } else {
+                this.game.sounds.paperSound.play();
+
                 this.stage.addActor(this.brownOverlay);
                 this.recipe.toFront();
                 this.brownOverlay.addAction(fadeIn(0.5f, Interpolation.pow5));
