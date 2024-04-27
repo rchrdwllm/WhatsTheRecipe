@@ -172,7 +172,42 @@ public class StepSorting {
                                     "\nFailed to cook the meal. " + (this.tries) + "/" + (this.maxTries)
                                             + " tries! Proceeding to next meal...");
 
-                            this.recipePaperView.kitchenScreen.nextRound();
+                            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                            TextButton nextMeal = new TextButton("Next meal",
+                                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+                            buttons.add(nextMeal);
+
+                            Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
+                                    "Failed to cook the meal! But you already reached the max number of steps. Proceed now to the next meal.",
+                                    buttons);
+
+                            nextMeal.addListener(new InputListener() {
+                                @Override
+                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                    game.sounds.clickSound.play();
+                                    popup.hide();
+
+                                    table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                        recipePaperView.brownOverlay
+                                                .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                        recipePaperView.recipe.addAction(
+                                                sequence(delay(0.5f),
+                                                        moveTo((game.V_WIDTH / 2)
+                                                                - (recipePaperView.recipe.getWidth() / 2),
+                                                                -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                Interpolation.swingIn),
+                                                        run(() -> {
+                                                            recipePaperView.brownOverlay.remove();
+                                                            recipePaperView.kitchenScreen.nextRound();
+                                                        })));
+                                    })));
+
+                                    return true;
+                                }
+                            });
+
+                            popup.show();
                         } else {
                             System.out.println("\nIncorrect steps! Please arrange the steps correctly.");
 
