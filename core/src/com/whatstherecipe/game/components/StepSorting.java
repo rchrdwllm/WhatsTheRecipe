@@ -179,14 +179,14 @@ public class StepSorting {
                             ArrayList<TextButton> buttons = new ArrayList<TextButton>();
                             TextButton tryAgainBtn = new TextButton("Try again",
                                     this.game.skin.get("text-button-default", TextButtonStyle.class));
-                            TextButton giveUpBtn = new TextButton("Give up",
+                            TextButton nextMeal = new TextButton("Next meal",
                                     this.game.skin.get("text-button-default", TextButtonStyle.class));
 
                             buttons.add(tryAgainBtn);
-                            buttons.add(giveUpBtn);
+                            buttons.add(nextMeal);
 
                             Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
-                                    "Failed to cook the meal! You may try again or end the game here.",
+                                    "Failed to cook the meal! You may try again or skip to the next meal already (this won't earn you any points).",
                                     buttons);
 
                             tryAgainBtn.addListener(new InputListener() {
@@ -223,14 +223,26 @@ public class StepSorting {
                                 }
                             });
 
-                            giveUpBtn.addListener(new InputListener() {
+                            nextMeal.addListener(new InputListener() {
                                 @Override
                                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                     game.sounds.clickSound.play();
                                     popup.hide();
 
-                                    recipePaperView.kitchenScreen.roundCount = 5;
-                                    recipePaperView.kitchenScreen.nextRound();
+                                    table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                        recipePaperView.brownOverlay
+                                                .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                        recipePaperView.recipe.addAction(
+                                                sequence(delay(0.5f),
+                                                        moveTo((game.V_WIDTH / 2)
+                                                                - (recipePaperView.recipe.getWidth() / 2),
+                                                                -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                Interpolation.swingIn),
+                                                        run(() -> {
+                                                            recipePaperView.brownOverlay.remove();
+                                                            recipePaperView.kitchenScreen.nextRound();
+                                                        })));
+                                    })));
 
                                     return true;
                                 }
