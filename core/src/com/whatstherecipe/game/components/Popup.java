@@ -113,6 +113,11 @@ public class Popup {
                 parallel(fadeOut(0.7f, Interpolation.pow5), scaleTo(0.2f, 0.2f, 0.5f, Interpolation.swingIn)));
         this.overlay.addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
         this.groupBg.addAction(
-                parallel(fadeOut(0.7f, Interpolation.pow5), scaleTo(0.2f, 0.2f, 0.5f, Interpolation.swingIn)));
+                sequence(parallel(fadeOut(0.7f, Interpolation.pow5), scaleTo(0.2f, 0.2f, 0.5f, Interpolation.swingIn)),
+                        run(() -> {
+                            this.overlay.remove();
+                            this.groupBg.remove();
+                            this.mainContainer.remove();
+                        })));
     }
 }

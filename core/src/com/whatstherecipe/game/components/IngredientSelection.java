@@ -176,6 +176,26 @@ public class IngredientSelection {
                 System.out.println("Ingredients don't match!");
             }
         } else {
+            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+            TextButton tryAgainBtn = new TextButton("Try again",
+                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+            buttons.add(tryAgainBtn);
+
+            Popup popup = new Popup(this.game, this.stage, "Not a match!",
+                    "These ingredients aren't correct. Try again!", buttons);
+
+            popup.show();
+
+            tryAgainBtn.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    popup.hide();
+
+                    return true;
+                }
+            });
+
             System.out.println("Ingredients don't match!");
         }
     }
