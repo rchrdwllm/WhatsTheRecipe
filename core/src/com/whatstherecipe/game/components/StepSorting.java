@@ -145,7 +145,21 @@ public class StepSorting {
                             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                 game.sounds.clickSound.play();
                                 popup.hide();
-                                recipePaperView.kitchenScreen.nextRound();
+
+                                table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                    recipePaperView.brownOverlay
+                                            .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                    recipePaperView.recipe.addAction(
+                                            sequence(delay(0.5f),
+                                                    moveTo((game.V_WIDTH / 2)
+                                                            - (recipePaperView.recipe.getWidth() / 2),
+                                                            -recipePaperView.recipe.getHeight(), 0.75f,
+                                                            Interpolation.swingIn),
+                                                    run(() -> {
+                                                        recipePaperView.brownOverlay.remove();
+                                                        recipePaperView.kitchenScreen.nextRound();
+                                                    })));
+                                })));
 
                                 return true;
                             }

@@ -18,7 +18,7 @@ public class RecipePaperView {
     public Meal meal;
     public Image recipeRef;
     public Image recipe;
-    private Image brownOverlay;
+    public Image brownOverlay;
     private boolean recipePaperVisible = false;
     public KitchenScreen kitchenScreen;
     public IngredientSelection ingredientSelection;

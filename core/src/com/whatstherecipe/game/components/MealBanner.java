@@ -58,14 +58,25 @@ public class MealBanner {
 
         this.stage.addActor(brownOverlay);
 
-        this.brownOverlay.addAction(sequence(
-                alpha(0),
-                delay(0.05f),
-                fadeIn(0.5f, Interpolation.pow5),
-                delay(8.5f),
-                fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                    this.brownOverlay.remove();
-                })));
+        if (this.roundNumber > 1) {
+            this.brownOverlay.addAction(sequence(
+                    alpha(0),
+                    delay(0.05f),
+                    fadeIn(0.5f, Interpolation.pow5),
+                    delay(5.5f),
+                    fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                        this.brownOverlay.remove();
+                    })));
+        } else {
+            this.brownOverlay.addAction(sequence(
+                    alpha(0),
+                    delay(0.05f),
+                    fadeIn(0.5f, Interpolation.pow5),
+                    delay(8.5f),
+                    fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                        this.brownOverlay.remove();
+                    })));
+        }
     }
 
     private void renderLabels() {
@@ -123,7 +134,11 @@ public class MealBanner {
         group.addActor(yourMealGroup);
         group.addActor(mealGroup);
         group.addActor(mealDifficultyGroup);
-        group.addActor(instructionsLabel);
+
+        if (this.roundNumber <= 1) {
+            group.addActor(instructionsLabel);
+        }
+
         group.addAction(sequence(alpha(0), fadeIn(0.5f, Interpolation.pow5)));
 
         yourMealGroup.setOrigin(Align.center);
@@ -152,11 +167,13 @@ public class MealBanner {
                 mealGroup.remove();
                 mealDifficultyGroup.remove();
 
-                instructionsLabel
-                        .addAction(sequence(fadeIn(0.5f, Interpolation.pow5), delay(3f),
-                                fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                                    group.remove();
-                                })));
+                if (this.roundNumber <= 1) {
+                    instructionsLabel
+                            .addAction(sequence(fadeIn(0.5f, Interpolation.pow5), delay(3f),
+                                    fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                        group.remove();
+                                    })));
+                }
             })));
         })));
     }
