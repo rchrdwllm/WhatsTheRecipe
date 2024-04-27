@@ -71,6 +71,7 @@ public class WhatsTheRecipe extends Game {
 		this.assets.load("basket.png", Texture.class);
 		this.assets.load("how-to-play-book.png", Texture.class);
 		this.assets.load("popup-bg.png", Texture.class);
+		this.assets.load("wood-bg.png", Texture.class);
 		this.assets.load("audio/background.mp3", Music.class);
 
 		for (int i = 0; i < Ingredients.ingredientsList.length; i++) {
