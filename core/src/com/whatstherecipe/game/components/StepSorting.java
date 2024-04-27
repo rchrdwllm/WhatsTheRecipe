@@ -312,6 +312,7 @@ public class StepSorting {
             stepLabel.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.paperSound.play();
                     String labelText = step.stepNumber + 1 + ". " + step.label;
 
                     if (selectedSteps.contains(labelText)) {
@@ -325,8 +326,6 @@ public class StepSorting {
                     arrangedStepLabels.add(arrangedStepLabel);
 
                     if (step.isSelected) {
-                        game.sounds.paper2Sound.play();
-
                         arrangedSteps.remove(step);
 
                         Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
@@ -341,8 +340,6 @@ public class StepSorting {
 
                         step.isSelected = false;
                     } else {
-                        game.sounds.paperSound.play();
-
                         stepLabel.addAction(alpha(0.5f, 0.25f));
                         arrangedSteps.add(step);
                         centerTable.add(arrangedStepLabel).width(400).padBottom(15).row();
@@ -354,6 +351,7 @@ public class StepSorting {
                     arrangedStepLabel.addListener(new InputListener() {
                         @Override
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            game.sounds.paper2Sound.play();
                             arrangedSteps.remove(step);
 
                             Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
