@@ -82,9 +82,10 @@ public class Popup {
         Table buttonsRow = new Table();
 
         messageLabel.setWrap(true);
+        messageLabel.setAlignment(Align.center);
 
         this.mainContainer.add(titleLabel).center().row();
-        this.mainContainer.add(messageLabel).width(750).center().padTop(16).row();
+        this.mainContainer.add(messageLabel).width(850).center().padTop(16).row();
 
         buttons.forEach(button -> {
             buttonsRow.add(button).padTop(16).padLeft(8).padRight(8);
