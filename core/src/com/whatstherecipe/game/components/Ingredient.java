@@ -49,6 +49,7 @@ public class Ingredient {
             this.ingredient.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.dropSound.play();
                     toggleToBasket();
 
                     return true;

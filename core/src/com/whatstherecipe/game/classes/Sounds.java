@@ -9,6 +9,8 @@ public class Sounds {
     public Sound paperSound;
     public Sound openCabinetSound;
     public Sound closeCabinetSound;
+    public Sound dropSound;
+    public Sound bookSound;
 
     public Sounds() {
         initSounds();
@@ -20,5 +22,7 @@ public class Sounds {
         this.paperSound = Gdx.audio.newSound(Gdx.files.internal("audio/paper.mp3"));
         this.openCabinetSound = Gdx.audio.newSound(Gdx.files.internal("audio/open-cabinet.mp3"));
         this.closeCabinetSound = Gdx.audio.newSound(Gdx.files.internal("audio/close-cabinet.mp3"));
+        this.dropSound = Gdx.audio.newSound(Gdx.files.internal("audio/drop.mp3"));
+        this.bookSound = Gdx.audio.newSound(Gdx.files.internal("audio/book.mp3"));
     }
 }

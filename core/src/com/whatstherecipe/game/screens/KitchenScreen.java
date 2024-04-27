@@ -420,6 +420,7 @@ public class KitchenScreen implements Screen {
             this.basket.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.clickSound.play();
                     basketView.toggleBasket();
 
                     return true;
