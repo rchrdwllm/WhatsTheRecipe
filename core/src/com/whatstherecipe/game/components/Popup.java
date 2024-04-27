@@ -81,8 +81,10 @@ public class Popup {
         Label messageLabel = new Label(message, CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32));
         Table buttonsRow = new Table();
 
+        messageLabel.setWrap(true);
+
         this.mainContainer.add(titleLabel).center().row();
-        this.mainContainer.add(messageLabel).center().padTop(16).row();
+        this.mainContainer.add(messageLabel).width(750).center().padTop(16).row();
 
         buttons.forEach(button -> {
             buttonsRow.add(button).padTop(16).padLeft(8).padRight(8);
