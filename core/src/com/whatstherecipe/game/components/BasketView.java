@@ -116,7 +116,8 @@ public class BasketView {
             if (ingredientsInBasket.isEmpty()) {
                 this.table.add(emptyLabel).center();
                 this.emptyLabel.addAction(alpha(0));
-                this.emptyLabel.addAction(fadeIn(0.5f, Interpolation.pow5));
+                this.emptyLabel.addAction(sequence(parallel(scaleTo(1, 1, 0.5f, Interpolation.swingOut),
+                        fadeIn(0.5f, Interpolation.pow5))));
                 this.emptyLabel.toFront();
             } else {
                 this.table.add(this.row1).padTop(50).grow().padBottom(50).row();
