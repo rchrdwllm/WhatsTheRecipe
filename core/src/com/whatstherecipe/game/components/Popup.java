@@ -12,23 +12,28 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.ui.Colors;
 import com.whatstherecipe.game.ui.CustomSkin;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class Popup {
+    private final WhatsTheRecipe game;
     private Stage stage;
     private Image overlay;
     private Table rootTable;
     private Table mainContainer;
     private Group mainGroup;
+    private Image groupBg;
 
-    public Popup(Stage stage, String title, String message, ArrayList<TextButton> buttons) {
+    public Popup(final WhatsTheRecipe game, Stage stage, String title, String message, ArrayList<TextButton> buttons) {
+        this.game = game;
         this.stage = stage;
 
         initOverlay();
         initTables();
+        initBg();
         initLabels(title, message);
         addBtns(buttons);
     }
@@ -48,7 +53,6 @@ public class Popup {
         });
 
         this.stage.addActor(overlay);
-        this.overlay.addAction(fadeIn(0.5f, Interpolation.pow5));
     }
 
     private void initTables() {
@@ -56,6 +60,21 @@ public class Popup {
         this.rootTable.setFillParent(true);
 
         this.mainContainer = new Table();
+    }
+
+    private void initBg() {
+        if (this.game.assets.isLoaded("popup-bg.png")) {
+            Texture popupTexture = this.game.assets.get("popup-bg.png", Texture.class);
+
+            this.groupBg = new Image(popupTexture);
+
+            this.groupBg.setOrigin(Align.center);
+            this.groupBg.setSize(popupTexture.getWidth(), popupTexture.getHeight());
+            this.groupBg.setPosition((this.stage.getWidth() / 2) - (this.groupBg.getWidth() / 2),
+                    (this.stage.getHeight() / 2) - (this.groupBg.getHeight() / 2));
+            this.groupBg.addAction(parallel(alpha(0), scaleTo(0.2f, 0.2f)));
+            this.stage.addActor(groupBg);
+        }
     }
 
     private void initLabels(String title, String message) {
@@ -72,7 +91,6 @@ public class Popup {
                 (this.stage.getHeight() / 2) - (this.mainGroup.getHeight() / 2));
         mainGroup.setOrigin(Align.center);
         mainGroup.addAction(parallel(alpha(0), scaleTo(0.2f, 0.2f)));
-
         this.stage.addActor(mainGroup);
     }
 
@@ -83,12 +101,18 @@ public class Popup {
     }
 
     public void show() {
+        this.overlay.addAction(fadeIn(0.5f, Interpolation.pow5));
         this.mainGroup.addAction(parallel(scaleTo(1, 1, 0.7f, Interpolation.swingOut),
+                fadeIn(0.5f, Interpolation.pow5)));
+        this.groupBg.addAction(parallel(scaleTo(1, 1, 0.7f, Interpolation.swingOut),
                 fadeIn(0.5f, Interpolation.pow5)));
     }
 
     public void hide() {
         this.mainGroup.addAction(
+                parallel(fadeOut(0.7f, Interpolation.pow5), scaleTo(0.2f, 0.2f, 0.5f, Interpolation.swingIn)));
+        this.overlay.addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+        this.groupBg.addAction(
                 parallel(fadeOut(0.7f, Interpolation.pow5), scaleTo(0.2f, 0.2f, 0.5f, Interpolation.swingIn)));
     }
 }
