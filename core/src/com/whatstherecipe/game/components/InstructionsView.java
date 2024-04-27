@@ -56,7 +56,7 @@ public class InstructionsView {
     }
 
     public void toggleInstructions() {
-        this.game.sounds.paperSound.play();
+        this.game.sounds.bookSound.play();
 
         RunnableAction removeOverlay = new RunnableAction();
 
