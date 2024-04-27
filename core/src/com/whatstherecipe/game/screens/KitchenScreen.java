@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -32,6 +33,7 @@ import com.whatstherecipe.game.components.Ingredient;
 import com.whatstherecipe.game.components.MealBanner;
 import com.whatstherecipe.game.components.RecipePaperView;
 import com.whatstherecipe.game.ui.Colors;
+import com.whatstherecipe.game.ui.CustomSkin;
 
 public class KitchenScreen implements Screen {
     public final WhatsTheRecipe game;
@@ -57,6 +59,8 @@ public class KitchenScreen implements Screen {
     public int selectionTime;
     public int sortingTime;
     public String phase = "ingredient-selection";
+    private Label countdown;
+    private Label pointsLabel;
 
     public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan) {
         this.game = game;
@@ -154,6 +158,7 @@ public class KitchenScreen implements Screen {
             positionIngredients();
             prepareCabinetImgs();
             renderCabinetTriggers();
+            initUpperRightLabels();
         }
 
         this.screenShows += 1;
@@ -229,7 +234,7 @@ public class KitchenScreen implements Screen {
 
     private void renderButtons() {
         this.quitBtn = new TextButton("Quit", this.game.skin.get("text-button-default", TextButtonStyle.class));
-        this.tableRoot.add(this.quitBtn).expandY().top().expandX().left().pad(100, 100, 0, 0);
+        this.tableRoot.add(this.quitBtn).expandY().top().expandX().left().pad(48, 48, 0, 0);
 
         this.quitBtn.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
         this.quitBtn.addListener(
@@ -481,6 +486,20 @@ public class KitchenScreen implements Screen {
                 mealPlan,
                 roundCount));
         this.dispose();
+    }
+
+    private void initUpperRightLabels() {
+        this.pointsLabel = new Label("0 pts", CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
+        this.countdown = new Label("60", CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
+
+        Table upperRightLabels = new Table();
+
+        this.countdown.setAlignment(Align.center);
+
+        upperRightLabels.add(this.pointsLabel).right().row();
+        upperRightLabels.add(this.countdown).right().padTop(10);
+
+        this.tableRoot.add(upperRightLabels).expandY().top().expandX().right().pad(48, 0, 0, 48);
     }
 
     private void resetState() {
