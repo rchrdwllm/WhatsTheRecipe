@@ -1,6 +1,8 @@
 package com.whatstherecipe.game.components;
 
 import java.util.ArrayList;
+
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
@@ -26,10 +28,23 @@ public class Popup {
     private Table mainContainer;
     private Group mainGroup;
     private Image groupBg;
+    private Sound sound;
 
     public Popup(final WhatsTheRecipe game, Stage stage, String title, String message, ArrayList<TextButton> buttons) {
         this.game = game;
         this.stage = stage;
+
+        initOverlay();
+        initTables();
+        initBg();
+        initLabels(title, message, buttons);
+    }
+
+    public Popup(final WhatsTheRecipe game, Stage stage, String title, String message, ArrayList<TextButton> buttons,
+            Sound sound) {
+        this.game = game;
+        this.stage = stage;
+        this.sound = sound;
 
         initOverlay();
         initTables();
@@ -109,6 +124,7 @@ public class Popup {
                 fadeIn(0.5f, Interpolation.pow5)));
         this.groupBg.addAction(parallel(scaleTo(1, 1, 0.7f, Interpolation.swingOut),
                 fadeIn(0.5f, Interpolation.pow5)));
+        this.sound.play();
     }
 
     public void hide() {

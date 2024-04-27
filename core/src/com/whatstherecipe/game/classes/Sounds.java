@@ -12,6 +12,8 @@ public class Sounds {
     public Sound closeCabinetSound;
     public Sound dropSound;
     public Sound bookSound;
+    public Sound successSound;
+    public Sound failSound;
 
     public Sounds() {
         initSounds();
@@ -26,5 +28,7 @@ public class Sounds {
         this.closeCabinetSound = Gdx.audio.newSound(Gdx.files.internal("audio/close-cabinet.mp3"));
         this.dropSound = Gdx.audio.newSound(Gdx.files.internal("audio/drop.mp3"));
         this.bookSound = Gdx.audio.newSound(Gdx.files.internal("audio/book.mp3"));
+        this.successSound = Gdx.audio.newSound(Gdx.files.internal("audio/success.mp3"));
+        this.failSound = Gdx.audio.newSound(Gdx.files.internal("audio/fail.mp3"));
     }
 }

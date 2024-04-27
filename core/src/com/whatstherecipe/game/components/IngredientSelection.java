@@ -134,7 +134,8 @@ public class IngredientSelection {
                 buttons.add(nextBtn);
 
                 Popup popup = new Popup(this.game, this.stage, "Ingredients match!",
-                        "You can now proceed to the sorting stage of the round! Well done!", buttons);
+                        "You can now proceed to the sorting stage of the round! Well done!", buttons,
+                        this.game.sounds.successSound);
 
                 popup.show();
 
@@ -161,7 +162,7 @@ public class IngredientSelection {
                 buttons.add(tryAgainBtn);
 
                 Popup popup = new Popup(this.game, this.stage, "Not a match!",
-                        "These ingredients aren't correct. Try again!", buttons);
+                        "These ingredients aren't correct. Try again!", buttons, this.game.sounds.failSound);
 
                 popup.show();
 
@@ -185,7 +186,7 @@ public class IngredientSelection {
             buttons.add(tryAgainBtn);
 
             Popup popup = new Popup(this.game, this.stage, "Not a match!",
-                    "These ingredients aren't correct. Try again!", buttons);
+                    "These ingredients aren't correct. Try again!", buttons, this.game.sounds.failSound);
 
             popup.show();
 
