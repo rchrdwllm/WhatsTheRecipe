@@ -127,4 +127,22 @@ public class CustomSkin extends Skin {
 
         return customLabelStyle;
     }
+
+    public static LabelStyle generateCustomLilitaOneBackground(Color color, int size) {
+        FreeTypeFontGenerator lilitaOneGenerator = new FreeTypeFontGenerator(
+                Gdx.files.internal("fonts/LilitaOne-Regular.ttf"));
+        FreeTypeFontParameter customParameter = new FreeTypeFontParameter();
+        LabelStyle customLabelStyle = new LabelStyle();
+        Drawable labelPatch = new NinePatchDrawable(
+                new NinePatch(new Texture(Gdx.files.internal("patches/label.9.png")), 32, 32, 0, 0));
+
+        customParameter.size = size;
+        customParameter.color = color;
+
+        BitmapFont customFont = lilitaOneGenerator.generateFont(customParameter);
+        customLabelStyle.font = customFont;
+        customLabelStyle.background = labelPatch;
+
+        return customLabelStyle;
+    }
 }
