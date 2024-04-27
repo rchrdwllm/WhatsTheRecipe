@@ -71,7 +71,7 @@ public class Popup {
             this.groupBg.setOrigin(Align.center);
             this.groupBg.setSize(popupTexture.getWidth(), popupTexture.getHeight());
             this.groupBg.setPosition((this.stage.getWidth() / 2) - (this.groupBg.getWidth() / 2),
-                    (this.stage.getHeight() / 2) - (this.groupBg.getHeight() / 2));
+                    (this.stage.getHeight() / 2) - (this.groupBg.getHeight() / 2) - 32);
             this.groupBg.addAction(parallel(alpha(0), scaleTo(0.2f, 0.2f)));
             this.stage.addActor(groupBg);
         }
