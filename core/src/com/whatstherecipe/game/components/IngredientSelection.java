@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.whatstherecipe.game.WhatsTheRecipe;
-import com.whatstherecipe.game.classes.ClickSound;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.ui.Colors;
@@ -31,7 +30,6 @@ public class IngredientSelection {
     private StepSorting stepSorting;
     private ArrayList<String> selectedIngredients;
     private KitchenScreen kitchenScreen;
-    private ClickSound clickSound;
 
     public IngredientSelection(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -41,7 +39,6 @@ public class IngredientSelection {
         this.kitchenScreen = recipePaperView.kitchenScreen;
         this.recipePaperView = recipePaperView;
         this.selectedIngredients = new ArrayList<String>();
-        this.clickSound = new ClickSound();
 
         initTables();
         renderLeft();
@@ -72,10 +69,6 @@ public class IngredientSelection {
         this.table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
             this.table.remove();
         })));
-    }
-
-    public void dispose() {
-        this.clickSound.dispose();
     }
 
     private void renderLeft() {
@@ -192,7 +185,7 @@ public class IngredientSelection {
         checkBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                clickSound.play();
+                game.sounds.clickSound.play();
                 checkIngredients();
 
                 return true;

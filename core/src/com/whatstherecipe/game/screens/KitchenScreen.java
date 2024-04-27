@@ -26,7 +26,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.whatstherecipe.game.WhatsTheRecipe;
-import com.whatstherecipe.game.classes.ClickSound;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.components.BasketView;
@@ -43,7 +42,6 @@ public class KitchenScreen implements Screen {
     private Image kitchenBg;
     private Image basket;
     private TextButton quitBtn;
-    private ClickSound clickSound;
     private int screenShows = 0;
     private ArrayList<Image> cabinetTriggers;
     private ArrayList<Image> cabinetImgs;
@@ -65,7 +63,6 @@ public class KitchenScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
         this.camera = game.camera;
-        this.clickSound = new ClickSound();
         this.mealPlan = mealPlan;
         this.meal = mealPlan.get(0);
         this.ingredientsWithRandom = new ArrayList<String>();
@@ -114,7 +111,6 @@ public class KitchenScreen implements Screen {
 
     @Override
     public void hide() {
-        this.clickSound.dispose();
     }
 
     @Override
@@ -239,7 +235,7 @@ public class KitchenScreen implements Screen {
         this.quitBtn.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
-                        clickSound.play();
+                        this.game.sounds.clickSound.play();
                         transitionToMainMenu();
                     }
 
@@ -324,7 +320,6 @@ public class KitchenScreen implements Screen {
             cabinetTrigger.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    clickSound.play();
                     Image cabinetImg = cabinetImgs.get(index);
 
                     closeCabinetBtn.clear();
@@ -335,6 +330,8 @@ public class KitchenScreen implements Screen {
                     closeCabinetBtn.addListener(new InputListener() {
                         @Override
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            game.sounds.clickSound.play();
+
                             RunnableAction removeItems = new RunnableAction();
 
                             removeItems.setRunnable(new Runnable() {

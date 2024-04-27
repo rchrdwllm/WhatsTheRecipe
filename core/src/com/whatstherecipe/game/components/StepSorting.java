@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.whatstherecipe.game.WhatsTheRecipe;
-import com.whatstherecipe.game.classes.ClickSound;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.classes.Step;
 import com.whatstherecipe.game.ui.Colors;
@@ -38,7 +37,6 @@ public class StepSorting {
     private int tries = 0;
     private CookingAnimation cookingAnimation;
     private RecipePaperView recipePaperView;
-    private ClickSound clickSound;
 
     public StepSorting(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -51,7 +49,6 @@ public class StepSorting {
         this.stepLabels = new ArrayList<Label>();
         this.arrangedStepLabels = new ArrayList<Label>();
         this.selectedSteps = new ArrayList<String>();
-        this.clickSound = new ClickSound();
 
         determineMaxTries();
         initTables();
@@ -297,7 +294,7 @@ public class StepSorting {
         cookBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                clickSound.play();
+                game.sounds.clickSound.play();
                 checkSteps();
 
                 return true;

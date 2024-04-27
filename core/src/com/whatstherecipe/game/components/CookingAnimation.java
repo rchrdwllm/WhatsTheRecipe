@@ -1,7 +1,7 @@
 package com.whatstherecipe.game.components;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -30,7 +30,7 @@ public class CookingAnimation {
     public AnimatedActor cookingActor;
     private Image brownOverlay;
     private Table table;
-    private Music cookingSound;
+    private Sound cookingSound;
 
     public CookingAnimation(final WhatsTheRecipe game, Stage stage) {
         this.game = game;
@@ -108,8 +108,8 @@ public class CookingAnimation {
     }
 
     private void prepareSound() {
-        if (this.game.assets.isLoaded("audio/cooking-sound.mp3")) {
-            this.cookingSound = this.game.assets.get("audio/cooking-sound.mp3", Music.class);
+        if (this.game.assets.isLoaded("audio/cooking.mp3")) {
+            this.cookingSound = this.game.assets.get("audio/cooking.mp3", Sound.class);
         }
     }
 }

@@ -152,7 +152,7 @@ public class MainMenuScreen implements Screen {
         playButton.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
-                        game.clickSound.play();
+                        this.game.sounds.clickSound.play();
                         playGame();
                     }
 
@@ -162,7 +162,7 @@ public class MainMenuScreen implements Screen {
         howToPlay.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
-                        game.clickSound.play();
+                        this.game.sounds.clickSound.play();
                         instructionsView.toggleInstructions();
                     }
 
@@ -172,7 +172,7 @@ public class MainMenuScreen implements Screen {
         exitButton.addListener(
                 (EventListener) event -> {
                     if (event.toString().equals("touchDown")) {
-                        game.clickSound.play();
+                        this.game.sounds.clickSound.play();
                         Gdx.app.exit();
                     }
 

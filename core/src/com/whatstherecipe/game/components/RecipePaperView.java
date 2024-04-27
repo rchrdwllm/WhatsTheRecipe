@@ -88,6 +88,8 @@ public class RecipePaperView {
     }
 
     public void toggleRecipePaper() {
+        this.game.sounds.paperSound.play();
+
         RunnableAction removeOverlay = new RunnableAction();
 
         removeOverlay.setRunnable(new Runnable() {
