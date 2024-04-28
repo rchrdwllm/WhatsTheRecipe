@@ -98,7 +98,7 @@ public class StepSorting {
                 this.deduction = 0;
                 break;
             case "medium":
-                this.deduction = (1 / 3) * recipePaperView.kitchenScreen.currentPoints;
+                this.deduction = (int) ((1.0 / 3.0) * recipePaperView.kitchenScreen.currentPoints);
                 break;
             case "hard":
                 this.deduction = recipePaperView.kitchenScreen.currentPoints;
@@ -199,6 +199,9 @@ public class StepSorting {
     private void checkSteps() {
         determineDeduction();
 
+        System.out.println("Current points: " + recipePaperView.kitchenScreen.currentPoints);
+        System.out.println("Deduction points: " + this.deduction);
+
         this.tries += 1;
         this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
 
@@ -229,45 +232,89 @@ public class StepSorting {
                         this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
                         this.scoreLabel.setText(this.currentPoints + " pts");
 
-                        ArrayList<TextButton> buttons = new ArrayList<TextButton>();
-                        TextButton nextBtn = new TextButton("Next meal",
-                                this.game.skin.get("text-button-default", TextButtonStyle.class));
+                        if (meal.difficulty.equals("hard")) {
+                            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                            TextButton okayBtn = new TextButton("Okay",
+                                    this.game.skin.get("text-button-default", TextButtonStyle.class));
 
-                        buttons.add(nextBtn);
+                            buttons.add(okayBtn);
 
-                        Popup popup = new Popup(this.game, this.stage, "Correct steps!",
-                                "You've successfully cooked the meal! You earned " + this.plusPoints + " points!",
-                                buttons,
-                                this.game.sounds.successSound);
+                            Popup popup = new Popup(this.game, this.stage, "Congratulations!",
+                                    "You've successfully cooked the meal and successfully finished the full course! You earned "
+                                            + this.plusPoints + " points, having a total of " + this.currentPoints
+                                            + " points. You can attempt to play the whole course again if you want to aim for higher scores!",
+                                    buttons,
+                                    this.game.sounds.successSound);
 
-                        nextBtn.addListener(new InputListener() {
-                            @Override
-                            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                game.sounds.clickSound.play();
-                                popup.hide();
+                            okayBtn.addListener(new InputListener() {
+                                @Override
+                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                    game.sounds.clickSound.play();
+                                    popup.hide();
 
-                                timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                                    recipePaperView.brownOverlay
-                                            .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
-                                    recipePaperView.recipe.addAction(
-                                            sequence(delay(0.5f),
-                                                    moveTo((game.V_WIDTH / 2)
-                                                            - (recipePaperView.recipe.getWidth() / 2),
-                                                            -recipePaperView.recipe.getHeight(), 0.75f,
-                                                            Interpolation.swingIn),
-                                                    run(() -> {
-                                                        recipePaperView.brownOverlay.remove();
-                                                        recipePaperView.kitchenScreen.nextRound();
-                                                    })));
-                                })));
+                                    timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                    scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                    table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                        recipePaperView.brownOverlay
+                                                .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                        recipePaperView.recipe.addAction(
+                                                sequence(delay(0.5f),
+                                                        moveTo((game.V_WIDTH / 2)
+                                                                - (recipePaperView.recipe.getWidth() / 2),
+                                                                -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                Interpolation.swingIn),
+                                                        run(() -> {
+                                                            recipePaperView.brownOverlay.remove();
+                                                            recipePaperView.kitchenScreen.transitionToMainMenu();
+                                                        })));
+                                    })));
 
-                                return true;
-                            }
-                        });
+                                    return true;
+                                }
+                            });
 
-                        popup.show();
+                            popup.show();
+                        } else {
+                            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                            TextButton nextBtn = new TextButton("Next meal",
+                                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+                            buttons.add(nextBtn);
+
+                            Popup popup = new Popup(this.game, this.stage, "Correct steps!",
+                                    "You've successfully cooked the meal! You earned " + this.plusPoints + " points!",
+                                    buttons,
+                                    this.game.sounds.successSound);
+
+                            nextBtn.addListener(new InputListener() {
+                                @Override
+                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                    game.sounds.clickSound.play();
+                                    popup.hide();
+
+                                    timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                    scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                    table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                        recipePaperView.brownOverlay
+                                                .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                        recipePaperView.recipe.addAction(
+                                                sequence(delay(0.5f),
+                                                        moveTo((game.V_WIDTH / 2)
+                                                                - (recipePaperView.recipe.getWidth() / 2),
+                                                                -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                Interpolation.swingIn),
+                                                        run(() -> {
+                                                            recipePaperView.brownOverlay.remove();
+                                                            recipePaperView.kitchenScreen.nextRound();
+                                                        })));
+                                    })));
+
+                                    return true;
+                                }
+                            });
+
+                            popup.show();
+                        }
                     } else {
                         if (this.tries == this.maxTries) {
                             System.out.println(
@@ -292,6 +339,8 @@ public class StepSorting {
                                         game.sounds.clickSound.play();
                                         popup.hide();
 
+                                        timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                        scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
                                         table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
                                             recipePaperView.brownOverlay
                                                     .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
@@ -304,6 +353,50 @@ public class StepSorting {
                                                             run(() -> {
                                                                 recipePaperView.brownOverlay.remove();
                                                                 recipePaperView.kitchenScreen.nextRound();
+                                                            })));
+                                        })));
+
+                                        return true;
+                                    }
+                                });
+
+                                popup.show();
+                            } else if (meal.difficulty.equals("hard")) {
+                                recipePaperView.kitchenScreen.updatePoints(-this.deduction);
+                                this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
+                                this.scoreLabel.setText(this.currentPoints + " pts");
+
+                                ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                                TextButton okayBtn = new TextButton("Okay",
+                                        this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+                                buttons.add(okayBtn);
+
+                                Popup popup = new Popup(this.game, this.stage, "Goodbye!",
+                                        "This is an all or nothing round, and you lost everything!",
+                                        buttons, this.game.sounds.failSound);
+
+                                okayBtn.addListener(new InputListener() {
+                                    @Override
+                                    public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                            int button) {
+                                        game.sounds.clickSound.play();
+                                        popup.hide();
+
+                                        timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                        scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                        table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                            recipePaperView.brownOverlay
+                                                    .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                            recipePaperView.recipe.addAction(
+                                                    sequence(delay(0.5f),
+                                                            moveTo((game.V_WIDTH / 2)
+                                                                    - (recipePaperView.recipe.getWidth() / 2),
+                                                                    -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                    Interpolation.swingIn),
+                                                            run(() -> {
+                                                                recipePaperView.brownOverlay.remove();
+                                                                recipePaperView.kitchenScreen.transitionToMainMenu();
                                                             })));
                                         })));
 
@@ -331,6 +424,8 @@ public class StepSorting {
                                         game.sounds.clickSound.play();
                                         popup.hide();
 
+                                        timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                        scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
                                         table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
                                             recipePaperView.brownOverlay
                                                     .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
@@ -411,6 +506,8 @@ public class StepSorting {
                                         game.sounds.clickSound.play();
                                         popup.hide();
 
+                                        timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                        scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
                                         table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
                                             recipePaperView.brownOverlay
                                                     .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
@@ -434,7 +531,6 @@ public class StepSorting {
                             } else {
                                 recipePaperView.kitchenScreen.updatePoints(-this.deduction);
 
-                                // TODO fix deductions
                                 this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
                                 this.totalDeductions += this.deduction;
                                 this.scoreLabel.setText(this.currentPoints + " pts");

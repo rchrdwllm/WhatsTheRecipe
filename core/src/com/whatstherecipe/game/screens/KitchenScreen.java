@@ -60,6 +60,7 @@ public class KitchenScreen implements Screen {
     public int selectionTime;
     public int sortingTime;
     public String phase = "ingredient-selection";
+    private Table upperRightLabels;
     private Label countdown;
     private Label pointsLabel;
     private boolean isGameStarted = false;
@@ -259,13 +260,17 @@ public class KitchenScreen implements Screen {
                 });
     }
 
-    private void transitionToMainMenu() {
+    public void transitionToMainMenu() {
         RunnableAction panKitchenBg = new RunnableAction();
 
         panKitchenBg.setRunnable(new Runnable() {
             @Override
             public void run() {
                 RunnableAction switchToMainMenuScreen = new RunnableAction();
+
+                cabinetImgs.forEach(cabinet -> {
+                    cabinet.addAction(fadeOut(0.5f, Interpolation.pow5));
+                });
 
                 switchToMainMenuScreen.setRunnable(new Runnable() {
                     @Override
@@ -282,7 +287,6 @@ public class KitchenScreen implements Screen {
                                 scaleBy(0.25f, 0.25f, 2f, Interpolation.pow5),
                                 moveBy(game.V_WIDTH, 0, 2f, Interpolation.pow5)),
                         switchToMainMenuScreen));
-
                 basket.addAction(sequence(parallel(
                         scaleBy(0.25f, 0.25f, 2f, Interpolation.pow5),
                         moveBy(game.V_WIDTH, 0, 2.05f, Interpolation.pow5)),
@@ -372,6 +376,7 @@ public class KitchenScreen implements Screen {
                     });
                     closeCabinetBtn.addAction(sequence(fadeIn(0.5f)));
                     closeCabinetBtn.toFront();
+                    upperRightLabels.toFront();
                     stage.addActor(closeCabinetBtn);
                     recipePaperView.recipeRef.toFront();
                     basket.toFront();
@@ -506,7 +511,7 @@ public class KitchenScreen implements Screen {
         this.countdown = new Label(String.format("%02d:%02d", this.selectionTime / 60, this.selectionTime % 60),
                 CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
 
-        Table upperRightLabels = new Table();
+        this.upperRightLabels = new Table();
 
         this.countdown.setAlignment(Align.center);
 
@@ -545,30 +550,59 @@ public class KitchenScreen implements Screen {
     }
 
     private void alertUserFailedSelection() {
-        ArrayList<TextButton> buttons = new ArrayList<TextButton>();
-        TextButton nextBtn = new TextButton("Next meal",
-                this.game.skin.get("text-button-default", TextButtonStyle.class));
+        if (this.roundCount == this.maxRoundCount) {
+            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+            TextButton okayBtn = new TextButton("Okay",
+                    this.game.skin.get("text-button-default", TextButtonStyle.class));
 
-        buttons.add(nextBtn);
+            buttons.add(okayBtn);
 
-        Popup popup = new Popup(this.game, this.stage, "Time's up!",
-                "Aw, you ran out of time to select ingredients. Proceed now to the next meal!", buttons,
-                this.game.sounds.failSound);
+            Popup popup = new Popup(this.game, this.stage, "Time's up!",
+                    "Aw, you ran out of time to select ingredients for the last meal. All in all, you scored a total of "
+                            + this.currentPoints + " points. You can always try again from the beginning!",
+                    buttons,
+                    this.game.sounds.failSound);
 
-        nextBtn.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.sounds.clickSound.play();
+            okayBtn.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.clickSound.play();
 
-                popup.hide(() -> {
-                    nextRound();
-                });
+                    popup.hide(() -> {
+                        transitionToMainMenu();
+                    });
 
-                return true;
-            }
-        });
+                    return true;
+                }
+            });
 
-        popup.show();
+            popup.show();
+        } else {
+            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+            TextButton nextBtn = new TextButton("Next meal",
+                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+            buttons.add(nextBtn);
+
+            Popup popup = new Popup(this.game, this.stage, "Time's up!",
+                    "Aw, you ran out of time to select ingredients. Proceed now to the next meal!", buttons,
+                    this.game.sounds.failSound);
+
+            nextBtn.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.clickSound.play();
+
+                    popup.hide(() -> {
+                        nextRound();
+                    });
+
+                    return true;
+                }
+            });
+
+            popup.show();
+        }
     }
 
     private void startStepSortingCountdown(float delta) {

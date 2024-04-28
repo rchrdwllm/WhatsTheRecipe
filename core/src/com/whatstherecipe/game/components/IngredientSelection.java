@@ -146,55 +146,109 @@ public class IngredientSelection {
 
                 System.out.println("Ingredients match!");
 
-                TextButton nextBtn = new TextButton("Next",
-                        this.game.skin.get("text-button-default", TextButtonStyle.class));
-                ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                if (meal.difficulty.equals("hard")) {
+                    TextButton nextBtn = new TextButton("Next",
+                            this.game.skin.get("text-button-default", TextButtonStyle.class));
+                    ArrayList<TextButton> buttons = new ArrayList<TextButton>();
 
-                buttons.add(nextBtn);
+                    buttons.add(nextBtn);
 
-                TextButton nestedNextBtn = new TextButton("Next",
-                        game.skin.get("text-button-default", TextButtonStyle.class));
-                ArrayList<TextButton> nextBtns = new ArrayList<TextButton>();
+                    TextButton nestedNextBtn = new TextButton("Next",
+                            game.skin.get("text-button-default", TextButtonStyle.class));
+                    ArrayList<TextButton> nextBtns = new ArrayList<TextButton>();
 
-                nextBtns.add(nestedNextBtn);
+                    nextBtns.add(nestedNextBtn);
 
-                Popup nextPopup = new Popup(game, stage, "Next phase!",
-                        "For this " + meal.difficulty + " meal, you have " + stepSortingTimeString
-                                + " to sort the correct steps for cooking. Good luck!",
-                        nextBtns);
+                    Popup nextPopup = new Popup(game, stage, "All or nothing!!",
+                            "Since this is a " + meal.difficulty + " meal, you have " + stepSortingTimeString
+                                    + " to sort the correct steps for cooking and you only have 1 attempt. If you win, you'll have twice your current score. If not, you'll lose everything, and may have to start all over again. Good luck!",
+                            nextBtns);
 
-                Popup popup = new Popup(this.game, this.stage, "Ingredients match!",
-                        "You can now proceed to the sorting stage of the round! Well done!", buttons,
-                        this.game.sounds.successSound);
+                    Popup popup = new Popup(this.game, this.stage, "Ingredients match!",
+                            "You can now proceed to the sorting stage of the round! Well done!", buttons,
+                            this.game.sounds.successSound);
 
-                popup.show();
+                    popup.show();
 
-                nextBtn.addListener(new InputListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        game.sounds.clickSound.play();
+                    nextBtn.addListener(new InputListener() {
+                        @Override
+                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            game.sounds.clickSound.play();
 
-                        popup.hide(() -> {
-                            nextPopup.show();
+                            popup.hide(() -> {
+                                nextPopup.show();
 
-                            nestedNextBtn.addListener(new InputListener() {
-                                @Override
-                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                    game.sounds.clickSound.play();
-                                    nextPopup.hide();
+                                nestedNextBtn.addListener(new InputListener() {
+                                    @Override
+                                    public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                            int button) {
+                                        game.sounds.clickSound.play();
+                                        nextPopup.hide();
 
-                                    hide();
+                                        hide();
 
-                                    stepSorting.show();
+                                        stepSorting.show();
 
-                                    return true;
-                                }
+                                        return true;
+                                    }
+                                });
                             });
-                        });
 
-                        return true;
-                    }
-                });
+                            return true;
+                        }
+                    });
+                } else {
+                    TextButton nextBtn = new TextButton("Next",
+                            this.game.skin.get("text-button-default", TextButtonStyle.class));
+                    ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+
+                    buttons.add(nextBtn);
+
+                    TextButton nestedNextBtn = new TextButton("Next",
+                            game.skin.get("text-button-default", TextButtonStyle.class));
+                    ArrayList<TextButton> nextBtns = new ArrayList<TextButton>();
+
+                    nextBtns.add(nestedNextBtn);
+
+                    Popup nextPopup = new Popup(game, stage, "Next phase!",
+                            "For this " + meal.difficulty + " meal, you have " + stepSortingTimeString
+                                    + " to sort the correct steps for cooking. Good luck!",
+                            nextBtns);
+
+                    Popup popup = new Popup(this.game, this.stage, "Ingredients match!",
+                            "You can now proceed to the sorting stage of the round! Well done!", buttons,
+                            this.game.sounds.successSound);
+
+                    popup.show();
+
+                    nextBtn.addListener(new InputListener() {
+                        @Override
+                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            game.sounds.clickSound.play();
+
+                            popup.hide(() -> {
+                                nextPopup.show();
+
+                                nestedNextBtn.addListener(new InputListener() {
+                                    @Override
+                                    public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                            int button) {
+                                        game.sounds.clickSound.play();
+                                        nextPopup.hide();
+
+                                        hide();
+
+                                        stepSorting.show();
+
+                                        return true;
+                                    }
+                                });
+                            });
+
+                            return true;
+                        }
+                    });
+                }
             } else {
                 ArrayList<TextButton> buttons = new ArrayList<TextButton>();
                 TextButton tryAgainBtn = new TextButton("Try again",
