@@ -510,7 +510,7 @@ public class KitchenScreen implements Screen {
     }
 
     private void startCountdown(float delta) {
-        if (this.isGameStarted) {
+        if (this.isGameStarted && this.phase.equals("ingredient-selection")) {
             this.selectionTimeElapsed += delta;
 
             if (this.selectionTimeElapsed >= 1) {

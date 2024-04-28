@@ -125,6 +125,8 @@ public class IngredientSelection {
 
         if (selectedIngredients.containsAll(meal.ingredients)) {
             if (selectedIngredients.size() == meal.ingredients.size()) {
+                kitchenScreen.phase = "step-sorting";
+
                 System.out.println("Ingredients match!");
 
                 TextButton nextBtn = new TextButton("Next",
@@ -146,8 +148,6 @@ public class IngredientSelection {
                         popup.hide();
 
                         hide();
-
-                        kitchenScreen.phase = "step-sorting";
 
                         stepSorting.show();
 
