@@ -65,6 +65,7 @@ public class KitchenScreen implements Screen {
     private boolean isGameStarted = false;
     private float selectionTimeElapsed = 0;
     private boolean isSelectionTimeUp = false;
+    public boolean isStepSortingStarted = false;
 
     public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan) {
         this.game = game;
@@ -135,6 +136,7 @@ public class KitchenScreen implements Screen {
         this.game.batch.setProjectionMatrix(this.camera.combined);
 
         startCountdown(delta);
+        startStepSortingCountdown(delta);
     }
 
     @Override
@@ -562,6 +564,10 @@ public class KitchenScreen implements Screen {
         });
 
         popup.show();
+    }
+
+    private void startStepSortingCountdown(float delta) {
+        recipePaperView.stepSorting.startCountdown(delta);
     }
 
     private void resetState() {
