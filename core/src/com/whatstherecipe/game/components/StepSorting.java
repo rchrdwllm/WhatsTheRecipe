@@ -880,7 +880,8 @@ public class StepSorting {
             buttons.add(nextBtn);
 
             Popup popup = new Popup(this.game, this.stage, "Time's up!",
-                    "You ran out of time to sort the steps. You got a deduction of x points. Proceed now to next meal!",
+                    "You ran out of time to sort the steps. You got a total deduction of " + this.deduction
+                            + " points. Proceed now to next meal!",
                     buttons,
                     this.game.sounds.failSound);
 
