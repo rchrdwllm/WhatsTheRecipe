@@ -37,8 +37,8 @@ public class MealBanner {
     }
 
     private void determineTimeString() {
-        int minutes = this.selectionTime / 60000;
-        int seconds = this.selectionTime % 60000;
+        int minutes = this.selectionTime / 60;
+        int seconds = this.selectionTime % 60;
 
         if (minutes == 0) {
             this.selectionTimeString = seconds + " seconds";

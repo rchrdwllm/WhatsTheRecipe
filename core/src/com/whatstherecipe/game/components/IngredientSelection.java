@@ -30,6 +30,7 @@ public class IngredientSelection {
     private StepSorting stepSorting;
     private ArrayList<String> selectedIngredients;
     private KitchenScreen kitchenScreen;
+    private String stepSortingTimeString;
 
     public IngredientSelection(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -40,10 +41,26 @@ public class IngredientSelection {
         this.recipePaperView = recipePaperView;
         this.selectedIngredients = new ArrayList<String>();
 
+        determineStepSortingTimeString();
         initTables();
         renderLeft();
         renderCenter();
         renderRight();
+    }
+
+    private void determineStepSortingTimeString() {
+        int minutes = stepSorting.time / 60;
+        int seconds = stepSorting.time % 60;
+
+        if (minutes == 0) {
+            this.stepSortingTimeString = seconds + " seconds";
+        } else if (seconds == 0) {
+            if (minutes > 1) {
+                this.stepSortingTimeString = minutes + " minutes";
+            } else {
+                this.stepSortingTimeString = minutes + " minute";
+            }
+        }
     }
 
     private void initTables() {
@@ -135,6 +152,17 @@ public class IngredientSelection {
 
                 buttons.add(nextBtn);
 
+                TextButton nestedNextBtn = new TextButton("Next",
+                        game.skin.get("text-button-default", TextButtonStyle.class));
+                ArrayList<TextButton> nextBtns = new ArrayList<TextButton>();
+
+                nextBtns.add(nestedNextBtn);
+
+                Popup nextPopup = new Popup(game, stage, "Next phase!",
+                        "For this " + meal.difficulty + " meal, you have " + stepSortingTimeString
+                                + " to sort the correct steps for cooking. Good luck!",
+                        nextBtns);
+
                 Popup popup = new Popup(this.game, this.stage, "Ingredients match!",
                         "You can now proceed to the sorting stage of the round! Well done!", buttons,
                         this.game.sounds.successSound);
@@ -145,11 +173,23 @@ public class IngredientSelection {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                         game.sounds.clickSound.play();
-                        popup.hide();
 
-                        hide();
+                        popup.hide(() -> {
+                            nextPopup.show();
 
-                        stepSorting.show();
+                            nestedNextBtn.addListener(new InputListener() {
+                                @Override
+                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                    nextPopup.hide();
+
+                                    hide();
+
+                                    stepSorting.show();
+
+                                    return true;
+                                }
+                            });
+                        });
 
                         return true;
                     }

@@ -125,7 +125,10 @@ public class Popup {
                 fadeIn(0.5f, Interpolation.pow5)));
         this.groupBg.addAction(parallel(scaleTo(1, 1, 0.7f, Interpolation.swingOut),
                 fadeIn(0.5f, Interpolation.pow5)));
-        this.sound.play();
+
+        if (this.sound != null) {
+            this.sound.play();
+        }
     }
 
     public void hide() {

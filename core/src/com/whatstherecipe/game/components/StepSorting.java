@@ -36,7 +36,7 @@ public class StepSorting {
     private ArrayList<String> selectedSteps;
     private int maxTries = 0;
     private int tries = 0;
-    private int time = 0;
+    public int time = 0;
     private CookingAnimation cookingAnimation;
     private RecipePaperView recipePaperView;
     private Label timerLabel;
