@@ -93,7 +93,7 @@ public class KitchenScreen implements Screen {
         initComponents();
     }
 
-    public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan, int roundCount) {
+    public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan, int roundCount, int currentPoints) {
         this.game = game;
         this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
         this.camera = game.camera;
@@ -103,6 +103,7 @@ public class KitchenScreen implements Screen {
         this.ingredientsWithRandom = new ArrayList<String>();
         this.ingredientsInBasket = new ArrayList<Ingredient>();
         this.ingredients = new ArrayList<ArrayList<Ingredient>>();
+        this.currentPoints = currentPoints;
 
         System.out.println("\nRound: " + roundCount);
         System.out.println("Meal: " + meal.name);
@@ -138,6 +139,7 @@ public class KitchenScreen implements Screen {
 
         startCountdown(delta);
         startStepSortingCountdown(delta);
+        monitorPoints();
     }
 
     @Override
@@ -493,7 +495,8 @@ public class KitchenScreen implements Screen {
 
         game.setScreen(new KitchenScreen(game,
                 mealPlan,
-                roundCount));
+                roundCount,
+                currentPoints));
         this.dispose();
     }
 
@@ -570,6 +573,19 @@ public class KitchenScreen implements Screen {
 
     private void startStepSortingCountdown(float delta) {
         recipePaperView.stepSorting.startCountdown(delta);
+    }
+
+    private void monitorPoints() {
+        if (this.currentPoints == 0 && !this.isEndGame) {
+            this.isEndGame = true;
+
+            System.out.println("You have no more points. Game over!");
+        }
+    }
+
+    public void updatePoints(int points) {
+        this.currentPoints += points;
+        this.pointsLabel.setText(this.currentPoints + " pts");
     }
 
     private void resetState() {

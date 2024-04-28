@@ -45,11 +45,16 @@ public class StepSorting {
     private Table scoreTable;
     public float sortingTimeElapsed = 0;
     private boolean isSortingTimeUp = false;
+    private int plusPoints = 0;
+    private int deduction = 0;
+    private int totalDeductions = 0;
+    private int currentPoints = 0;
 
     public StepSorting(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
         this.stage = recipePaperView.stage;
         this.meal = recipePaperView.meal;
+        this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
         this.recipePaperView = recipePaperView;
         this.shuffledSteps = new ArrayList<Step>(meal.steps);
         this.arrangedSteps = new ArrayList<Step>();
@@ -58,6 +63,8 @@ public class StepSorting {
         this.arrangedStepLabels = new ArrayList<Label>();
         this.selectedSteps = new ArrayList<String>();
 
+        determinePlusPoints();
+        determineDeduction();
         determineMaxTries();
         determineTime();
         initTables();
@@ -66,6 +73,40 @@ public class StepSorting {
         renderRight();
         prepareCookingAnimation();
         renderTimerScore();
+    }
+
+    private void determinePlusPoints() {
+        switch (meal.difficulty) {
+            case "easy":
+                this.plusPoints = 200;
+                break;
+            case "medium":
+                this.plusPoints = 500;
+                break;
+            case "hard":
+                this.plusPoints = 2 * recipePaperView.kitchenScreen.currentPoints;
+                break;
+            default:
+                this.plusPoints = 200;
+                break;
+        }
+    }
+
+    private void determineDeduction() {
+        switch (meal.difficulty) {
+            case "easy":
+                this.deduction = 0;
+                break;
+            case "medium":
+                this.deduction = (1 / 3) * recipePaperView.kitchenScreen.currentPoints;
+                break;
+            case "hard":
+                this.deduction = recipePaperView.kitchenScreen.currentPoints;
+                break;
+            default:
+                this.deduction = 0;
+                break;
+        }
     }
 
     private void determineMaxTries() {
@@ -156,6 +197,8 @@ public class StepSorting {
     }
 
     private void checkSteps() {
+        determineDeduction();
+
         this.tries += 1;
         this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
 
@@ -182,6 +225,10 @@ public class StepSorting {
                     if (arrangedSteps.equals(sortedSteps)) {
                         System.out.println("Correct steps! Proceeding to next meal...");
 
+                        recipePaperView.kitchenScreen.updatePoints(this.plusPoints);
+                        this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
+                        this.scoreLabel.setText(this.currentPoints + " pts");
+
                         ArrayList<TextButton> buttons = new ArrayList<TextButton>();
                         TextButton nextBtn = new TextButton("Next meal",
                                 this.game.skin.get("text-button-default", TextButtonStyle.class));
@@ -189,7 +236,8 @@ public class StepSorting {
                         buttons.add(nextBtn);
 
                         Popup popup = new Popup(this.game, this.stage, "Correct steps!",
-                                "You've successfully cooked the meal! You earned x points!", buttons,
+                                "You've successfully cooked the meal! You earned " + this.plusPoints + " points!",
+                                buttons,
                                 this.game.sounds.successSound);
 
                         nextBtn.addListener(new InputListener() {
@@ -272,7 +320,8 @@ public class StepSorting {
                                 buttons.add(nextMeal);
 
                                 Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
-                                        "You already reached the max number of steps! Your total deduction is 0. Proceed now to the next meal.",
+                                        "You already reached the max number of steps! The total deduction for this round is "
+                                                + this.totalDeductions + " points. Proceed now to the next meal.",
                                         buttons, this.game.sounds.failSound);
 
                                 nextMeal.addListener(new InputListener() {
@@ -383,6 +432,13 @@ public class StepSorting {
 
                                 popup.show();
                             } else {
+                                recipePaperView.kitchenScreen.updatePoints(-this.deduction);
+
+                                // TODO fix deductions
+                                this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
+                                this.totalDeductions += this.deduction;
+                                this.scoreLabel.setText(this.currentPoints + " pts");
+
                                 ArrayList<TextButton> buttons = new ArrayList<TextButton>();
                                 TextButton tryAgainBtn = new TextButton("Try again",
                                         this.game.skin.get("text-button-default", TextButtonStyle.class));
@@ -393,7 +449,8 @@ public class StepSorting {
                                 buttons.add(nextMeal);
 
                                 Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
-                                        "Failed to cook the meal! You got a deduction of x points. You may try again or skip to the next meal already.",
+                                        "Failed to cook the meal! You got a deduction of " + this.deduction
+                                                + " points. You may try again or skip to the next meal already.",
                                         buttons, this.game.sounds.failSound);
 
                                 tryAgainBtn.addListener(new InputListener() {
