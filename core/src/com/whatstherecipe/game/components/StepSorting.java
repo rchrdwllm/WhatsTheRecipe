@@ -480,7 +480,8 @@ public class StepSorting {
     private void renderTimerScore() {
         this.timerLabel = new Label(String.format("%02d:%02d", this.time / 60, this.time % 60),
                 CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
-        this.scoreLabel = new Label("0 pts", CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
+        this.scoreLabel = new Label(recipePaperView.kitchenScreen.currentPoints + " pts",
+                CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
 
         this.timerLabel.setAlignment(Align.center);
         this.scoreLabel.setAlignment(Align.center);

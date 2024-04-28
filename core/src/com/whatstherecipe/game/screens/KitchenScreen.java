@@ -66,6 +66,7 @@ public class KitchenScreen implements Screen {
     private float selectionTimeElapsed = 0;
     private boolean isSelectionTimeUp = false;
     public boolean isStepSortingStarted = false;
+    public int currentPoints = 0;
 
     public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan) {
         this.game = game;
@@ -497,7 +498,8 @@ public class KitchenScreen implements Screen {
     }
 
     private void initUpperRightLabels() {
-        this.pointsLabel = new Label("0 pts", CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
+        this.pointsLabel = new Label(currentPoints + " pts",
+                CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
         this.countdown = new Label(String.format("%02d:%02d", this.selectionTime / 60, this.selectionTime % 60),
                 CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
 
