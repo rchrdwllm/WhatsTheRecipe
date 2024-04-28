@@ -31,6 +31,7 @@ import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.components.BasketView;
 import com.whatstherecipe.game.components.Ingredient;
 import com.whatstherecipe.game.components.MealBanner;
+import com.whatstherecipe.game.components.Popup;
 import com.whatstherecipe.game.components.RecipePaperView;
 import com.whatstherecipe.game.ui.Colors;
 import com.whatstherecipe.game.ui.CustomSkin;
@@ -61,6 +62,9 @@ public class KitchenScreen implements Screen {
     public String phase = "ingredient-selection";
     private Label countdown;
     private Label pointsLabel;
+    private boolean isGameStarted = false;
+    private float selectionTimeElapsed = 0;
+    private boolean isSelectionTimeUp = false;
 
     public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan) {
         this.game = game;
@@ -129,6 +133,8 @@ public class KitchenScreen implements Screen {
         this.stage.act(delta);
         this.stage.draw();
         this.game.batch.setProjectionMatrix(this.camera.combined);
+
+        startCountdown(delta);
     }
 
     @Override
@@ -179,13 +185,13 @@ public class KitchenScreen implements Screen {
     private void determineTime() {
         switch (this.meal.difficulty) {
             case "easy":
-                this.selectionTime = 60000;
+                this.selectionTime = 60;
                 break;
             case "medium":
-                this.selectionTime = 60000;
+                this.selectionTime = 60;
                 break;
             case "hard":
-                this.selectionTime = 60000;
+                this.selectionTime = 60;
                 break;
         }
 
@@ -490,7 +496,8 @@ public class KitchenScreen implements Screen {
 
     private void initUpperRightLabels() {
         this.pointsLabel = new Label("0 pts", CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
-        this.countdown = new Label("60", CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
+        this.countdown = new Label(String.format("%02d:%02d", this.selectionTime / 60, this.selectionTime % 60),
+                CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
 
         Table upperRightLabels = new Table();
 
@@ -500,6 +507,61 @@ public class KitchenScreen implements Screen {
         upperRightLabels.add(this.countdown).right().padTop(10);
 
         this.tableRoot.add(upperRightLabels).expandY().top().expandX().right().pad(48, 0, 0, 48);
+    }
+
+    private void startCountdown(float delta) {
+        if (this.isGameStarted) {
+            this.selectionTimeElapsed += delta;
+
+            if (this.selectionTimeElapsed >= 1) {
+                this.selectionTime -= (int) this.selectionTimeElapsed;
+                this.selectionTimeElapsed = 0;
+
+                if (this.selectionTime <= 0 && !this.isSelectionTimeUp) {
+                    this.selectionTime = 0;
+                    this.isSelectionTimeUp = true;
+
+                    alertUserFailedSelection();
+                }
+
+                int seconds = (int) this.selectionTime;
+
+                if (seconds >= 0) {
+                    this.countdown.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
+                }
+            }
+        }
+    }
+
+    public void startGame() {
+        this.isGameStarted = true;
+    }
+
+    private void alertUserFailedSelection() {
+        ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+        TextButton nextBtn = new TextButton("Next meal",
+                this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+        buttons.add(nextBtn);
+
+        Popup popup = new Popup(this.game, this.stage, "Time's up!",
+                "You ran out of time to select ingredients. Proceed now to next meal!", buttons,
+                this.game.sounds.failSound);
+
+        nextBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.sounds.clickSound.play();
+
+                popup.hide(() -> {
+                    nextRound();
+                });
+
+                return true;
+            }
+        });
+
+        popup.show();
     }
 
     private void resetState() {

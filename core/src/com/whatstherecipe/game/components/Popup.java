@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -137,6 +138,23 @@ public class Popup {
                             this.overlay.remove();
                             this.groupBg.remove();
                             this.mainContainer.remove();
+                        })));
+    }
+
+    public void hide(Runnable runnable) {
+        this.mainGroup.addAction(
+                parallel(fadeOut(0.7f, Interpolation.pow5), scaleTo(0.2f, 0.2f, 0.5f, Interpolation.swingIn)));
+        this.overlay.addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+        this.groupBg.addAction(
+                sequence(parallel(fadeOut(0.7f, Interpolation.pow5), scaleTo(0.2f, 0.2f, 0.5f, Interpolation.swingIn)),
+                        run(() -> {
+                            this.overlay.remove();
+                            this.groupBg.remove();
+                            this.mainContainer.remove();
+
+                            RunnableAction action = action(RunnableAction.class);
+                            action.setRunnable(runnable);
+                            action.run();
                         })));
     }
 }
