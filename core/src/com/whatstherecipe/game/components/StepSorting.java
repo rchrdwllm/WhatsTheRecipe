@@ -206,11 +206,12 @@ public class StepSorting {
         this.sortedSteps = new ArrayList<Step>(this.arrangedSteps);
 
         if (!this.sortedSteps.isEmpty()) {
-            System.out.println("\nCooking the meal...");
-
             this.cookingAnimation.toggleAnimation();
+
             this.stage.addAction(sequence(delay(2f), run(() -> {
                 if (this.sortedSteps.size() == this.meal.steps.size()) {
+                    System.out.println("\nCooking the meal...");
+
                     System.out.println("Arranged steps by player:");
 
                     for (Step step : this.sortedSteps) {
@@ -614,6 +615,29 @@ public class StepSorting {
                             }
                         }
                     }
+                } else {
+                    ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                    TextButton tryAgainBtn = new TextButton("Try again",
+                            this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+                    buttons.add(tryAgainBtn);
+
+                    Popup popup = new Popup(this.game, this.stage, "Oops!",
+                            "You tried to cook the meal without arranging all steps. Try again!",
+                            buttons, this.game.sounds.failSound);
+
+                    tryAgainBtn.addListener(new InputListener() {
+                        @Override
+                        public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                int button) {
+                            game.sounds.clickSound.play();
+                            popup.hide();
+
+                            return true;
+                        }
+                    });
+
+                    popup.show();
                 }
             })));
         }

@@ -272,6 +272,7 @@ public class KitchenScreen implements Screen {
                     cabinet.addAction(fadeOut(0.5f, Interpolation.pow5));
                 });
 
+                upperRightLabels.addAction(fadeOut(0.5f, Interpolation.pow5));
                 switchToMainMenuScreen.setRunnable(new Runnable() {
                     @Override
                     public void run() {
