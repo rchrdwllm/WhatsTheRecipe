@@ -193,6 +193,8 @@ public class StepSorting {
                                 game.sounds.clickSound.play();
                                 popup.hide();
 
+                                timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
                                 table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
                                     recipePaperView.brownOverlay
                                             .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
