@@ -66,6 +66,7 @@ public class MealBanner {
                     delay(5f),
                     fadeOut(0.5f, Interpolation.pow5), run(() -> {
                         this.brownOverlay.remove();
+                        kitchenScreen.startGame();
                     })));
         } else {
             this.brownOverlay.addAction(sequence(
@@ -75,6 +76,7 @@ public class MealBanner {
                     delay(8.5f),
                     fadeOut(0.5f, Interpolation.pow5), run(() -> {
                         this.brownOverlay.remove();
+                        kitchenScreen.startGame();
                     })));
         }
     }
