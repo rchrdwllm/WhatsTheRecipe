@@ -844,6 +844,34 @@ public class StepSorting {
             });
 
             popup.show();
+        } else if (meal.difficulty.equals("hard")) {
+            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+            TextButton okayBtn = new TextButton("Okay",
+                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+            buttons.add(okayBtn);
+
+            Popup popup = new Popup(this.game, this.stage, "Time's up!",
+                    "You ran out of time to sort the steps. Since this is the last round, you have to try again from the start!",
+                    buttons,
+                    this.game.sounds.failSound);
+
+            okayBtn.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.clickSound.play();
+
+                    popup.hide(() -> {
+                        timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                        scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                        recipePaperView.kitchenScreen.transitionToMainMenu();
+                    });
+
+                    return true;
+                }
+            });
+
+            popup.show();
         } else {
             ArrayList<TextButton> buttons = new ArrayList<TextButton>();
             TextButton nextBtn = new TextButton("Next meal",
