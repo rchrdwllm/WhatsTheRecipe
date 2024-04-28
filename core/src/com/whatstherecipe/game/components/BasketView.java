@@ -26,6 +26,7 @@ public class BasketView {
     private Table table;
     private Table row1;
     private Table row2;
+    private Table backBtnTable;
     private Stage stage;
     private Label emptyLabel;
     private KitchenScreen kitchenScreen;
@@ -42,6 +43,7 @@ public class BasketView {
         renderOverlay();
         renderEmptyLabel();
         renderTable();
+        renderBackBtn();
     }
 
     private void renderOverlay() {
@@ -74,6 +76,25 @@ public class BasketView {
 
         this.table.toFront();
         this.table.addAction(alpha(0));
+
+        this.backBtnTable = new Table();
+        this.backBtnTable.setFillParent(true);
+        this.backBtnTable.addAction(alpha(0f));
+    }
+
+    private void renderBackBtn() {
+        TextButton backBtn = new TextButton("Back", this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+        backBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer,
+                    int button) {
+                toggleBasket();
+                return true;
+            }
+        });
+
+        this.backBtnTable.add(backBtn).expand().top().left().pad(48, 48, 0, 0);
     }
 
     public void toggleBasket() {
@@ -104,6 +125,10 @@ public class BasketView {
                 })));
             }
 
+            this.backBtnTable.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                this.backBtnTable.remove();
+            })));
+
             basketVisible = false;
         } else {
             this.table.clear();
@@ -120,11 +145,15 @@ public class BasketView {
                 this.emptyLabel.addAction(fadeIn(0.5f, Interpolation.pow5));
                 this.emptyLabel.toFront();
             } else {
-                this.table.add(this.row1).padTop(50).grow().padBottom(50).row();
-                this.table.add(this.row2).padTop(50).grow().padBottom(50);
+                this.table.add(this.row1).grow().pad(100, 100, 0, 100).row();
+                this.table.add(this.row2).grow().pad(0, 100, 100, 100);
 
                 addIngredients();
             }
+
+            this.stage.addActor(this.backBtnTable);
+            this.backBtnTable.addAction(fadeIn(0.5f, Interpolation.pow5));
+            this.backBtnTable.toFront();
 
             basketVisible = true;
         }
