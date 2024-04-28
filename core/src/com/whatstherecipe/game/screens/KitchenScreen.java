@@ -547,7 +547,7 @@ public class KitchenScreen implements Screen {
         buttons.add(nextBtn);
 
         Popup popup = new Popup(this.game, this.stage, "Time's up!",
-                "You ran out of time to select ingredients. Proceed now to next meal!", buttons,
+                "Aw, you ran out of time to select ingredients. Proceed now to next meal!", buttons,
                 this.game.sounds.failSound);
 
         nextBtn.addListener(new InputListener() {
