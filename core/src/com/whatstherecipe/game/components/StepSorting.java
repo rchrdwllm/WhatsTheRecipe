@@ -179,7 +179,7 @@ public class StepSorting {
                             buttons.add(nextMeal);
 
                             Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
-                                    "Failed to cook the meal! But you already reached the max number of steps. Proceed now to the next meal.",
+                                    "You already reached the max number of steps. You won't earn points for this one. Proceed now to the next meal.",
                                     buttons, this.game.sounds.failSound);
 
                             nextMeal.addListener(new InputListener() {
@@ -221,7 +221,7 @@ public class StepSorting {
                             buttons.add(nextMeal);
 
                             Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
-                                    "Failed to cook the meal! You may try again or skip to the next meal already (this won't earn you any points).",
+                                    "Failed to cook the meal! You got a deduction of x points. You may try again or skip to the next meal already.",
                                     buttons, this.game.sounds.failSound);
 
                             tryAgainBtn.addListener(new InputListener() {
