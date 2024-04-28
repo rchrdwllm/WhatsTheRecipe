@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.Align;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.classes.Step;
@@ -35,8 +36,13 @@ public class StepSorting {
     private ArrayList<String> selectedSteps;
     private int maxTries = 0;
     private int tries = 0;
+    private int time = 0;
     private CookingAnimation cookingAnimation;
     private RecipePaperView recipePaperView;
+    private Label timerLabel;
+    private Label scoreLabel;
+    private Table timerTable;
+    private Table scoreTable;
 
     public StepSorting(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -51,11 +57,13 @@ public class StepSorting {
         this.selectedSteps = new ArrayList<String>();
 
         determineMaxTries();
+        determineTime();
         initTables();
         randomizeSteps();
         renderLeft();
         renderRight();
         prepareCookingAnimation();
+        renderTimerScore();
     }
 
     private void determineMaxTries() {
@@ -75,16 +83,49 @@ public class StepSorting {
         }
     }
 
+    private void determineTime() {
+        switch (this.meal.difficulty) {
+            case "easy":
+                this.time = 120;
+                break;
+            case "medium":
+                this.time = 60;
+                break;
+            case "hard":
+                this.time = 30;
+                break;
+            default:
+                this.time = 60;
+                break;
+        }
+    }
+
     public void show() {
         this.stage.addActor(table);
         this.table.addAction(alpha(0f));
         this.table.toFront();
         this.table.addAction(sequence(delay(1f, fadeIn(0.5f, Interpolation.pow5))));
+
+        this.stage.addActor(timerTable);
+        this.timerTable.addAction(alpha(0f));
+        this.timerTable.toFront();
+        this.timerTable.addAction(sequence(delay(1f, fadeIn(0.5f, Interpolation.pow5))));
+
+        this.stage.addActor(scoreTable);
+        this.scoreTable.addAction(alpha(0f));
+        this.scoreTable.toFront();
+        this.scoreTable.addAction(sequence(delay(1f, fadeIn(0.5f, Interpolation.pow5))));
     }
 
     public void hide() {
         this.table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
             this.table.remove();
+        })));
+        this.timerTable.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+            this.timerTable.remove();
+        })));
+        this.scoreTable.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+            this.scoreTable.remove();
         })));
     }
 
@@ -98,6 +139,12 @@ public class StepSorting {
         this.table.add(leftTable).expand().left().padLeft(100);
         this.table.add(centerTable).expand().center();
         this.table.add(rightTable).expand().right().padRight(100);
+
+        this.timerTable = new Table();
+        this.scoreTable = new Table();
+
+        timerTable.setFillParent(true);
+        scoreTable.setFillParent(true);
     }
 
     private void randomizeSteps() {
@@ -422,5 +469,17 @@ public class StepSorting {
 
     private void prepareCookingAnimation() {
         this.cookingAnimation = new CookingAnimation(this.game, this.stage);
+    }
+
+    private void renderTimerScore() {
+        this.timerLabel = new Label(String.format("%02d:%02d", this.time / 60, this.time % 60),
+                CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
+        this.scoreLabel = new Label("0 pts", CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 32));
+
+        this.timerLabel.setAlignment(Align.center);
+        this.scoreLabel.setAlignment(Align.center);
+
+        this.timerTable.add(timerLabel).center().expand().top().padTop(48);
+        this.scoreTable.add(scoreLabel).top().expand().right().pad(48, 0, 0, 48);
     }
 }
