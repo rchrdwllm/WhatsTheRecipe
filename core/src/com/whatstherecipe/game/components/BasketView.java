@@ -83,7 +83,7 @@ public class BasketView {
     }
 
     private void renderBackBtn() {
-        TextButton backBtn = new TextButton("Back", this.game.skin.get("text-button-default", TextButtonStyle.class));
+        TextButton backBtn = new TextButton("Back", this.game.skin.get("text-button-alt", TextButtonStyle.class));
 
         backBtn.addListener(new InputListener() {
             @Override
