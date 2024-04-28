@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -50,14 +49,6 @@ public class BasketView {
         this.brownOverlay = new Image(this.game.assets.get("abaca-bg.png", Texture.class));
         this.brownOverlay.setFillParent(true);
         this.brownOverlay.addAction(alpha(0));
-
-        this.brownOverlay.addListener((EventListener) event -> {
-            if (event.toString().contains("touchDown")) {
-                toggleBasket();
-            }
-
-            return false;
-        });
     }
 
     private void renderEmptyLabel() {
@@ -89,6 +80,7 @@ public class BasketView {
             @Override
             public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer,
                     int button) {
+                game.sounds.clickSound.play();
                 toggleBasket();
                 return true;
             }

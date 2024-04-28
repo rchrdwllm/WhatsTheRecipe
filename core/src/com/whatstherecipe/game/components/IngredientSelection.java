@@ -26,6 +26,7 @@ public class IngredientSelection {
     private Table leftTable;
     private Table centerTable;
     private Table rightTable;
+    private Table backBtnTable;
     private RecipePaperView recipePaperView;
     private StepSorting stepSorting;
     private ArrayList<String> selectedIngredients;
@@ -46,6 +47,7 @@ public class IngredientSelection {
         renderLeft();
         renderCenter();
         renderRight();
+        renderBtns();
     }
 
     private void determineStepSortingTimeString() {
@@ -68,11 +70,15 @@ public class IngredientSelection {
         this.leftTable = new Table();
         this.centerTable = new Table();
         this.rightTable = new Table();
+        this.backBtnTable = new Table();
 
         this.table.setFillParent(true);
         this.table.add(leftTable).expand().left().padLeft(100);
         this.table.add(centerTable).expand().center();
         this.table.add(rightTable).expand().right().padRight(100);
+
+        this.backBtnTable.setFillParent(true);
+        this.backBtnTable.addAction(alpha(0));
     }
 
     public void show() {
@@ -80,11 +86,17 @@ public class IngredientSelection {
         this.table.toFront();
         this.table.addAction(alpha(0f));
         this.table.addAction(sequence(delay(1f, fadeIn(0.5f, Interpolation.pow5))));
+        this.stage.addActor(backBtnTable);
+        this.backBtnTable.addAction(fadeIn(0.5f, Interpolation.pow5));
+        this.backBtnTable.toFront();
     }
 
     public void hide() {
         this.table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
             this.table.remove();
+        })));
+        this.backBtnTable.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+            this.backBtnTable.remove();
         })));
     }
 
@@ -121,6 +133,22 @@ public class IngredientSelection {
 
             this.centerTable.add(ingredientLabel).width(300).padBottom(15).row();
         }
+    }
+
+    private void renderBtns() {
+        TextButton backBtn = new TextButton("Back", this.game.skin.get("text-button-alt", TextButtonStyle.class));
+
+        backBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.sounds.clickSound.play();
+                recipePaperView.toggleRecipePaper();
+
+                return true;
+            }
+        });
+
+        this.backBtnTable.add(backBtn).top().left().expand().pad(48, 48, 0, 0);
     }
 
     public void checkIngredients() {

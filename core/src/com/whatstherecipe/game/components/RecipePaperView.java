@@ -42,14 +42,6 @@ public class RecipePaperView {
             this.brownOverlay = new Image(this.game.assets.get("wood-bg.png", Texture.class));
             this.brownOverlay.setFillParent(true);
             this.brownOverlay.addAction(alpha(0));
-
-            this.brownOverlay.addListener((EventListener) event -> {
-                if (event.toString().contains("touchDown")) {
-                    toggleRecipePaper();
-                }
-
-                return false;
-            });
         }
     }
 

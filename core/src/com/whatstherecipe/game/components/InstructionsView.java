@@ -114,6 +114,7 @@ public class InstructionsView {
             @Override
             public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer,
                     int button) {
+                game.sounds.clickSound.play();
                 toggleInstructions();
                 return true;
             }
