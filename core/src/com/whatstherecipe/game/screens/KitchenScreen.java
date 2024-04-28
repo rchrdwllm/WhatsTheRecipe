@@ -505,7 +505,7 @@ public class KitchenScreen implements Screen {
 
         upperRightLabels.add(this.pointsLabel).right().row();
         upperRightLabels.add(this.countdown).right().padTop(10);
-
+        upperRightLabels.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
         this.tableRoot.add(upperRightLabels).expandY().top().expandX().right().pad(48, 0, 0, 48);
     }
 
