@@ -43,6 +43,8 @@ public class StepSorting {
     private Label scoreLabel;
     private Table timerTable;
     private Table scoreTable;
+    public float sortingTimeElapsed = 0;
+    private boolean isSortingTimeUp = false;
 
     public StepSorting(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -114,7 +116,9 @@ public class StepSorting {
         this.stage.addActor(scoreTable);
         this.scoreTable.addAction(alpha(0f));
         this.scoreTable.toFront();
-        this.scoreTable.addAction(sequence(delay(1f, fadeIn(0.5f, Interpolation.pow5))));
+        this.scoreTable.addAction(sequence(delay(1f, fadeIn(0.5f, Interpolation.pow5)), run(() -> {
+            startPhase();
+        })));
     }
 
     public void hide() {
@@ -483,5 +487,61 @@ public class StepSorting {
 
         this.timerTable.add(timerLabel).center().expand().top().padTop(48);
         this.scoreTable.add(scoreLabel).top().expand().right().pad(48, 0, 0, 48);
+    }
+
+    private void startPhase() {
+        recipePaperView.kitchenScreen.isStepSortingStarted = true;
+    }
+
+    public void startCountdown(float delta) {
+        if (recipePaperView.kitchenScreen.isStepSortingStarted) {
+            this.sortingTimeElapsed += delta;
+
+            if (this.sortingTimeElapsed >= 1) {
+                this.time -= (int) this.sortingTimeElapsed;
+                this.sortingTimeElapsed = 0;
+
+                if (this.time <= 0 && !this.isSortingTimeUp) {
+                    this.time = 0;
+                    this.isSortingTimeUp = true;
+
+                    alertUserFailedSorting();
+                }
+
+                int seconds = (int) this.time;
+
+                if (seconds >= 0) {
+                    this.timerLabel.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
+                }
+            }
+        }
+    }
+
+    private void alertUserFailedSorting() {
+        ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+        TextButton nextBtn = new TextButton("Next meal",
+                this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+        buttons.add(nextBtn);
+
+        Popup popup = new Popup(this.game, this.stage, "Time's up!",
+                "You ran out of time to sort the steps. You got a deduction of x points. Proceed now to next meal!",
+                buttons,
+                this.game.sounds.failSound);
+
+        nextBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.sounds.clickSound.play();
+
+                popup.hide(() -> {
+                    recipePaperView.kitchenScreen.nextRound();
+                });
+
+                return true;
+            }
+        });
+
+        popup.show();
     }
 }
