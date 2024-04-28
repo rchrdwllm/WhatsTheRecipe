@@ -1,5 +1,7 @@
 package com.whatstherecipe.game.components;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -8,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.whatstherecipe.game.WhatsTheRecipe;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class InstructionsView {
     private final WhatsTheRecipe game;

@@ -1,6 +1,9 @@
 package com.whatstherecipe.game.components;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+
 import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -17,8 +20,6 @@ import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.screens.KitchenScreen;
 import com.whatstherecipe.game.ui.Colors;
 import com.whatstherecipe.game.ui.CustomSkin;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class BasketView {
     private WhatsTheRecipe game;
