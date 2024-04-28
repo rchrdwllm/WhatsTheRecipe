@@ -189,7 +189,8 @@ public class StepSorting {
                         buttons.add(nextBtn);
 
                         Popup popup = new Popup(this.game, this.stage, "Correct steps!",
-                                "You've successfully cooked the meal!", buttons, this.game.sounds.successSound);
+                                "You've successfully cooked the meal! You earned x points!", buttons,
+                                this.game.sounds.successSound);
 
                         nextBtn.addListener(new InputListener() {
                             @Override
@@ -225,118 +226,239 @@ public class StepSorting {
                                     "\nFailed to cook the meal. " + (this.tries) + "/" + (this.maxTries)
                                             + " tries! Proceeding to next meal...");
 
-                            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
-                            TextButton nextMeal = new TextButton("Next meal",
-                                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+                            if (meal.difficulty.equals("easy")) {
+                                ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                                TextButton nextMeal = new TextButton("Next meal",
+                                        this.game.skin.get("text-button-default", TextButtonStyle.class));
 
-                            buttons.add(nextMeal);
+                                buttons.add(nextMeal);
 
-                            Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
-                                    "You already reached the max number of steps. You won't earn points for this one. Proceed now to the next meal.",
-                                    buttons, this.game.sounds.failSound);
+                                Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
+                                        "You already reached the max number of steps! No deductions for this easy meal. Proceed now to the next meal.",
+                                        buttons, this.game.sounds.failSound);
 
-                            nextMeal.addListener(new InputListener() {
-                                @Override
-                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                    game.sounds.clickSound.play();
-                                    popup.hide();
+                                nextMeal.addListener(new InputListener() {
+                                    @Override
+                                    public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                            int button) {
+                                        game.sounds.clickSound.play();
+                                        popup.hide();
 
-                                    table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                                        recipePaperView.brownOverlay
-                                                .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
-                                        recipePaperView.recipe.addAction(
-                                                sequence(delay(0.5f),
-                                                        moveTo((game.V_WIDTH / 2)
-                                                                - (recipePaperView.recipe.getWidth() / 2),
-                                                                -recipePaperView.recipe.getHeight(), 0.75f,
-                                                                Interpolation.swingIn),
-                                                        run(() -> {
-                                                            recipePaperView.brownOverlay.remove();
-                                                            recipePaperView.kitchenScreen.nextRound();
-                                                        })));
-                                    })));
+                                        table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                            recipePaperView.brownOverlay
+                                                    .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                            recipePaperView.recipe.addAction(
+                                                    sequence(delay(0.5f),
+                                                            moveTo((game.V_WIDTH / 2)
+                                                                    - (recipePaperView.recipe.getWidth() / 2),
+                                                                    -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                    Interpolation.swingIn),
+                                                            run(() -> {
+                                                                recipePaperView.brownOverlay.remove();
+                                                                recipePaperView.kitchenScreen.nextRound();
+                                                            })));
+                                        })));
 
-                                    return true;
-                                }
-                            });
+                                        return true;
+                                    }
+                                });
 
-                            popup.show();
+                                popup.show();
+                            } else {
+                                ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                                TextButton nextMeal = new TextButton("Next meal",
+                                        this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+                                buttons.add(nextMeal);
+
+                                Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
+                                        "You already reached the max number of steps! Your total deduction is 0. Proceed now to the next meal.",
+                                        buttons, this.game.sounds.failSound);
+
+                                nextMeal.addListener(new InputListener() {
+                                    @Override
+                                    public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                            int button) {
+                                        game.sounds.clickSound.play();
+                                        popup.hide();
+
+                                        table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                            recipePaperView.brownOverlay
+                                                    .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                            recipePaperView.recipe.addAction(
+                                                    sequence(delay(0.5f),
+                                                            moveTo((game.V_WIDTH / 2)
+                                                                    - (recipePaperView.recipe.getWidth() / 2),
+                                                                    -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                    Interpolation.swingIn),
+                                                            run(() -> {
+                                                                recipePaperView.brownOverlay.remove();
+                                                                recipePaperView.kitchenScreen.nextRound();
+                                                            })));
+                                        })));
+
+                                        return true;
+                                    }
+                                });
+
+                                popup.show();
+                            }
                         } else {
                             System.out.println("\nIncorrect steps! Please arrange the steps correctly.");
 
-                            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
-                            TextButton tryAgainBtn = new TextButton("Try again",
-                                    this.game.skin.get("text-button-default", TextButtonStyle.class));
-                            TextButton nextMeal = new TextButton("Next meal",
-                                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+                            if (meal.difficulty.equals("easy")) {
+                                ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                                TextButton tryAgainBtn = new TextButton("Try again",
+                                        this.game.skin.get("text-button-default", TextButtonStyle.class));
+                                TextButton nextMeal = new TextButton("Next meal",
+                                        this.game.skin.get("text-button-default", TextButtonStyle.class));
 
-                            buttons.add(tryAgainBtn);
-                            buttons.add(nextMeal);
+                                buttons.add(tryAgainBtn);
+                                buttons.add(nextMeal);
 
-                            Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
-                                    "Failed to cook the meal! You got a deduction of x points. You may try again or skip to the next meal already.",
-                                    buttons, this.game.sounds.failSound);
+                                Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
+                                        "Failed to cook the meal! No deductions for this easy meal. You may try again or skip to the next meal already.",
+                                        buttons, this.game.sounds.failSound);
 
-                            tryAgainBtn.addListener(new InputListener() {
-                                @Override
-                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                    game.sounds.clickSound.play();
-                                    popup.hide();
+                                tryAgainBtn.addListener(new InputListener() {
+                                    @Override
+                                    public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                            int button) {
+                                        game.sounds.clickSound.play();
+                                        popup.hide();
 
-                                    arrangedSteps.clear();
-                                    selectedSteps.clear();
+                                        arrangedSteps.clear();
+                                        selectedSteps.clear();
 
-                                    stepLabels.forEach(step -> {
-                                        step.addAction(alpha(1f, 0.25f));
-                                    });
+                                        stepLabels.forEach(step -> {
+                                            step.addAction(alpha(1f, 0.25f));
+                                        });
 
-                                    shuffledSteps.forEach(step -> {
-                                        step.isSelected = false;
-                                    });
+                                        shuffledSteps.forEach(step -> {
+                                            step.isSelected = false;
+                                        });
 
-                                    arrangedStepLabels.forEach(arrangedStepLabel -> {
-                                        arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                        arrangedStepLabels.forEach(arrangedStepLabel -> {
+                                            arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
 
-                                        Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
+                                            Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
 
-                                        if (arrangedStepLabelCell != null) {
-                                            arrangedStepLabelCell.padBottom(0);
-                                            arrangedStepLabel.remove();
-                                        }
+                                            if (arrangedStepLabelCell != null) {
+                                                arrangedStepLabelCell.padBottom(0);
+                                                arrangedStepLabel.remove();
+                                            }
 
-                                        centerTable.invalidate();
-                                    });
+                                            centerTable.invalidate();
+                                        });
 
-                                    return true;
-                                }
-                            });
+                                        return true;
+                                    }
+                                });
 
-                            nextMeal.addListener(new InputListener() {
-                                @Override
-                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                    game.sounds.clickSound.play();
-                                    popup.hide();
+                                nextMeal.addListener(new InputListener() {
+                                    @Override
+                                    public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                            int button) {
+                                        game.sounds.clickSound.play();
+                                        popup.hide();
 
-                                    table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                                        recipePaperView.brownOverlay
-                                                .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
-                                        recipePaperView.recipe.addAction(
-                                                sequence(delay(0.5f),
-                                                        moveTo((game.V_WIDTH / 2)
-                                                                - (recipePaperView.recipe.getWidth() / 2),
-                                                                -recipePaperView.recipe.getHeight(), 0.75f,
-                                                                Interpolation.swingIn),
-                                                        run(() -> {
-                                                            recipePaperView.brownOverlay.remove();
-                                                            recipePaperView.kitchenScreen.nextRound();
-                                                        })));
-                                    })));
+                                        table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                            recipePaperView.brownOverlay
+                                                    .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                            recipePaperView.recipe.addAction(
+                                                    sequence(delay(0.5f),
+                                                            moveTo((game.V_WIDTH / 2)
+                                                                    - (recipePaperView.recipe.getWidth() / 2),
+                                                                    -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                    Interpolation.swingIn),
+                                                            run(() -> {
+                                                                recipePaperView.brownOverlay.remove();
+                                                                recipePaperView.kitchenScreen.nextRound();
+                                                            })));
+                                        })));
 
-                                    return true;
-                                }
-                            });
+                                        return true;
+                                    }
+                                });
 
-                            popup.show();
+                                popup.show();
+                            } else {
+                                ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+                                TextButton tryAgainBtn = new TextButton("Try again",
+                                        this.game.skin.get("text-button-default", TextButtonStyle.class));
+                                TextButton nextMeal = new TextButton("Next meal",
+                                        this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+                                buttons.add(tryAgainBtn);
+                                buttons.add(nextMeal);
+
+                                Popup popup = new Popup(this.game, this.stage, "Incorrect steps!",
+                                        "Failed to cook the meal! You got a deduction of x points. You may try again or skip to the next meal already.",
+                                        buttons, this.game.sounds.failSound);
+
+                                tryAgainBtn.addListener(new InputListener() {
+                                    @Override
+                                    public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                            int button) {
+                                        game.sounds.clickSound.play();
+                                        popup.hide();
+
+                                        arrangedSteps.clear();
+                                        selectedSteps.clear();
+
+                                        stepLabels.forEach(step -> {
+                                            step.addAction(alpha(1f, 0.25f));
+                                        });
+
+                                        shuffledSteps.forEach(step -> {
+                                            step.isSelected = false;
+                                        });
+
+                                        arrangedStepLabels.forEach(arrangedStepLabel -> {
+                                            arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
+
+                                            Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
+
+                                            if (arrangedStepLabelCell != null) {
+                                                arrangedStepLabelCell.padBottom(0);
+                                                arrangedStepLabel.remove();
+                                            }
+
+                                            centerTable.invalidate();
+                                        });
+
+                                        return true;
+                                    }
+                                });
+
+                                nextMeal.addListener(new InputListener() {
+                                    @Override
+                                    public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                            int button) {
+                                        game.sounds.clickSound.play();
+                                        popup.hide();
+
+                                        table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                            recipePaperView.brownOverlay
+                                                    .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                            recipePaperView.recipe.addAction(
+                                                    sequence(delay(0.5f),
+                                                            moveTo((game.V_WIDTH / 2)
+                                                                    - (recipePaperView.recipe.getWidth() / 2),
+                                                                    -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                    Interpolation.swingIn),
+                                                            run(() -> {
+                                                                recipePaperView.brownOverlay.remove();
+                                                                recipePaperView.kitchenScreen.nextRound();
+                                                            })));
+                                        })));
+
+                                        return true;
+                                    }
+                                });
+
+                                popup.show();
+                            }
                         }
                     }
                 }
@@ -519,30 +641,58 @@ public class StepSorting {
     }
 
     private void alertUserFailedSorting() {
-        ArrayList<TextButton> buttons = new ArrayList<TextButton>();
-        TextButton nextBtn = new TextButton("Next meal",
-                this.game.skin.get("text-button-default", TextButtonStyle.class));
+        if (meal.difficulty.equals("easy")) {
+            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+            TextButton nextBtn = new TextButton("Next meal",
+                    this.game.skin.get("text-button-default", TextButtonStyle.class));
 
-        buttons.add(nextBtn);
+            buttons.add(nextBtn);
 
-        Popup popup = new Popup(this.game, this.stage, "Time's up!",
-                "You ran out of time to sort the steps. You got a deduction of x points. Proceed now to next meal!",
-                buttons,
-                this.game.sounds.failSound);
+            Popup popup = new Popup(this.game, this.stage, "Time's up!",
+                    "You ran out of time to sort the steps. No deduction for this easy meal. Proceed now to next meal!",
+                    buttons,
+                    this.game.sounds.failSound);
 
-        nextBtn.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.sounds.clickSound.play();
+            nextBtn.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.clickSound.play();
 
-                popup.hide(() -> {
-                    recipePaperView.kitchenScreen.nextRound();
-                });
+                    popup.hide(() -> {
+                        recipePaperView.kitchenScreen.nextRound();
+                    });
 
-                return true;
-            }
-        });
+                    return true;
+                }
+            });
 
-        popup.show();
+            popup.show();
+        } else {
+            ArrayList<TextButton> buttons = new ArrayList<TextButton>();
+            TextButton nextBtn = new TextButton("Next meal",
+                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+            buttons.add(nextBtn);
+
+            Popup popup = new Popup(this.game, this.stage, "Time's up!",
+                    "You ran out of time to sort the steps. You got a deduction of x points. Proceed now to next meal!",
+                    buttons,
+                    this.game.sounds.failSound);
+
+            nextBtn.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    game.sounds.clickSound.play();
+
+                    popup.hide(() -> {
+                        recipePaperView.kitchenScreen.nextRound();
+                    });
+
+                    return true;
+                }
+            });
+
+            popup.show();
+        }
     }
 }
