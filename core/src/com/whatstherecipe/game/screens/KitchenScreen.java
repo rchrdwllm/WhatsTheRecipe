@@ -304,10 +304,6 @@ public class KitchenScreen implements Screen {
         this.cabinetTriggers = new ArrayList<Image>();
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        TextButton closeCabinetBtn = new TextButton("Close the cabinet",
-                this.game.skin.get("text-button-default", TextButtonStyle.class));
-
-        closeCabinetBtn.setPosition(100, this.game.V_HEIGHT - closeCabinetBtn.getHeight() - 100);
 
         pixmap.setColor(Colors.transparent);
         pixmap.fillRectangle(0, 0, 1, 1);
@@ -334,8 +330,12 @@ public class KitchenScreen implements Screen {
 
         for (int i = 0; i < this.cabinetTriggers.size(); i++) {
             Image cabinetTrigger = this.cabinetTriggers.get(i);
-            int index = i;
+            final int index = i;
 
+            TextButton closeCabinetBtn = new TextButton("Close the cabinet",
+                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+            closeCabinetBtn.setPosition(48, this.game.V_HEIGHT - closeCabinetBtn.getHeight() - 48);
             this.stage.addActor(cabinetTrigger);
 
             cabinetTrigger.addListener(new InputListener() {
@@ -344,8 +344,8 @@ public class KitchenScreen implements Screen {
                     game.sounds.openCabinetSound.play();
 
                     Image cabinetImg = cabinetImgs.get(index);
+                    closeCabinetBtn.clearActions();
 
-                    closeCabinetBtn.clear();
                     stage.addActor(cabinetImg);
                     cabinetImg.toFront();
                     cabinetImg.addAction(fadeIn(0.5f));
@@ -361,7 +361,7 @@ public class KitchenScreen implements Screen {
                                 @Override
                                 public void run() {
                                     cabinetImg.remove();
-                                    closeCabinetBtn.clear();
+                                    closeCabinetBtn.clearActions();
                                     closeCabinetBtn.remove();
                                 }
                             });
