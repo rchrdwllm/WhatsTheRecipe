@@ -219,15 +219,14 @@ public class KitchenScreen implements Screen {
 
         this.tableRoot.setFillParent(true);
         this.stage.addActor(tableRoot);
-        // this.stage.addListener(new InputListener() {
-        // @Override
-        // public boolean touchDown(InputEvent event, float x, float y, int pointer, int
-        // button) {
-        // System.out.print("x: " + x + ", y: " + y + "\n");
+        this.stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.print("x: " + x + ", y: " + y + "\n");
 
-        // return true;
-        // }
-        // });
+                return true;
+            }
+        });
     }
 
     private void renderKitchenBg() {
@@ -454,10 +453,11 @@ public class KitchenScreen implements Screen {
 
     private void positionIngredients() {
         try {
-            this.ingredients.get(0).get(0).ingredient.setPosition(100, 362);
-            this.ingredients.get(0).get(1).ingredient.setPosition(222, 362);
-            this.ingredients.get(0).get(2).ingredient.setPosition(100, 174);
-            this.ingredients.get(0).get(3).ingredient.setPosition(222, 174);
+            this.ingredients.get(0).get(0).ingredient.setPosition(86, 362);
+            this.ingredients.get(0).get(1).ingredient.setPosition(177, 362);
+            this.ingredients.get(0).get(2).ingredient.setPosition(254, 362);
+            this.ingredients.get(0).get(3).ingredient.setPosition(100, 174);
+            this.ingredients.get(0).get(4).ingredient.setPosition(222, 174);
         } catch (IndexOutOfBoundsException e) {
         }
 
@@ -475,6 +475,7 @@ public class KitchenScreen implements Screen {
             this.ingredients.get(2).get(1).ingredient.setPosition(1217, 888);
             this.ingredients.get(2).get(2).ingredient.setPosition(1285, 888);
             this.ingredients.get(2).get(3).ingredient.setPosition(1342, 888);
+            this.ingredients.get(2).get(4).ingredient.setPosition(1342, 888);
         } catch (IndexOutOfBoundsException e) {
         }
 
