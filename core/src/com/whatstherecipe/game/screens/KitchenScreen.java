@@ -612,7 +612,7 @@ public class KitchenScreen implements Screen {
     }
 
     private void monitorPoints() {
-        if (this.currentPoints == 0 && !this.isEndGame) {
+        if (this.currentPoints == 0 && !this.isEndGame && this.roundCount > 1) {
             this.isEndGame = true;
 
             System.out.println("You have no more points. Game over!");
