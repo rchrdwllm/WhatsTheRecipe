@@ -16,7 +16,6 @@ public class Meals {
                 "Pour in the soy sauce, vinegar, and peppercorns. Bring to a simmer.",
                 "Reduce heat to low, cover, and simmer until the chicken is cooked through and the sauce is slightly thickened (about 30-40 minutes).",
                 "Enjoy your delicious adobo with steamed rice."
-
         };
         easyMeals.add(new Meal("Adobo", "easy", adoboIngredients, adoboSteps));
 
