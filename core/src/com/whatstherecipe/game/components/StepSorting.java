@@ -229,11 +229,13 @@ public class StepSorting {
                     if (arrangedSteps.equals(sortedSteps)) {
                         System.out.println("Correct steps! Proceeding to next meal...");
 
-                        recipePaperView.kitchenScreen.updatePoints(this.plusPoints);
-                        this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
-                        this.scoreLabel.setText(this.currentPoints + " pts");
-
                         if (meal.difficulty.equals("hard")) {
+                            Scoring scoring = new Scoring(stage, currentPoints, plusPoints, 10);
+
+                            recipePaperView.kitchenScreen.updatePoints(this.plusPoints);
+                            this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
+                            this.scoreLabel.setText(this.currentPoints + " pts");
+
                             ArrayList<TextButton> buttons = new ArrayList<TextButton>();
                             TextButton okayBtn = new TextButton("Okay",
                                     this.game.skin.get("text-button-default", TextButtonStyle.class));
@@ -251,24 +253,27 @@ public class StepSorting {
                                 @Override
                                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                     game.sounds.clickSound.play();
-                                    popup.hide();
-
-                                    timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                    scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                    table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                                        recipePaperView.brownOverlay
-                                                .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
-                                        recipePaperView.recipe.addAction(
-                                                sequence(delay(0.5f),
-                                                        moveTo((game.V_WIDTH / 2)
-                                                                - (recipePaperView.recipe.getWidth() / 2),
-                                                                -recipePaperView.recipe.getHeight(), 0.75f,
-                                                                Interpolation.swingIn),
-                                                        run(() -> {
-                                                            recipePaperView.brownOverlay.remove();
-                                                            recipePaperView.kitchenScreen.transitionToMainMenu();
-                                                        })));
-                                    })));
+                                    popup.hide(() -> {
+                                        scoring.show(() -> {
+                                            timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                            scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                            table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                                recipePaperView.brownOverlay
+                                                        .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                                recipePaperView.recipe.addAction(
+                                                        sequence(delay(0.5f),
+                                                                moveTo((game.V_WIDTH / 2)
+                                                                        - (recipePaperView.recipe.getWidth() / 2),
+                                                                        -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                        Interpolation.swingIn),
+                                                                run(() -> {
+                                                                    recipePaperView.brownOverlay.remove();
+                                                                    recipePaperView.kitchenScreen
+                                                                            .transitionToMainMenu();
+                                                                })));
+                                            })));
+                                        });
+                                    });
 
                                     return true;
                                 }
@@ -276,6 +281,26 @@ public class StepSorting {
 
                             popup.show();
                         } else {
+                            int step = 0;
+
+                            switch (meal.difficulty) {
+                                case "easy":
+                                    step = 2;
+                                    break;
+                                case "medium":
+                                    step = 5;
+                                    break;
+                                default:
+                                    step = 2;
+                                    break;
+                            }
+
+                            Scoring scoring = new Scoring(stage, currentPoints, plusPoints, step);
+
+                            recipePaperView.kitchenScreen.updatePoints(this.plusPoints);
+                            this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
+                            this.scoreLabel.setText(this.currentPoints + " pts");
+
                             ArrayList<TextButton> buttons = new ArrayList<TextButton>();
                             TextButton nextBtn = new TextButton("Next meal",
                                     this.game.skin.get("text-button-default", TextButtonStyle.class));
@@ -292,23 +317,24 @@ public class StepSorting {
                                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                     game.sounds.clickSound.play();
                                     popup.hide();
-
-                                    timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                    scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                    table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                                        recipePaperView.brownOverlay
-                                                .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
-                                        recipePaperView.recipe.addAction(
-                                                sequence(delay(0.5f),
-                                                        moveTo((game.V_WIDTH / 2)
-                                                                - (recipePaperView.recipe.getWidth() / 2),
-                                                                -recipePaperView.recipe.getHeight(), 0.75f,
-                                                                Interpolation.swingIn),
-                                                        run(() -> {
-                                                            recipePaperView.brownOverlay.remove();
-                                                            recipePaperView.kitchenScreen.nextRound();
-                                                        })));
-                                    })));
+                                    scoring.show(() -> {
+                                        timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                        scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                        table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                            recipePaperView.brownOverlay
+                                                    .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                            recipePaperView.recipe.addAction(
+                                                    sequence(delay(0.5f),
+                                                            moveTo((game.V_WIDTH / 2)
+                                                                    - (recipePaperView.recipe.getWidth() / 2),
+                                                                    -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                    Interpolation.swingIn),
+                                                            run(() -> {
+                                                                recipePaperView.brownOverlay.remove();
+                                                                recipePaperView.kitchenScreen.nextRound();
+                                                            })));
+                                        })));
+                                    });
 
                                     return true;
                                 }
@@ -363,6 +389,8 @@ public class StepSorting {
 
                                 popup.show();
                             } else if (meal.difficulty.equals("hard")) {
+                                Scoring scoring = new Scoring(stage, currentPoints, -deduction, 20);
+
                                 recipePaperView.kitchenScreen.updatePoints(-this.deduction);
                                 this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
                                 this.scoreLabel.setText(this.currentPoints + " pts");
@@ -382,24 +410,27 @@ public class StepSorting {
                                     public boolean touchDown(InputEvent event, float x, float y, int pointer,
                                             int button) {
                                         game.sounds.clickSound.play();
-                                        popup.hide();
-
-                                        timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                        scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                        table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                                            recipePaperView.brownOverlay
-                                                    .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
-                                            recipePaperView.recipe.addAction(
-                                                    sequence(delay(0.5f),
-                                                            moveTo((game.V_WIDTH / 2)
-                                                                    - (recipePaperView.recipe.getWidth() / 2),
-                                                                    -recipePaperView.recipe.getHeight(), 0.75f,
-                                                                    Interpolation.swingIn),
-                                                            run(() -> {
-                                                                recipePaperView.brownOverlay.remove();
-                                                                recipePaperView.kitchenScreen.transitionToMainMenu();
-                                                            })));
-                                        })));
+                                        popup.hide(() -> {
+                                            scoring.show(() -> {
+                                                timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                                scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                                table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                                    recipePaperView.brownOverlay
+                                                            .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                                    recipePaperView.recipe.addAction(
+                                                            sequence(delay(0.5f),
+                                                                    moveTo((game.V_WIDTH / 2)
+                                                                            - (recipePaperView.recipe.getWidth() / 2),
+                                                                            -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                            Interpolation.swingIn),
+                                                                    run(() -> {
+                                                                        recipePaperView.brownOverlay.remove();
+                                                                        recipePaperView.kitchenScreen
+                                                                                .transitionToMainMenu();
+                                                                    })));
+                                                })));
+                                            });
+                                        });
 
                                         return true;
                                     }
@@ -530,6 +561,8 @@ public class StepSorting {
 
                                 popup.show();
                             } else {
+                                Scoring scoring = new Scoring(stage, currentPoints, -deduction, 3);
+
                                 recipePaperView.kitchenScreen.updatePoints(-this.deduction);
 
                                 this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
@@ -555,30 +588,33 @@ public class StepSorting {
                                     public boolean touchDown(InputEvent event, float x, float y, int pointer,
                                             int button) {
                                         game.sounds.clickSound.play();
-                                        popup.hide();
+                                        popup.hide(() -> {
+                                            scoring.show(() -> {
+                                                arrangedSteps.clear();
+                                                selectedSteps.clear();
 
-                                        arrangedSteps.clear();
-                                        selectedSteps.clear();
+                                                stepLabels.forEach(step -> {
+                                                    step.addAction(alpha(1f, 0.25f));
+                                                });
 
-                                        stepLabels.forEach(step -> {
-                                            step.addAction(alpha(1f, 0.25f));
-                                        });
+                                                shuffledSteps.forEach(step -> {
+                                                    step.isSelected = false;
+                                                });
 
-                                        shuffledSteps.forEach(step -> {
-                                            step.isSelected = false;
-                                        });
+                                                arrangedStepLabels.forEach(arrangedStepLabel -> {
+                                                    arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
 
-                                        arrangedStepLabels.forEach(arrangedStepLabel -> {
-                                            arrangedStepLabel.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                                    Cell<Label> arrangedStepLabelCell = centerTable
+                                                            .getCell(arrangedStepLabel);
 
-                                            Cell<Label> arrangedStepLabelCell = centerTable.getCell(arrangedStepLabel);
+                                                    if (arrangedStepLabelCell != null) {
+                                                        arrangedStepLabelCell.padBottom(0);
+                                                        arrangedStepLabel.remove();
+                                                    }
 
-                                            if (arrangedStepLabelCell != null) {
-                                                arrangedStepLabelCell.padBottom(0);
-                                                arrangedStepLabel.remove();
-                                            }
-
-                                            centerTable.invalidate();
+                                                    centerTable.invalidate();
+                                                });
+                                            });
                                         });
 
                                         return true;
@@ -590,22 +626,24 @@ public class StepSorting {
                                     public boolean touchDown(InputEvent event, float x, float y, int pointer,
                                             int button) {
                                         game.sounds.clickSound.play();
-                                        popup.hide();
-
-                                        table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                                            recipePaperView.brownOverlay
-                                                    .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
-                                            recipePaperView.recipe.addAction(
-                                                    sequence(delay(0.5f),
-                                                            moveTo((game.V_WIDTH / 2)
-                                                                    - (recipePaperView.recipe.getWidth() / 2),
-                                                                    -recipePaperView.recipe.getHeight(), 0.75f,
-                                                                    Interpolation.swingIn),
-                                                            run(() -> {
-                                                                recipePaperView.brownOverlay.remove();
-                                                                recipePaperView.kitchenScreen.nextRound();
-                                                            })));
-                                        })));
+                                        popup.hide(() -> {
+                                            scoring.show(() -> {
+                                                table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                                    recipePaperView.brownOverlay
+                                                            .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
+                                                    recipePaperView.recipe.addAction(
+                                                            sequence(delay(0.5f),
+                                                                    moveTo((game.V_WIDTH / 2)
+                                                                            - (recipePaperView.recipe.getWidth() / 2),
+                                                                            -recipePaperView.recipe.getHeight(), 0.75f,
+                                                                            Interpolation.swingIn),
+                                                                    run(() -> {
+                                                                        recipePaperView.brownOverlay.remove();
+                                                                        recipePaperView.kitchenScreen.nextRound();
+                                                                    })));
+                                                })));
+                                            });
+                                        });
 
                                         return true;
                                     }
