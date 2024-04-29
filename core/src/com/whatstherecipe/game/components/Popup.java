@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
@@ -62,10 +61,6 @@ public class Popup {
         this.overlay = new Image(new Texture(brownPixmap));
         this.overlay.setFillParent(true);
         this.overlay.addAction(alpha(0));
-
-        this.overlay.addListener((EventListener) event -> {
-            return false;
-        });
 
         this.stage.addActor(overlay);
     }
