@@ -49,6 +49,7 @@ public class StepSorting {
     private int deduction = 0;
     private int totalDeductions = 0;
     private int currentPoints = 0;
+    private boolean isCountdownPaused = false;
 
     public StepSorting(RecipePaperView recipePaperView) {
         this.game = recipePaperView.game;
@@ -229,6 +230,8 @@ public class StepSorting {
                     if (arrangedSteps.equals(sortedSteps)) {
                         System.out.println("Correct steps! Proceeding to next meal...");
 
+                        this.isCountdownPaused = true;
+
                         if (meal.difficulty.equals("hard")) {
                             Scoring scoring = new Scoring(stage, currentPoints, plusPoints, 10);
 
@@ -347,6 +350,8 @@ public class StepSorting {
                             System.out.println(
                                     "\nFailed to cook the meal. " + (this.tries) + "/" + (this.maxTries)
                                             + " tries! Proceeding to next meal...");
+
+                            this.isCountdownPaused = true;
 
                             if (meal.difficulty.equals("easy")) {
                                 ArrayList<TextButton> buttons = new ArrayList<TextButton>();
@@ -482,6 +487,8 @@ public class StepSorting {
                         } else {
                             System.out.println("\nIncorrect steps! Please arrange the steps correctly.");
 
+                            this.isCountdownPaused = true;
+
                             if (meal.difficulty.equals("easy")) {
                                 ArrayList<TextButton> buttons = new ArrayList<TextButton>();
                                 TextButton tryAgainBtn = new TextButton("Try again",
@@ -501,7 +508,9 @@ public class StepSorting {
                                     public boolean touchDown(InputEvent event, float x, float y, int pointer,
                                             int button) {
                                         game.sounds.clickSound.play();
-                                        popup.hide();
+                                        popup.hide(() -> {
+                                            isCountdownPaused = false;
+                                        });
 
                                         arrangedSteps.clear();
                                         selectedSteps.clear();
@@ -614,6 +623,8 @@ public class StepSorting {
 
                                                     centerTable.invalidate();
                                                 });
+
+                                                isCountdownPaused = false;
                                             });
                                         });
 
@@ -832,7 +843,7 @@ public class StepSorting {
     }
 
     public void startCountdown(float delta) {
-        if (recipePaperView.kitchenScreen.isStepSortingStarted) {
+        if (recipePaperView.kitchenScreen.isStepSortingStarted && !this.isCountdownPaused) {
             this.sortingTimeElapsed += delta;
 
             if (this.sortingTimeElapsed >= 1) {
