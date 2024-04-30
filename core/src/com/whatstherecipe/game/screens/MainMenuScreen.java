@@ -127,6 +127,10 @@ public class MainMenuScreen implements Screen {
     }
 
     private void renderScoreLabel() {
+        this.currentHighScore = this.game.currentHighScore;
+
+        this.currentHighScoreLabel.setText("High score: " + this.currentHighScore);
+
         this.stage.addActor(highScoreTable);
         this.highScoreTable.addAction(fadeIn(0.5f, Interpolation.pow5));
     }

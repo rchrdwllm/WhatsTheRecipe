@@ -85,7 +85,7 @@ public class StepSorting {
                 this.plusPoints = 500;
                 break;
             case "hard":
-                this.plusPoints = 2 * recipePaperView.kitchenScreen.currentPoints;
+                this.plusPoints = recipePaperView.kitchenScreen.currentPoints;
                 break;
             default:
                 this.plusPoints = 200;
