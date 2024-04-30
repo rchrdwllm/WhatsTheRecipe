@@ -104,7 +104,6 @@ public class Scoring {
                 fadeIn(0.5f, Interpolation.pow5)), repeat(repeats, scoreAction), delay(0.5f),
                 run(() -> {
                     scoreToAdd = 0;
-                    System.out.println("Done score countdown");
                     hide();
 
                     runnableAction.run();
