@@ -75,14 +75,14 @@ public class Scoring {
 
         Action scoreAction = sequence(run(() -> {
             if (scoreToAdd > 0) {
-                if (currentScore < limit) {
+                if (currentScore + step < limit) {
                     currentScore += step;
                     scoreLabel.setText(currentScore + " pts");
                 } else {
                     scoreLabel.setText(limit + " pts");
                 }
             } else if (scoreToAdd < 0) {
-                if (currentScore > limit) {
+                if (currentScore - step > limit) {
                     currentScore -= step;
                     scoreLabel.setText(currentScore + " pts");
                 } else {
@@ -91,9 +91,17 @@ public class Scoring {
             }
         }), delay(0.00001f));
 
+        int repeats = 0;
+
+        if (Math.abs(scoreToAdd) % step == 0) {
+            repeats = Math.abs(scoreToAdd) / step;
+        } else {
+            repeats = Math.abs(scoreToAdd) / step + 1;
+        }
+
         overlay.addAction(fadeIn(0.5f, Interpolation.pow5));
         scoreGroup.addAction(sequence(parallel(scaleTo(1, 1, 0.5f, Interpolation.swingOut),
-                fadeIn(0.5f, Interpolation.pow5)), repeat(Math.abs(scoreToAdd) / step, scoreAction), delay(0.5f),
+                fadeIn(0.5f, Interpolation.pow5)), repeat(repeats, scoreAction), delay(0.5f),
                 run(() -> {
                     scoreToAdd = 0;
                     System.out.println("Done score countdown");
