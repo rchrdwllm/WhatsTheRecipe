@@ -25,6 +25,7 @@ public class WhatsTheRecipe extends Game {
 	public Meals meals;
 	public CustomSkin skin;
 	public Sounds sounds;
+	public int currentHighScore = 0;
 
 	@Override
 	public void create() {

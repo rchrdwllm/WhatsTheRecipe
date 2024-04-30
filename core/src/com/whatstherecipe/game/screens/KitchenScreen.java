@@ -54,7 +54,7 @@ public class KitchenScreen implements Screen {
     public ArrayList<Ingredient> ingredientsInBasket;
     public ArrayList<Meal> mealPlan;
     public Meal meal;
-    private int maxRoundCount = 5;
+    public int maxRoundCount = 5;
     public int roundCount = 1;
     public boolean isEndGame = false;
     public int selectionTime;

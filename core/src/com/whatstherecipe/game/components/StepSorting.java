@@ -252,6 +252,11 @@ public class StepSorting {
                                     buttons,
                                     this.game.sounds.successSound);
 
+                            if (this.currentPoints > this.game.currentHighScore
+                                    && recipePaperView.kitchenScreen.roundCount == recipePaperView.kitchenScreen.maxRoundCount) {
+                                this.game.currentHighScore = this.currentPoints;
+                            }
+
                             okayBtn.addListener(new InputListener() {
                                 @Override
                                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -409,6 +414,11 @@ public class StepSorting {
                                 Popup popup = new Popup(this.game, this.stage, "Goodbye!",
                                         "This is an all or nothing round, and you lost everything!",
                                         buttons, this.game.sounds.failSound);
+
+                                if (this.currentPoints > this.game.currentHighScore
+                                        && recipePaperView.kitchenScreen.roundCount == recipePaperView.kitchenScreen.maxRoundCount) {
+                                    this.game.currentHighScore = this.currentPoints;
+                                }
 
                                 okayBtn.addListener(new InputListener() {
                                     @Override

@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -26,6 +27,8 @@ import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.classes.Meals;
 import com.whatstherecipe.game.components.InstructionsView;
+import com.whatstherecipe.game.ui.Colors;
+import com.whatstherecipe.game.ui.CustomSkin;
 
 public class MainMenuScreen implements Screen {
     private final WhatsTheRecipe game;
@@ -37,10 +40,14 @@ public class MainMenuScreen implements Screen {
     private int screenShows = 0;
     private InstructionsView instructionsView;
     private Music backgroundMusic;
+    private int currentHighScore = 0;
+    private Table highScoreTable;
+    private Label currentHighScoreLabel;
 
     public MainMenuScreen(final WhatsTheRecipe game) {
         this.game = game;
         this.camera = game.camera;
+        this.currentHighScore = game.currentHighScore;
         this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
 
         initComponents();
@@ -86,6 +93,7 @@ public class MainMenuScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         this.instructionsView = new InstructionsView(game, stage);
+        this.currentHighScore = game.currentHighScore;
 
         if (this.screenShows > 0) {
             resetState();
@@ -94,11 +102,12 @@ public class MainMenuScreen implements Screen {
 
             renderHeadingsAndButtons();
             renderKitchenBg();
+            playBgMusic();
         }
 
         this.screenShows += 1;
 
-        playBgMusic();
+        renderScoreLabel();
     }
 
     private void initComponents() {
@@ -107,6 +116,19 @@ public class MainMenuScreen implements Screen {
         this.tableRoot.setFillParent(true);
         this.stage.addActor(tableRoot);
         this.tableRoot.toFront();
+
+        this.highScoreTable = new Table();
+        this.highScoreTable.setFillParent(true);
+
+        this.currentHighScoreLabel = new Label("High Score: " + this.currentHighScore,
+                CustomSkin.generateCustomLilitaOneBackground(Colors.lightBrown, 48));
+        this.highScoreTable.add(currentHighScoreLabel).expand().top().right().pad(48, 0, 0, 48);
+        this.highScoreTable.addAction(alpha(0));
+    }
+
+    private void renderScoreLabel() {
+        this.stage.addActor(highScoreTable);
+        this.highScoreTable.addAction(fadeIn(0.5f, Interpolation.pow5));
     }
 
     private void renderHeadingsAndButtons() {
@@ -228,6 +250,10 @@ public class MainMenuScreen implements Screen {
                         fadeOut(0.75f, Interpolation.pow5),
                         moveBy(-350, 0, 0.5f, Interpolation.swingIn)),
                 panKitchenBg));
+
+        this.highScoreTable.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+            this.highScoreTable.remove();
+        })));
     }
 
     private void playBgMusic() {
