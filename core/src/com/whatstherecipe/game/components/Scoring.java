@@ -49,8 +49,14 @@ public class Scoring {
     }
 
     private void initLabels() {
-        this.scoreLabel = new Label(currentScore + " pts",
-                CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 128));
+        if (this.scoreToAdd > 0) {
+            this.scoreLabel = new Label(currentScore + " pts",
+                    CustomSkin.generateCustomLilitaOneFont(Colors.green, 128));
+        } else {
+            this.scoreLabel = new Label(currentScore + " pts",
+                    CustomSkin.generateCustomLilitaOneFont(Colors.red, 128));
+        }
+
         this.scoreLabel.setAlignment(Align.center);
 
         this.scoreGroup = new Group();
