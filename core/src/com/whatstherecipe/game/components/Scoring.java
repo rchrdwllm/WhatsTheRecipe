@@ -54,7 +54,7 @@ public class Scoring {
     private void initLabels() {
         if (this.scoreToAdd > 0) {
             this.scoreLabel = new Label(currentScore + " pts",
-                    CustomSkin.generateCustomLilitaOneFont(Colors.green, 128));
+                    CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 128));
         } else {
             this.scoreLabel = new Label(currentScore + " pts",
                     CustomSkin.generateCustomLilitaOneFont(Colors.red, 128));
