@@ -233,7 +233,7 @@ public class StepSorting {
                         this.isCountdownPaused = true;
 
                         if (meal.difficulty.equals("hard")) {
-                            Scoring scoring = new Scoring(stage, currentPoints, plusPoints, 10);
+                            Scoring scoring = new Scoring(game, stage, currentPoints, plusPoints, 51);
 
                             recipePaperView.kitchenScreen.updatePoints(this.plusPoints);
                             this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
@@ -303,7 +303,7 @@ public class StepSorting {
                                     break;
                             }
 
-                            Scoring scoring = new Scoring(stage, currentPoints, plusPoints, step);
+                            Scoring scoring = new Scoring(game, stage, currentPoints, plusPoints, step);
 
                             recipePaperView.kitchenScreen.updatePoints(this.plusPoints);
                             this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
@@ -399,7 +399,7 @@ public class StepSorting {
 
                                 popup.show();
                             } else if (meal.difficulty.equals("hard")) {
-                                Scoring scoring = new Scoring(stage, currentPoints, -deduction, 20);
+                                Scoring scoring = new Scoring(game, stage, currentPoints, -deduction, 51);
 
                                 recipePaperView.kitchenScreen.updatePoints(-this.deduction);
                                 this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
@@ -580,7 +580,7 @@ public class StepSorting {
 
                                 popup.show();
                             } else {
-                                Scoring scoring = new Scoring(stage, currentPoints, -deduction, 3);
+                                Scoring scoring = new Scoring(game, stage, currentPoints, -deduction, 3);
 
                                 recipePaperView.kitchenScreen.updatePoints(-this.deduction);
 

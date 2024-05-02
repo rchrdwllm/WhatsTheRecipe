@@ -14,6 +14,7 @@ public class Sounds {
     public Sound bookSound;
     public Sound successSound;
     public Sound failSound;
+    public Sound popSound;
 
     public Sounds() {
         initSounds();
@@ -30,5 +31,6 @@ public class Sounds {
         this.bookSound = Gdx.audio.newSound(Gdx.files.internal("audio/book.mp3"));
         this.successSound = Gdx.audio.newSound(Gdx.files.internal("audio/success.mp3"));
         this.failSound = Gdx.audio.newSound(Gdx.files.internal("audio/fail.mp3"));
+        this.popSound = Gdx.audio.newSound(Gdx.files.internal("audio/pop.mp3"));
     }
 }

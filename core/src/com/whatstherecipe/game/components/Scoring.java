@@ -12,11 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
+import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.ui.Colors;
 import com.whatstherecipe.game.ui.CustomSkin;
 import java.lang.Math;
 
 public class Scoring {
+    private final WhatsTheRecipe game;
     private Stage stage;
     private Image overlay;
     private Label scoreLabel;
@@ -26,7 +28,8 @@ public class Scoring {
     private int scoreToAdd;
     private int step;
 
-    public Scoring(Stage stage, int currentScore, int scoreToAdd, int step) {
+    public Scoring(WhatsTheRecipe game, Stage stage, int currentScore, int scoreToAdd, int step) {
+        this.game = game;
         this.stage = stage;
         this.origScore = currentScore;
         this.currentScore = currentScore;
@@ -95,6 +98,8 @@ public class Scoring {
                     scoreLabel.setText(limit + " pts");
                 }
             }
+
+            this.game.sounds.popSound.play();
         }), delay(0.00001f));
 
         int repeats = 0;
