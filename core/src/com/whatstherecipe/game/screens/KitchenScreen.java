@@ -159,8 +159,6 @@ public class KitchenScreen implements Screen {
         this.renderBasket();
         this.basketView = new BasketView(this);
 
-        new MealBanner(this, stage, meal, roundCount);
-
         if (this.screenShows > 0) {
             resetState();
         } else {
@@ -172,6 +170,8 @@ public class KitchenScreen implements Screen {
             renderCabinetTriggers();
             initUpperRightLabels();
         }
+
+        new MealBanner(this, stage, meal, roundCount);
 
         this.screenShows += 1;
     }
@@ -515,12 +515,12 @@ public class KitchenScreen implements Screen {
 
         this.upperRightLabels = new Table();
 
-        this.countdown.setAlignment(Align.center);
-
         upperRightLabels.add(this.pointsLabel).right().row();
         upperRightLabels.add(this.countdown).right().padTop(10);
         upperRightLabels.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
-        this.tableRoot.add(upperRightLabels).expandY().top().expandX().right().pad(48, 0, 0, 48);
+        upperRightLabels.setPosition(game.V_WIDTH - upperRightLabels.getWidth() - 96,
+                game.V_HEIGHT - upperRightLabels.getHeight() - 96);
+        this.stage.addActor(upperRightLabels);
     }
 
     private void startCountdown(float delta) {
