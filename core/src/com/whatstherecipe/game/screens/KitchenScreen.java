@@ -455,6 +455,7 @@ public class KitchenScreen implements Screen {
 
             this.basket = new Image(basketTexture);
             this.basket.setPosition(947, 553);
+            this.basket.setOrigin(Align.center);
             this.stage.addActor(basket);
             this.basket.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
 
@@ -470,11 +471,15 @@ public class KitchenScreen implements Screen {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+
+                    basket.addAction(scaleTo(1.2f, 1.2f, 0.25f, Interpolation.swingOut));
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+
+                    basket.addAction(scaleTo(1f, 1f, 0.25f, Interpolation.swingIn));
                 }
             });
         }

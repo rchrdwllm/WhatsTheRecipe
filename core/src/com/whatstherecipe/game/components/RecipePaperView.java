@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Align;
 import com.whatstherecipe.game.WhatsTheRecipe;
 import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.screens.KitchenScreen;
@@ -57,6 +58,7 @@ public class RecipePaperView {
             this.recipeRef = new Image(recipeRefTexture);
             this.recipeRef.setWidth(recipeRef.getWidth() / 4);
             this.recipeRef.setHeight(recipeRef.getHeight() / 4);
+            this.recipeRef.setOrigin(Align.center);
             this.recipeRef.setPosition((this.game.V_WIDTH - recipeRef.getWidth()) - 240,
                     (this.game.V_HEIGHT - recipeRef.getHeight()) - 160);
             this.recipeRef.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
@@ -79,11 +81,15 @@ public class RecipePaperView {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+
+                    recipeRef.addAction(scaleTo(1.2f, 1.2f, 0.25f, Interpolation.swingOut));
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+
+                    recipeRef.addAction(scaleTo(1f, 1f, 0.25f, Interpolation.swingIn));
                 }
             });
         }
