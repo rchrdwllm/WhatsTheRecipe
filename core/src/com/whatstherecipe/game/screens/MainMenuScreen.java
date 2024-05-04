@@ -12,7 +12,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -175,35 +178,65 @@ public class MainMenuScreen implements Screen {
                 delay(1.3f),
                 parallel(fadeIn(0.5f, Interpolation.pow5), moveBy(350, 0, 0.5f, Interpolation.swingOut))));
 
-        playButton.addListener(
-                (EventListener) event -> {
-                    if (event.toString().equals("touchDown")) {
-                        this.game.sounds.clickSound.play();
-                        playGame();
-                    }
+        playButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.sounds.clickSound.play();
+                playGame();
 
-                    return false;
-                });
+                return true;
+            }
 
-        howToPlay.addListener(
-                (EventListener) event -> {
-                    if (event.toString().equals("touchDown")) {
-                        this.game.sounds.clickSound.play();
-                        instructionsView.toggleInstructions();
-                    }
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+            }
 
-                    return false;
-                });
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+            }
+        });
 
-        exitButton.addListener(
-                (EventListener) event -> {
-                    if (event.toString().equals("touchDown")) {
-                        this.game.sounds.clickSound.play();
-                        Gdx.app.exit();
-                    }
+        howToPlay.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.sounds.clickSound.play();
+                instructionsView.toggleInstructions();
 
-                    return false;
-                });
+                return true;
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+            }
+        });
+
+        exitButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.sounds.clickSound.play();
+                Gdx.app.exit();
+
+                return true;
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+            }
+        });
 
         this.labelGroup.setPosition(160, (float) 132.5);
         this.tableRoot.add(labelGroup).expandX().left().top().pad(0, 160, 0, 0);

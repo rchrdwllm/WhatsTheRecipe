@@ -1,11 +1,13 @@
 package com.whatstherecipe.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.whatstherecipe.game.classes.Cursors;
 import com.whatstherecipe.game.classes.Ingredients;
 import com.whatstherecipe.game.classes.Meals;
 import com.whatstherecipe.game.classes.Sounds;
@@ -25,6 +27,7 @@ public class WhatsTheRecipe extends Game {
 	public Meals meals;
 	public CustomSkin skin;
 	public Sounds sounds;
+	public Cursors cursors;
 	public int currentHighScore = 0;
 
 	@Override
@@ -37,8 +40,10 @@ public class WhatsTheRecipe extends Game {
 		this.mainMenuScreen = new MainMenuScreen(this);
 		this.meals = new Meals();
 		this.sounds = new Sounds();
+		this.cursors = new Cursors();
 
 		queueLoadingAssets();
+		setupCursor();
 
 		this.camera.setToOrtho(false, V_WIDTH, V_HEIGHT);
 		this.setScreen(this.loadingScreen);
@@ -90,5 +95,9 @@ public class WhatsTheRecipe extends Game {
 		}
 
 		this.assets.finishLoading();
+	}
+
+	private void setupCursor() {
+		Gdx.graphics.setCursor(this.cursors.spatulaCursor);
 	}
 }
