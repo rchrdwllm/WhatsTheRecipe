@@ -4,9 +4,12 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -83,6 +86,16 @@ public class BasketView {
                 game.sounds.clickSound.play();
                 toggleBasket();
                 return true;
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaCursor);
             }
         });
 
@@ -215,6 +228,16 @@ public class BasketView {
 
                     return true;
                 }
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+                }
             });
         }
     }
@@ -274,6 +297,16 @@ public class BasketView {
                     updateIngredients();
 
                     return true;
+                }
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaCursor);
                 }
             });
         }

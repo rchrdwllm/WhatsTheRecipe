@@ -2,7 +2,9 @@ package com.whatstherecipe.game.components;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -11,6 +13,8 @@ import com.whatstherecipe.game.classes.Meal;
 import com.whatstherecipe.game.screens.KitchenScreen;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+
+import com.badlogic.gdx.Gdx;
 
 public class RecipePaperView {
     public final WhatsTheRecipe game;
@@ -64,12 +68,23 @@ public class RecipePaperView {
             this.recipe.setPosition((this.game.V_WIDTH / 2) - (recipe.getWidth() / 2), -recipe.getHeight());
             this.stage.addActor(recipe);
 
-            this.recipeRef.addListener((EventListener) event -> {
-                if (event.toString().equals("touchDown")) {
+            this.recipeRef.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y,
+                        int pointer, int button) {
                     toggleRecipePaper();
+                    return true;
                 }
 
-                return false;
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+                }
             });
         }
     }

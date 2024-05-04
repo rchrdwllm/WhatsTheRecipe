@@ -4,7 +4,9 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -146,6 +148,16 @@ public class IngredientSelection {
 
                 return true;
             }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+            }
         });
 
         this.backBtnTable.add(backBtn).top().left().expand().pad(48, 48, 0, 0);
@@ -224,6 +236,16 @@ public class IngredientSelection {
 
                             return true;
                         }
+
+                        @Override
+                        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                            Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+                        }
+
+                        @Override
+                        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                            Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+                        }
                     });
                 } else {
                     TextButton nextBtn = new TextButton("Next",
@@ -275,6 +297,16 @@ public class IngredientSelection {
 
                             return true;
                         }
+
+                        @Override
+                        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                            Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+                        }
+
+                        @Override
+                        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                            Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+                        }
                     });
                 }
             } else {
@@ -296,6 +328,16 @@ public class IngredientSelection {
                         popup.hide();
 
                         return true;
+                    }
+
+                    @Override
+                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                        Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+                    }
+
+                    @Override
+                    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                        Gdx.graphics.setCursor(game.cursors.spatulaCursor);
                     }
                 });
 
@@ -320,6 +362,16 @@ public class IngredientSelection {
                     popup.hide();
 
                     return true;
+                }
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaCursor);
                 }
             });
 
@@ -358,6 +410,15 @@ public class IngredientSelection {
                 return true;
             }
 
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+            }
         });
 
         this.rightTable.add(checkBtn).padTop(50);

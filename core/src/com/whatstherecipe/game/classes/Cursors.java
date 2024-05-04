@@ -21,7 +21,7 @@ public class Cursors {
         this.spatulaCursor = spatulaCursor;
         spatulaPixmap.dispose();
 
-        Pixmap spatulaWhiskPixmap = new Pixmap(Gdx.files.internal("cursors/spatula-whisk-test.png"));
+        Pixmap spatulaWhiskPixmap = new Pixmap(Gdx.files.internal("cursors/spatula-whisk.png"));
         Cursor spatulaWhiskCursor = Gdx.graphics.newCursor(spatulaWhiskPixmap, xHotspot, yHotspot);
 
         this.spatulaWhiskCursor = spatulaWhiskCursor;

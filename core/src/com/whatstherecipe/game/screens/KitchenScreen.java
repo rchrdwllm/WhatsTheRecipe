@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -248,15 +248,25 @@ public class KitchenScreen implements Screen {
         this.tableRoot.add(this.quitBtn).expandY().top().expandX().left().pad(48, 48, 0, 0);
 
         this.quitBtn.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow5)));
-        this.quitBtn.addListener(
-                (EventListener) event -> {
-                    if (event.toString().equals("touchDown")) {
-                        this.game.sounds.clickSound.play();
-                        transitionToMainMenu();
-                    }
+        this.quitBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.sounds.clickSound.play();
+                transitionToMainMenu();
 
-                    return false;
-                });
+                return true;
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+            }
+        });
     }
 
     public void transitionToMainMenu() {
@@ -373,6 +383,16 @@ public class KitchenScreen implements Screen {
 
                             return true;
                         }
+
+                        @Override
+                        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                            Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+                        }
+
+                        @Override
+                        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                            Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+                        }
                     });
                     closeCabinetBtn.addAction(sequence(fadeIn(0.5f)));
                     closeCabinetBtn.toFront();
@@ -447,6 +467,15 @@ public class KitchenScreen implements Screen {
                     return true;
                 }
 
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    Gdx.graphics.setCursor(game.cursors.spatulaCursor);
+                }
             });
         }
     }
