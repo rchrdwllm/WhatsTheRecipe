@@ -23,6 +23,7 @@ public class MealBanner {
     private int selectionTime;
     private String selectionTimeString;
     private Image brownOverlay;
+    private Image mealImage;
 
     public MealBanner(KitchenScreen kitchenScreen, Stage stage, Meal meal, int roundNumber) {
         this.kitchenScreen = kitchenScreen;
@@ -33,6 +34,7 @@ public class MealBanner {
 
         determineTimeString();
         renderOverlay();
+        renderMealImage();
         renderLabels();
     }
 
@@ -81,6 +83,18 @@ public class MealBanner {
         }
     }
 
+    private void renderMealImage() {
+        String mealString = "meals/" + this.meal.name.toLowerCase() + ".png";
+
+        if (this.kitchenScreen.game.assets.isLoaded(mealString)) {
+            Texture mealTexture = this.kitchenScreen.game.assets.get(mealString,
+                    Texture.class);
+
+            this.mealImage = new Image(mealTexture);
+            this.mealImage.setOrigin(Align.center);
+        }
+    }
+
     private void renderLabels() {
         Group group = new Group();
 
@@ -109,19 +123,26 @@ public class MealBanner {
         yourMealGroup.setPosition((this.kitchenScreen.game.V_WIDTH / 2) - (yourMealGroup.getWidth() / 2),
                 (this.kitchenScreen.game.V_HEIGHT / 2) - (yourMealGroup.getHeight() / 2));
 
+        mealImage.addAction(alpha(0));
+        mealImage.addAction(scaleTo(0.5f, 0.5f));
+        mealImage.setPosition((this.kitchenScreen.game.V_WIDTH / 2) -
+                (mealImage.getWidth() / 2),
+                (this.kitchenScreen.game.V_HEIGHT / 2) - (mealImage.getHeight() / 2) -
+                        100);
+
         mealGroup.addActor(mealLabel);
         mealGroup.addAction(alpha(0));
         mealGroup.addAction(scaleTo(0.5f, 0.5f));
         mealGroup.setSize(mealLabel.getWidth(), mealLabel.getHeight());
         mealGroup.setPosition((this.kitchenScreen.game.V_WIDTH / 2) - (mealGroup.getWidth() / 2),
-                (this.kitchenScreen.game.V_HEIGHT / 2) - (mealGroup.getHeight() / 2) - 100);
+                (this.kitchenScreen.game.V_HEIGHT / 2) - (mealGroup.getHeight() / 2) - 375);
 
         mealDifficultyGroup.addActor(mealDifficulty);
         mealDifficultyGroup.addAction(alpha(0));
         mealDifficultyGroup.setSize(mealDifficulty.getWidth(), mealDifficulty.getHeight());
         mealDifficultyGroup.setPosition(
                 (this.kitchenScreen.game.V_WIDTH / 2) - (mealDifficultyGroup.getWidth() / 2),
-                (this.kitchenScreen.game.V_HEIGHT / 2) - (mealDifficultyGroup.getHeight() / 2) - 200);
+                (this.kitchenScreen.game.V_HEIGHT / 2) - (mealDifficultyGroup.getHeight() / 2) - 475);
 
         instructionsLabel.setAlignment(Align.center);
         instructionsLabel.setWrap(true);
@@ -133,6 +154,7 @@ public class MealBanner {
 
         group.setOrigin(Align.center);
         group.addActor(roundNumber);
+        group.addActor(mealImage);
         group.addActor(yourMealGroup);
         group.addActor(mealGroup);
         group.addActor(mealDifficultyGroup);
@@ -146,16 +168,21 @@ public class MealBanner {
         yourMealGroup.setOrigin(Align.center);
         yourMealGroup.addAction(sequence(delay(2.5f),
                 parallel(scaleTo(0.5f, 0.5f, 1f, Interpolation.pow5),
-                        moveBy(0, 100, 1f, Interpolation.pow5))));
+                        moveBy(0, 300, 1f, Interpolation.pow5))));
+
+        mealImage.setOrigin(Align.center);
+        mealImage.addAction(sequence(delay(2.5f),
+                parallel(fadeIn(1f, Interpolation.pow5), moveBy(0, 125, 1f, Interpolation.pow5),
+                        scaleTo(1, 1, 1f, Interpolation.pow5))));
 
         mealGroup.setOrigin(Align.center);
         mealGroup.addAction(sequence(delay(2.5f),
-                parallel(fadeIn(1f, Interpolation.pow5), moveBy(0, 100, 1f, Interpolation.pow5),
+                parallel(fadeIn(1f, Interpolation.pow5), moveBy(0, 125, 1f, Interpolation.pow5),
                         scaleTo(1, 1, 1f, Interpolation.pow5))));
 
         mealDifficultyGroup.setOrigin(Align.center);
         mealDifficultyGroup.addAction(sequence(delay(2.5f),
-                parallel(fadeIn(1f, Interpolation.pow5), moveBy(0, 100, 1f, Interpolation.pow5))));
+                parallel(fadeIn(1f, Interpolation.pow5), moveBy(0, 125, 1f, Interpolation.pow5))));
 
         this.stage.addActor(group);
 
@@ -163,10 +190,12 @@ public class MealBanner {
             roundNumber.addAction(fadeOut(0.5f, Interpolation.pow5));
             yourMealGroup.addAction(fadeOut(0.5f, Interpolation.pow5));
             mealGroup.addAction(fadeOut(0.5f, Interpolation.pow5));
+            mealImage.addAction(fadeOut(0.5f, Interpolation.pow5));
             mealDifficultyGroup.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
                 roundNumber.remove();
                 yourMealGroup.remove();
                 mealGroup.remove();
+                mealImage.remove();
                 mealDifficultyGroup.remove();
 
                 if (this.roundNumber <= 1) {
