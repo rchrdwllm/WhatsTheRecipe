@@ -479,7 +479,7 @@ public class KitchenScreen implements Screen {
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaCursor);
 
-                    basket.addAction(scaleTo(1f, 1f, 0.5f, Interpolation.swingIn));
+                    basket.addAction(scaleTo(1f, 1f, 0.5f, Interpolation.swingOut));
                 }
             });
         }

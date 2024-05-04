@@ -89,7 +89,7 @@ public class RecipePaperView {
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaCursor);
 
-                    recipeRef.addAction(scaleTo(1f, 1f, 0.5f, Interpolation.swingIn));
+                    recipeRef.addAction(scaleTo(1f, 1f, 0.5f, Interpolation.swingOut));
                 }
             });
         }
