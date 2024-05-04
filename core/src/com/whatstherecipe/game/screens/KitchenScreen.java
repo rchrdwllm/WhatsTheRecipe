@@ -472,14 +472,14 @@ public class KitchenScreen implements Screen {
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
 
-                    basket.addAction(scaleTo(1.2f, 1.2f, 0.25f, Interpolation.swingOut));
+                    basket.addAction(scaleTo(1.2f, 1.2f, 0.5f, Interpolation.swingOut));
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaCursor);
 
-                    basket.addAction(scaleTo(1f, 1f, 0.25f, Interpolation.swingIn));
+                    basket.addAction(scaleTo(1f, 1f, 0.5f, Interpolation.swingIn));
                 }
             });
         }

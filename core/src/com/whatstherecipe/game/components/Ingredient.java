@@ -62,14 +62,14 @@ public class Ingredient {
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaWhiskCursor);
 
-                    ingredient.addAction(scaleTo(1.2f, 1.2f, 0.25f, Interpolation.swingOut));
+                    ingredient.addAction(scaleTo(1.2f, 1.2f, 0.5f, Interpolation.swingOut));
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     Gdx.graphics.setCursor(game.cursors.spatulaCursor);
 
-                    ingredient.addAction(scaleTo(1f, 1f, 0.25f, Interpolation.swingIn));
+                    ingredient.addAction(scaleTo(1f, 1f, 0.5f, Interpolation.swingIn));
                 }
             });
         }
