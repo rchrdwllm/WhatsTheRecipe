@@ -15,44 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 public class CustomSkin extends Skin {
     private FreeTypeFontGenerator lilitaOneGenerator;
-    private FreeTypeFontGenerator denkOneGenerator;
-    private BitmapFont text16, text24, text48;
     private BitmapFont heading16, heading24, heading48, heading208;
 
     public CustomSkin() {
         this.lilitaOneGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/LilitaOne-Regular.ttf"));
-        this.denkOneGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/DenkOne-Regular.ttf"));
 
-        generateDenkOneFonts();
         generateLilitaOneFonts();
         generateTextButtonStyles();
         generateTextButtonAltStyles();
-    }
-
-    private void generateDenkOneFonts() {
-        FreeTypeFontParameter parameter16 = new FreeTypeFontParameter();
-        LabelStyle labelStyle16 = new LabelStyle();
-        parameter16.size = 16;
-        parameter16.color = Colors.brown;
-        this.text16 = denkOneGenerator.generateFont(parameter16);
-        labelStyle16.font = text16;
-        this.add("text-16", labelStyle16);
-
-        FreeTypeFontParameter parameter24 = new FreeTypeFontParameter();
-        LabelStyle labelStyle24 = new LabelStyle();
-        parameter24.size = 24;
-        parameter24.color = Colors.brown;
-        this.text24 = denkOneGenerator.generateFont(parameter24);
-        labelStyle24.font = text24;
-        this.add("text-24", labelStyle24);
-
-        FreeTypeFontParameter parameter48 = new FreeTypeFontParameter();
-        LabelStyle labelStyle48 = new LabelStyle();
-        parameter48.size = 48;
-        parameter48.color = Colors.brown;
-        this.text48 = denkOneGenerator.generateFont(parameter48);
-        labelStyle48.font = text48;
-        this.add("text-48", labelStyle48);
     }
 
     private void generateLilitaOneFonts() {
@@ -92,11 +62,14 @@ public class CustomSkin extends Skin {
     private void generateTextButtonStyles() {
         FreeTypeFontParameter params = new FreeTypeFontParameter();
         Drawable buttonPatch = new NinePatchDrawable(
-                new NinePatch(new Texture(Gdx.files.internal("patches/text_button.9.png")), 32, 32, 0, 0));
+                new NinePatch(new Texture(Gdx.files.internal("patches/text_button.9.png")), 32, 32, 0,
+                        0));
         Drawable buttonDown = new NinePatchDrawable(
-                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_down.9.png")), 32, 32, 0, 0));
+                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_down.9.png")), 32, 32,
+                        0, 0));
         Drawable buttonOver = new NinePatchDrawable(
-                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_over.9.png")), 32, 32, 0, 0));
+                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_over.9.png")), 32, 32,
+                        0, 0));
         TextButtonStyle textButtonStyle = new TextButtonStyle();
 
         params.size = 48;
@@ -117,11 +90,14 @@ public class CustomSkin extends Skin {
     private void generateTextButtonAltStyles() {
         FreeTypeFontParameter params = new FreeTypeFontParameter();
         Drawable buttonPatch = new NinePatchDrawable(
-                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_alt.9.png")), 32, 32, 0, 0));
+                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_alt.9.png")), 32, 32,
+                        0, 0));
         Drawable buttonDown = new NinePatchDrawable(
-                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_down_alt.9.png")), 32, 32, 0, 0));
+                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_down_alt.9.png")), 32,
+                        32, 0, 0));
         Drawable buttonOver = new NinePatchDrawable(
-                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_over_alt.9.png")), 32, 32, 0, 0));
+                new NinePatch(new Texture(Gdx.files.internal("patches/text_button_over_alt.9.png")), 32,
+                        32, 0, 0));
         TextButtonStyle textButtonStyle = new TextButtonStyle();
 
         params.size = 48;
