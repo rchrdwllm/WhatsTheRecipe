@@ -290,6 +290,7 @@ public class StepSorting {
                                     game.sounds.clickSound.play();
                                     popup.hide(() -> {
                                         masterChefPopup.show();
+                                        game.sounds.finishSound.play();
 
                                         masterChefBtn.addListener(new InputListener() {
                                             @Override
@@ -755,7 +756,7 @@ public class StepSorting {
         leftContainer.add(mealName).width(400).row();
 
         this.shuffledSteps.forEach(step -> {
-            Label stepLabel = new Label(step.stepNumber + 1 + ". " + step.label,
+            Label stepLabel = new Label(step.label,
                     CustomSkin.generateCustomLilitaOneFont(Colors.lightBrown, 32));
 
             this.stepLabels.add(stepLabel);
@@ -767,7 +768,7 @@ public class StepSorting {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     game.sounds.paperSound.play();
-                    String labelText = step.stepNumber + 1 + ". " + step.label;
+                    String labelText = step.label;
 
                     if (selectedSteps.contains(labelText)) {
                         return true;
