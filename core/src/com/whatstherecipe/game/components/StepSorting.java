@@ -247,7 +247,7 @@ public class StepSorting {
                             this.scoreLabel.setText(this.currentPoints + " pts");
 
                             ArrayList<TextButton> masterChefBtns = new ArrayList<TextButton>();
-                            TextButton masterChefBtn = new TextButton("Hooray!",
+                            TextButton masterChefBtn = new TextButton("Okay",
                                     this.game.skin.get("text-button-default", TextButtonStyle.class));
 
                             masterChefBtns.add(masterChefBtn);
