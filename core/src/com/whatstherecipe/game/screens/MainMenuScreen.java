@@ -296,7 +296,6 @@ public class MainMenuScreen implements Screen {
         if (this.game.assets.isLoaded("audio/background.mp3")) {
             this.backgroundMusic = this.game.assets.get("audio/background.mp3", Music.class);
             this.backgroundMusic.setLooping(true);
-            this.backgroundMusic.setVolume(0.1f);
             this.backgroundMusic.play();
         }
     }
