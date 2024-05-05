@@ -64,6 +64,7 @@ public class StepSorting {
         this.arrangedStepLabels = new ArrayList<Label>();
         this.selectedSteps = new ArrayList<String>();
 
+        resetState();
         determinePlusPoints();
         determineDeduction();
         determineMaxTries();
@@ -74,6 +75,12 @@ public class StepSorting {
         renderRight();
         prepareCookingAnimation();
         renderTimerScore();
+    }
+
+    private void resetState() {
+        meal.steps.forEach(step -> {
+            step.isSelected = false;
+        });
     }
 
     private void determinePlusPoints() {
