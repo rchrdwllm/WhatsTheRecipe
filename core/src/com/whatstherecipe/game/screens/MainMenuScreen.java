@@ -5,6 +5,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -45,18 +46,25 @@ public class MainMenuScreen implements Screen {
     private int currentHighScore = 0;
     private Table highScoreTable;
     private Label currentHighScoreLabel;
+    private Preferences prefs;
 
     public MainMenuScreen(final WhatsTheRecipe game) {
         this.game = game;
         this.camera = game.camera;
         this.currentHighScore = game.currentHighScore;
         this.stage = new Stage(new StretchViewport(game.V_WIDTH, game.V_HEIGHT));
+        this.prefs = Gdx.app.getPreferences("My Preferences");
+        this.game.currentHighScore = prefs.getInteger("highScore", 0);
+        Gdx.app.log("HighScore", "Loaded high score: " + currentHighScore);
 
         initComponents();
     }
 
     @Override
     public void dispose() {
+        prefs.putInteger("highScore", currentHighScore);
+        prefs.flush();
+        Gdx.app.log("HighScore", "Saved high score: " + currentHighScore);
         if (backgroundMusic != null) {
             backgroundMusic.dispose();
         }
