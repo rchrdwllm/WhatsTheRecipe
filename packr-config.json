@@ -1,0 +1,10 @@
+{
+    "platform": "windows64",
+    "jdk": "openjdk.zip",
+    "executable": "What's The Recipe",
+    "classpath": ["desktop-1.0.jar"],
+    "mainclass": "com.whatstherecipe.game.DesktopLauncher",
+    "output": "output/windows",
+    "resources": ["assets"],
+    "minimizejre": "soft"
+}
