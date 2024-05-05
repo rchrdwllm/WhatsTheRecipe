@@ -201,7 +201,7 @@ public class IngredientSelection {
 
                     Popup nextPopup = new Popup(game, stage, "All or nothing!!!",
                             "Since this is the last and " + meal.difficulty + " meal, you have " + stepSortingTimeString
-                                    + " to sort the correct steps with 1 attempt only. If you win, you'll have twice your current score! Else, you'll lose everything. Good luck!",
+                                    + " to sort the correct steps with 1 attempt only. Good luck!",
                             nextBtns);
 
                     Popup popup = new Popup(this.game, this.stage, "Ingredients match!",
