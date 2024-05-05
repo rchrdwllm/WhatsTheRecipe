@@ -454,8 +454,8 @@ public class StepSorting {
 
                                 buttons.add(okayBtn);
 
-                                Popup popup = new Popup(this.game, this.stage, "Goodbye!",
-                                        "This is an all or nothing round, and you lost everything!",
+                                Popup popup = new Popup(this.game, this.stage, "Better luck next time!",
+                                        "This is an all or nothing round, and you lost everything! You can always try again from the beginning!",
                                         buttons, this.game.sounds.failSound);
 
                                 if (this.currentPoints > this.game.currentHighScore
