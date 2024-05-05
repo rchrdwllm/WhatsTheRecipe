@@ -246,6 +246,26 @@ public class StepSorting {
                             this.currentPoints = recipePaperView.kitchenScreen.currentPoints;
                             this.scoreLabel.setText(this.currentPoints + " pts");
 
+                            ArrayList<TextButton> masterChefBtns = new ArrayList<TextButton>();
+                            TextButton masterChefBtn = new TextButton("Hooray!",
+                                    this.game.skin.get("text-button-default", TextButtonStyle.class));
+
+                            masterChefBtns.add(masterChefBtn);
+
+                            String masterChefTitle;
+                            String masterChefMessage;
+
+                            if (currentPoints < 2800) {
+                                masterChefTitle = "Master chef!";
+                                masterChefMessage = "Your cooking skills are sizzling! Imagine how amazing your dishes could be with the perfect score touch. Are you up for the challenge?";
+                            } else {
+                                masterChefTitle = "You're a culinary legend!";
+                                masterChefMessage = "Perfect scores on every dish! Your skills are unmatched. You've mastered the art of cooking!";
+                            }
+
+                            Popup masterChefPopup = new Popup(this.game, this.stage, masterChefTitle, masterChefMessage,
+                                    masterChefBtns);
+
                             ArrayList<TextButton> buttons = new ArrayList<TextButton>();
                             TextButton okayBtn = new TextButton("Okay",
                                     this.game.skin.get("text-button-default", TextButtonStyle.class));
@@ -255,7 +275,7 @@ public class StepSorting {
                             Popup popup = new Popup(this.game, this.stage, "Congratulations!",
                                     "You've successfully cooked the meal and successfully finished the full course! You earned "
                                             + this.plusPoints + " points, having a total of " + this.currentPoints
-                                            + " points. You can attempt to play the whole course again if you want to aim for higher scores!",
+                                            + " points.",
                                     buttons,
                                     this.game.sounds.successSound);
 
@@ -269,24 +289,40 @@ public class StepSorting {
                                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                     game.sounds.clickSound.play();
                                     popup.hide(() -> {
-                                        scoring.show(() -> {
-                                            timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                            scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
-                                            table.addAction(sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
-                                                recipePaperView.brownOverlay
-                                                        .addAction(sequence(fadeOut(0.5f, Interpolation.pow5)));
-                                                recipePaperView.recipe.addAction(
-                                                        sequence(delay(0.5f),
-                                                                moveTo((game.V_WIDTH / 2)
-                                                                        - (recipePaperView.recipe.getWidth() / 2),
-                                                                        -recipePaperView.recipe.getHeight(), 0.75f,
-                                                                        Interpolation.swingIn),
-                                                                run(() -> {
-                                                                    recipePaperView.brownOverlay.remove();
-                                                                    recipePaperView.kitchenScreen
-                                                                            .transitionToMainMenu();
+                                        masterChefPopup.show();
+
+                                        masterChefBtn.addListener(new InputListener() {
+                                            @Override
+                                            public boolean touchDown(InputEvent event, float x, float y, int pointer,
+                                                    int button) {
+                                                game.sounds.clickSound.play();
+
+                                                masterChefPopup.hide(() -> {
+                                                    scoring.show(() -> {
+                                                        timerTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                                        scoreTable.addAction(fadeOut(0.5f, Interpolation.pow5));
+                                                        table.addAction(
+                                                                sequence(fadeOut(0.5f, Interpolation.pow5), run(() -> {
+                                                                    recipePaperView.brownOverlay.addAction(sequence(
+                                                                            fadeOut(0.5f, Interpolation.pow5)));
+                                                                    recipePaperView.recipe.addAction(sequence(
+                                                                            delay(0.5f), moveTo(
+                                                                                    (game.V_WIDTH / 2)
+                                                                                            - (recipePaperView.recipe
+                                                                                                    .getWidth() / 2),
+                                                                                    -recipePaperView.recipe.getHeight(),
+                                                                                    0.75f, Interpolation.swingIn),
+                                                                            run(() -> {
+                                                                                recipePaperView.brownOverlay.remove();
+                                                                                recipePaperView.kitchenScreen
+                                                                                        .transitionToMainMenu();
+                                                                            })));
                                                                 })));
-                                            })));
+                                                    });
+                                                });
+
+                                                return true;
+                                            }
                                         });
                                     });
 
