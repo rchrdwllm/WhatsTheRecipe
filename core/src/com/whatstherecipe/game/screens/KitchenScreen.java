@@ -68,6 +68,7 @@ public class KitchenScreen implements Screen {
     private boolean isSelectionTimeUp = false;
     public boolean isStepSortingStarted = false;
     public int currentPoints = 0;
+    private KitchenScreen nextKitchenScreen;
 
     public KitchenScreen(final WhatsTheRecipe game, ArrayList<Meal> mealPlan) {
         this.game = game;
@@ -534,11 +535,10 @@ public class KitchenScreen implements Screen {
         }
 
         this.roundCount += 1;
+        this.nextKitchenScreen = new KitchenScreen(game, mealPlan, roundCount, currentPoints);
 
-        game.setScreen(new KitchenScreen(game,
-                mealPlan,
-                roundCount,
-                currentPoints));
+        game.setScreen(nextKitchenScreen);
+
         this.dispose();
     }
 
